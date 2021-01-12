@@ -51,7 +51,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             if (candidate.Role > Role.Headmaster)
                 return Result.Failure<bool, RequestError>(SharedErrors.General.BusinessRuleViolation("Role out of scope for school members!"));
 
-            if (candidate.Role == Role.Headmaster && Members.Any(m => m.Role == Role.Headmaster))
+            if (candidate.Role == Role.Headmaster && (_members.Any(m => m.Role == Role.Headmaster) || Members.Any(m => m.Role == Role.Headmaster)))
                 return Result.Failure<bool, RequestError>(SharedErrors.General.BusinessRuleViolation("School already have a headmaster, only one headmaster per school is allowed!"));
 
             return Result.Success<bool, RequestError>(true);
