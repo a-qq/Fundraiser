@@ -19,7 +19,7 @@ namespace IDP.Core.UserAggregate.Entities
         public bool IsActive { get; private set; }
         public Email Email { get; }
         public virtual SecurityCode SecurityCode { get; private set; }
-        public virtual IReadOnlyList<Claim> Claims => _claims.ToList();
+        public virtual IReadOnlyList<Claim> Claims => _claims.AsReadOnly();
 
         protected User()
         { 

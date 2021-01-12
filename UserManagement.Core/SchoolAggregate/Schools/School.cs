@@ -18,8 +18,8 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
         public Name Name { get; private set; }
         public Description Description { get; private set; }
         public string LogoId { get; private set; }
-        public virtual IReadOnlyList<User> Members => _members.ToList();
-        public virtual IReadOnlyList<Group> Groups => _groups.ToList();
+        public virtual IReadOnlyList<User> Members => _members.AsReadOnly();
+        public virtual IReadOnlyList<Group> Groups => _groups.AsReadOnly();
         protected School()
         {
         }

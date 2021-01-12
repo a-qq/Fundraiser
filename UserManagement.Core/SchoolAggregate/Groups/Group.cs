@@ -14,7 +14,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
         public char CodeLetter { get; private set; }
         public virtual User FormTutor { get; private set; }
         public virtual School School { get; private set; }
-        public virtual IReadOnlyList<User> Members => _members.ToList();
+        public virtual IReadOnlyList<User> Members => _members.AsReadOnly();
 
         protected Group()
         {
