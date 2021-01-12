@@ -24,7 +24,7 @@ namespace Fundraiser.IDP
                 new IdentityResource(
                     "schools", //scopename
                     "Your role(s) and school", //display name
-                    new List<string>() { "school" }), //list of claims
+                    new List<string>() { "school_id" }), //list of claims
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -39,7 +39,7 @@ namespace Fundraiser.IDP
             {
                 
                 // allows full access (via scope) to the api1 resource (which will end up as audience value)
-                new ApiResource("fundraiserapi", "Fundraiser API", new List<string>() { "role", "school" }) 
+                new ApiResource("fundraiserapi", "Fundraiser API", new List<string>() { "role", "school_id" }) 
                 {
                     Scopes = { "fundraiserapi.fullaccess" }, // "roles"
                     //ApiSecrets = { new Secret("apisecret".Sha256()) }
