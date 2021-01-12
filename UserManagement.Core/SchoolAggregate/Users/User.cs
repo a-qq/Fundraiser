@@ -71,8 +71,10 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
             if (validationResult.IsFailure)
                 return validationResult.ConvertFailure<User>();
 
-            User candidate = school == null ? new User(firstName, lastName, School, email, role, gender)
-                : new User(firstName, lastName, school, email, role, gender);
+            if (school == null)
+                school = this.School;
+
+            User candidate = new User(firstName, lastName, school, email, role, gender);
 
             var enrollmentResult = school.Enroll(candidate);
             if (enrollmentResult.IsFailure)
