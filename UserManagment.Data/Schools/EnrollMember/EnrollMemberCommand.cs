@@ -22,8 +22,8 @@ namespace SchoolManagement.Data.Schools.EnrollMember
             Email = email;
             Role = role;
             Gender = gender;
-            SchoolId = schoolId;
-            AuthId = authId;
+            SchoolId = schoolId == Guid.Empty ? throw new ArgumentNullException(nameof(schoolId)) : schoolId;
+            AuthId = schoolId == Guid.Empty ? throw new ArgumentNullException(nameof(authId)) : authId;
         }
     }
 }
