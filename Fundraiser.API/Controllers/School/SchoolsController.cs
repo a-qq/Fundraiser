@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.EnrollMember;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace Fundraiser.API.Controllers.School
         public SchoolsController(IMediator mediator)
             : base(mediator) {  }
         
-
+        [Authorize("MustBeHeadmaster")]
         [HttpPost("enroll")]
         public async Task<IActionResult> Enroll(EnrollMemberRequest request)
         {
