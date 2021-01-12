@@ -9,7 +9,9 @@ namespace SchoolManagement.Data.Database
     {
         public void Configure(EntityTypeBuilder<User> b)
         {
-            b.ToTable("Users", SchemaNames.Management).HasKey(p => p.Id); 
+            b.ToTable("Users", SchemaNames.Management).HasKey(p => p.Id);
+
+            b.Property(p => p.Id).ValueGeneratedNever();
 
             b.Property(p => p.FirstName)
                 .HasConversion(p => p.Value, p => FirstName.Create(p).Value)

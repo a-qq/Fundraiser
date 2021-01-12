@@ -11,7 +11,6 @@ namespace SchoolManagement.Data.Database
         {
             b.ToTable("Groups", SchemaNames.Management).HasKey(p => p.Id);
 
-            b.Property(p => p.Id).HasColumnName("GroupID");
             b.Property(p => p.CodeLetter);
             b.Property(p => p.CodeNumber);
             b.HasOne(p => p.School).WithMany(p => p.Groups).IsRequired();
