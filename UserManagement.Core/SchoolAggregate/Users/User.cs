@@ -29,7 +29,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
             Role = Role.Administrator;
         }
 
-        private User(FirstName firstName, LastName lastName, Email email, Role role, Gender gender, School school)
+        internal User(FirstName firstName, LastName lastName, Email email, Role role, Gender gender, School school)
             : base(Guid.NewGuid())
         {
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
@@ -40,17 +40,6 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
             School = school ?? throw new ArgumentNullException(nameof(school));
         }
 
-        internal static Result<User> Create(FirstName firstName, LastName lastName, Email email, Role role, Gender gender, School school)
-        {
-            User candidate = new User(firstName, lastName, email, role, gender, school);
-
-            Result enrollment = school.EnrollCandidate(candidate);
-
-            if (enrollment.IsFailure)
-                return enrollment.ConvertFailure<User>();
-
-            return Result.Success(candidate);
-        }
         public Result<School> RegisterSchool(Name schoolName, FirstName headmasterFirstName, LastName headmasterLastName, 
             Email headmasterEmail, Gender headmasterGender)
         {
@@ -68,6 +57,9 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
         public Result<User> EnrollToSchool(FirstName firstName, LastName lastName, Email email,
             Role role, Gender gender, School school) 
         {
+            if (school == null)
+                throw new ArgumentNullException(nameof(school));
+
             if (this.Role < Role.Headmaster)
                 return Result.Failure<User>("Insufficient role for member enrollment!");
 
@@ -80,7 +72,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
                     return Result.Failure<User>("School already have a headmaster, only one headmaster per school is allowed!");
             }
 
-            Result<User> member = Create(firstName, lastName, email, role, gender, school);
+            Result<User> member = school.EnrollCandidate(firstName, lastName, email, role, gender);
 
             return member;
         }

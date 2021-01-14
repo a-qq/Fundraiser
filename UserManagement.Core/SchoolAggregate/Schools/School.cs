@@ -29,32 +29,30 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
 
-            var headmaster = User.Create(firstName, lastName, email, Role.Headmaster, gender, this);
+            Result<User> headmaster = EnrollCandidate(firstName, lastName, email, Role.Headmaster, gender);
             _members.Add(headmaster.Value);
         }
 
-        internal Result EnrollCandidate(User candidate)
+        internal Result<User> EnrollCandidate(FirstName firstName, LastName lastName, Email email, Role role, Gender gender)
         {
-            if (candidate == null)
-                throw new ArgumentNullException(nameof(candidate));
+            User candidate = new User(firstName, lastName, email, role, gender, this);
 
             if (candidate.Role > Role.Headmaster)
-                return Result.Failure("Role out of school members' scope!");
+                return Result.Failure<User>("Role out of school members' scope!");
 
             if (candidate.Role == Role.Headmaster && Members.Any(m => m.Role == Role.Headmaster))
-                return Result.Failure("School already have a headmaster, only one headmaster per school is allowed!");
+                return Result.Failure<User>("School already have a headmaster, only one headmaster per school is allowed!");
 
             _members.Add(candidate);
 
             AddDomainEvent(new UserEnrolledEvent(candidate.Id, candidate.FirstName,
                 candidate.LastName, candidate.Email, candidate.Role, candidate.Gender, Id));
 
-            return Result.Success();
+            return Result.Success(candidate);
         }
 
         internal Result<Group> AddGroup(Number number, Sign sign)
         {
-            var isUnique = Groups.FirstOrDefault(g => g.Code == number + sign) == null;
             if (Groups.Any(g => g.Code == number + sign))
                 return Result.Failure<Group>($"Group with code {number + sign} already exist!");
 
