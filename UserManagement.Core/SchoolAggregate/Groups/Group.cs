@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Core.SchoolAggregate.Users;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SchoolManagement.Core.SchoolAggregate.Groups
 {
@@ -10,14 +10,22 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
     {
         private readonly List<User> _members = new List<User>();
 
-        public byte CodeNumber { get; private set; }
-        public char CodeLetter { get; private set; }
+        public Number Number { get; private set; }
+        public Sign Sign { get; private set; }
+        public string Code => Number + Sign;
         public virtual User FormTutor { get; private set; }
         public virtual School School { get; private set; }
         public virtual IReadOnlyList<User> Members => _members.AsReadOnly();
 
         protected Group()
         {
+        }
+
+        private Group(Number number, Sign sign, School school)
+        {
+            Number = number ?? throw new ArgumentNullException();
+            Sign = sign ?? throw new ArgumentNullException();
+            School = school ?? throw new ArgumentNullException();
         }
     }
 }

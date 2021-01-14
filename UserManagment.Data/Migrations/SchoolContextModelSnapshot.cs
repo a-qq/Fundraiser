@@ -26,18 +26,21 @@ namespace SchoolManagement.Data.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("CodeLetter")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(1)");
-
-                    b.Property<byte>("CodeNumber")
-                        .HasColumnType("tinyint");
-
                     b.Property<Guid?>("FormTutorId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte>("Number")
+                        .HasColumnName("Number")
+                        .HasColumnType("tinyint");
+
                     b.Property<Guid>("SchoolId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Sign")
+                        .IsRequired()
+                        .HasColumnName("Sign")
+                        .HasColumnType("nvarchar(4)")
+                        .HasMaxLength(4);
 
                     b.HasKey("Id");
 
@@ -46,6 +49,10 @@ namespace SchoolManagement.Data.Migrations
                         .HasFilter("[FormTutorId] IS NOT NULL");
 
                     b.HasIndex("SchoolId");
+
+                    b.HasIndex("Id", "Number", "Sign")
+                        .IsUnique()
+                        .HasName("Index_Code");
 
                     b.ToTable("Groups","management");
                 });

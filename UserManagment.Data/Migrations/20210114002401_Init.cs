@@ -15,14 +15,14 @@ namespace SchoolManagement.Data.Migrations
                 schema: "management",
                 columns: table => new
                 {
-                    SchoolID = table.Column<Guid>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     Name = table.Column<string>(maxLength: 500, nullable: false),
                     Description = table.Column<string>(maxLength: 3000, nullable: true),
                     LogoId = table.Column<string>(maxLength: 36, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Schools", x => x.SchoolID);
+                    table.PrimaryKey("PK_Schools", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -36,6 +36,7 @@ namespace SchoolManagement.Data.Migrations
                     Role = table.Column<int>(nullable: false),
                     Email = table.Column<string>(maxLength: 200, nullable: false),
                     Gender = table.Column<int>(nullable: false),
+                    IsActive = table.Column<bool>(nullable: false),
                     SchoolId = table.Column<Guid>(nullable: false),
                     GroupId = table.Column<long>(nullable: true)
                 },
@@ -47,7 +48,7 @@ namespace SchoolManagement.Data.Migrations
                         column: x => x.SchoolId,
                         principalSchema: "management",
                         principalTable: "Schools",
-                        principalColumn: "SchoolID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -56,16 +57,16 @@ namespace SchoolManagement.Data.Migrations
                 schema: "management",
                 columns: table => new
                 {
-                    GroupID = table.Column<long>(nullable: false)
+                    Id = table.Column<long>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    CodeNumber = table.Column<byte>(nullable: false),
-                    CodeLetter = table.Column<string>(nullable: false),
+                    Number = table.Column<byte>(nullable: false),
+                    Sign = table.Column<string>(maxLength: 4, nullable: false),
                     FormTutorId = table.Column<Guid>(nullable: true),
                     SchoolId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Groups", x => x.GroupID);
+                    table.PrimaryKey("PK_Groups", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Groups_Users_FormTutorId",
                         column: x => x.FormTutorId,
@@ -78,7 +79,7 @@ namespace SchoolManagement.Data.Migrations
                         column: x => x.SchoolId,
                         principalSchema: "management",
                         principalTable: "Schools",
-                        principalColumn: "SchoolID",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -95,6 +96,13 @@ namespace SchoolManagement.Data.Migrations
                 schema: "management",
                 table: "Groups",
                 column: "SchoolId");
+
+            migrationBuilder.CreateIndex(
+                name: "Index_Code",
+                schema: "management",
+                table: "Groups",
+                columns: new[] { "Id", "Number", "Sign" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
@@ -122,7 +130,7 @@ namespace SchoolManagement.Data.Migrations
                 column: "GroupId",
                 principalSchema: "management",
                 principalTable: "Groups",
-                principalColumn: "GroupID",
+                principalColumn: "Id",
                 onDelete: ReferentialAction.Restrict);
         }
 

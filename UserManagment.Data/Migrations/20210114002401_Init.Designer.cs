@@ -10,8 +10,8 @@ using SchoolManagement.Data.Database;
 namespace SchoolManagement.Data.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    [Migration("20210109232358_AddUserIsActiveProperty")]
-    partial class AddUserIsActiveProperty
+    [Migration("20210114002401_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -25,22 +25,24 @@ namespace SchoolManagement.Data.Migrations
                 {
                     b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnName("GroupID")
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("CodeLetter")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(1)");
-
-                    b.Property<byte>("CodeNumber")
-                        .HasColumnType("tinyint");
 
                     b.Property<Guid?>("FormTutorId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<byte>("Number")
+                        .HasColumnName("Number")
+                        .HasColumnType("tinyint");
+
                     b.Property<Guid>("SchoolId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Sign")
+                        .IsRequired()
+                        .HasColumnName("Sign")
+                        .HasColumnType("nvarchar(4)")
+                        .HasMaxLength(4);
 
                     b.HasKey("Id");
 
@@ -49,6 +51,10 @@ namespace SchoolManagement.Data.Migrations
                         .HasFilter("[FormTutorId] IS NOT NULL");
 
                     b.HasIndex("SchoolId");
+
+                    b.HasIndex("Id", "Number", "Sign")
+                        .IsUnique()
+                        .HasName("Index_Code");
 
                     b.ToTable("Groups","management");
                 });
@@ -80,7 +86,6 @@ namespace SchoolManagement.Data.Migrations
             modelBuilder.Entity("SchoolManagement.Core.SchoolAggregate.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
