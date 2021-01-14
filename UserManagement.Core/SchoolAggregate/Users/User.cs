@@ -44,7 +44,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
         {
             User candidate = new User(firstName, lastName, email, role, gender, school);
 
-            Result enrollment = school.Enroll(candidate);
+            Result enrollment = school.EnrollCandidate(candidate);
 
             if (enrollment.IsFailure)
                 return enrollment.ConvertFailure<User>();
@@ -83,6 +83,21 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
             Result<User> member = Create(firstName, lastName, email, role, gender, school);
 
             return member;
+        }
+
+        public Result<Group> CreateGroup(Number number, Sign sign, School school)
+        {
+            if (this.Role < Role.Headmaster)
+                return Result.Failure<Group>("Insufficient role to create groups!");
+
+            if (this.Role == Role.Headmaster)
+            {
+                if (this.School != school)
+                    throw new InvalidOperationException(nameof(CreateGroup));
+            }
+            Result<Group> group = school.AddGroup(number, sign);
+
+            return group;
         }
     }
 }

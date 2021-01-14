@@ -33,7 +33,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             _members.Add(headmaster.Value);
         }
 
-        internal Result Enroll(User candidate)
+        internal Result EnrollCandidate(User candidate)
         {
             if (candidate == null)
                 throw new ArgumentNullException(nameof(candidate));
@@ -50,6 +50,18 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
                 candidate.LastName, candidate.Email, candidate.Role, candidate.Gender, Id));
 
             return Result.Success();
+        }
+
+        internal Result<Group> AddGroup(Number number, Sign sign)
+        {
+            var isUnique = Groups.FirstOrDefault(g => g.Code == number + sign) == null;
+            if (Groups.Any(g => g.Code == number + sign))
+                return Result.Failure<Group>($"Group with code {number + sign} already exist!");
+
+             Group group = new Group(number, sign, this);
+            _groups.Add(group);
+
+            return Result.Success(group);
         }
     }
 }

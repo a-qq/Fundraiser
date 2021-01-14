@@ -21,7 +21,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
         {
         }
 
-        private Group(Number number, Sign sign, School school)
+        internal Group(Number number, Sign sign, School school)
         {
             Number = number ?? throw new ArgumentNullException();
             Sign = sign ?? throw new ArgumentNullException();

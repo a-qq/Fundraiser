@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.Commands.RegisterSchool;
+using SchoolManagement.Data.Schools.CreateGroup;
 using SchoolManagement.Data.Schools.EnrollMember;
 using SchoolManagement.Data.Schools.RegisterSchool;
 using System;
@@ -51,6 +52,17 @@ namespace Fundraiser.API.Controllers.School
             //    ? Ok(result.Value)/* CreatedAtRoute("GetSchool", new { result.Value.Id }, Envelope.Ok(result.Value))*/
             //    : errorResponseOrNull.Value;
 
+            return response;
+        }
+
+        [HttpPost("schools/{id}/groups")]
+        public async Task<IActionResult> CreateGroup(Guid id, CreateGroupRequest request)
+        {
+            var command = new CreateGroupCommand(request.Number, request.Sign, AuthId, id);
+
+            var result = await Handle(command);
+
+            IActionResult response = FromResultOk(result);
             return response;
         }
     }

@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagement.Data.Schools.CreateGroup;
 using SchoolManagement.Data.Schools.EnrollMember;
 using System.Threading.Tasks;
 
 namespace Fundraiser.API.Controllers.School
 {
-    [Route("schools/")]
+    [Route("management/")]
     [ApiController]
     public class SchoolsController : MediatrController
     {
@@ -30,5 +31,18 @@ namespace Fundraiser.API.Controllers.School
 
             return response;
         }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpPost("groups")]
+        public async Task<IActionResult> CreateGroup(CreateGroupRequest request)
+        {
+            var command = new CreateGroupCommand(request.Number, request.Sign, AuthId, SchoolId);
+
+            var result = await Handle(command);
+
+            var response = FromResultOk(result);
+            return response;
+        }
+
     }
 }
