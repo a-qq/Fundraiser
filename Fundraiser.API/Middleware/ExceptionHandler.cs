@@ -1,6 +1,8 @@
 ﻿using Fundraiser.API.Controllers;
 using Fundraiser.SharedKernel.ResultErrors;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using System;
 using System.Net;
@@ -8,13 +10,15 @@ using System.Threading.Tasks;
 
 namespace Fundraiser.API.Middleware
 {
-    public class ExceptionHandler
+    public sealed class ExceptionHandler
     {
         private readonly RequestDelegate _next;
+        private readonly IWebHostEnvironment _env;
 
-        public ExceptionHandler(RequestDelegate next)
+        public ExceptionHandler(RequestDelegate next, IWebHostEnvironment env)
         {
             _next = next;
+            _env = env;
         }
 
         public async Task Invoke(HttpContext context)
@@ -31,8 +35,10 @@ namespace Fundraiser.API.Middleware
 
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            // Log exception here
-            string result = JsonConvert.SerializeObject(Envelope.Error(SharedErrors.General.InternalServerError(exception.Message))); //TODO: delete message in deployment
+            //TODO: Log exception here
+            string result = _env.IsProduction() 
+                ? JsonConvert.SerializeObject(Envelope.Error(SharedErrors.General.InternalServerError("Internal server error")))
+                : JsonConvert.SerializeObject(Envelope.Error(SharedErrors.General.InternalServerError(exception.Message)));
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             return context.Response.WriteAsync(result);
