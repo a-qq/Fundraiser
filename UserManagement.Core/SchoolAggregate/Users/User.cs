@@ -1,7 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
 using Fundraiser.SharedKernel.Utils;
-using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Groups;
 using SchoolManagement.Core.SchoolAggregate.Schools;
 using System;
@@ -11,98 +9,80 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
     public class User : Entity<Guid>
     {
         public static readonly User Admin = new User(Guid.Parse("3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407"));
-        public FirstName FirstName { get; private set; }
-        public LastName LastName { get; private set; }
+        public FirstName FirstName { get; }
+        public LastName LastName { get; }
         public Role Role { get; private set; }
-        public Email Email { get; private set; }
-        public Gender Gender { get; private set; }
+        public Email Email { get; }
+        public Gender Gender { get; }
         public bool IsActive { get; }
-        public virtual School School { get; private set; }
+        public virtual School School { get; }
         public virtual Group Group { get; private set; }
 
 
         protected User()
         {
         }
+
         private User(Guid id)
             : base(id)
         {
             Role = Role.Administrator;
         }
 
-        private User(FirstName firstName, LastName lastName, School school, Email email, Role role, Gender gender)
+        private User(FirstName firstName, LastName lastName, Email email, Role role, Gender gender, School school)
             : base(Guid.NewGuid())
         {
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
-            School = school ?? throw new ArgumentNullException(nameof(school));
             Email = email ?? throw new ArgumentNullException(nameof(email));
             Role = role ?? throw new ArgumentNullException(nameof(role));
             Gender = gender ?? throw new ArgumentNullException(nameof(gender));
+            School = school ?? throw new ArgumentNullException(nameof(school));
         }
 
+        internal static Result<User> Create(FirstName firstName, LastName lastName, Email email, Role role, Gender gender, School school)
+        {
+            User candidate = new User(firstName, lastName, email, role, gender, school);
 
-        public Result<School, RequestError> RegisterSchool(Name schoolName, FirstName headmasterFirstName, LastName headmasterLastName, 
+            Result enrollment = school.Enroll(candidate);
+
+            if (enrollment.IsFailure)
+                return enrollment.ConvertFailure<User>();
+
+            return Result.Success(candidate);
+        }
+        public Result<School> RegisterSchool(Name schoolName, FirstName headmasterFirstName, LastName headmasterLastName, 
             Email headmasterEmail, Gender headmasterGender)
         {
-            var validationResult = CanRegisterSchool();
+            if(this.Role != Role.Administrator)
+                Result.Failure<School>("Insufficient role for school registration!");
 
-            if (validationResult.IsFailure)
-                return validationResult.ConvertFailure<School>();
+            School school = new School(schoolName, headmasterFirstName, headmasterLastName, headmasterEmail, headmasterGender);
 
-            School school = new School(schoolName);
-
-            User Headmaster = new User(headmasterFirstName, headmasterLastName, school, headmasterEmail,
-                Role.Headmaster, headmasterGender);
-
-            school.Enroll(Headmaster);
-
-            return Result.Success<School, RequestError>(school);
+            return Result.Success(school);
         }
 
         /// <summary>
-        ///    Creates a new member and enroll him/her to school. Returns successfull or failure result depending on bussinsess rule validation.
-        ///    Throws if calling User is an Administrator and <paramref name="school"/> isn't given.</summary>
-        public Result<User, RequestError> CreateMemberAndEnrollToSchool(FirstName firstName, LastName lastName, Email email,
-            Role role, Gender gender, School school = null) 
+        ///    Creates and enrolls a new member to <paramref name="school"/>. Returns successfull or failure result depending on bussinsess rule validation.
+        ///    Throws if calling User is a Headmaster and isn't member of a <paramref name="school"/>.</summary>
+        public Result<User> EnrollToSchool(FirstName firstName, LastName lastName, Email email,
+            Role role, Gender gender, School school) 
         {
-            var validationResult = CanEnrollToSchool(school);
+            if (this.Role < Role.Headmaster)
+                return Result.Failure<User>("Insufficient role for member enrollment!");
 
-            if (validationResult.IsFailure)
-                return validationResult.ConvertFailure<User>();
+            if (this.Role == Role.Headmaster)
+            {
+                if (this.School != school)
+                    throw new InvalidOperationException(nameof(EnrollToSchool));
 
-            if (school == null)
-                school = this.School;
+                if (this.Role == role) //prevents additional call to db in later validation
+                    return Result.Failure<User>("School already have a headmaster, only one headmaster per school is allowed!");
+            }
 
-            User candidate = new User(firstName, lastName, school, email, role, gender);
+            Result<User> member = Create(firstName, lastName, email, role, gender, school);
 
-            var enrollmentResult = school.Enroll(candidate);
-            if (enrollmentResult.IsFailure)
-                return enrollmentResult.ConvertFailure<User>();
-
-            return Result.Success<User, RequestError>(candidate);
-        }
-
-        private Result<bool, RequestError> CanEnrollToSchool(School school)
-        {
-            if (Role < Role.Headmaster)
-                return Result.Failure<bool, RequestError>(
-                    SharedErrors.General.BusinessRuleViolation("Insufficient role for member enrollment!"));
-
-            if (Role == Role.Administrator && school == null)
-                throw new InvalidOperationException(nameof(CanEnrollToSchool));
-
-            if (Role == Role.Headmaster && school != null && School != school)
-                return Result.Failure<bool, RequestError>(
-                    SharedErrors.General.BusinessRuleViolation("Headmaster can only enroll members to owned school!"));
-
-            return Result.Success<bool, RequestError>(true);
-        }
-
-        private Result<bool, RequestError> CanRegisterSchool()
-        {
-            return Result.FailureIf(this.Role != Role.Administrator, true,
-                SharedErrors.General.BusinessRuleViolation("Insufficient role for school registration!"));
+            return member;
         }
     }
 }

@@ -7,6 +7,8 @@ using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Core.SchoolAggregate.Users;
 using SchoolManagement.Data.Database;
+using SchoolManagement.Data.Services;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -16,45 +18,29 @@ namespace SchoolManagement.Data.Schools.EnrollMember
     {
         private readonly SchoolContext _schoolContext;
         private readonly IEmailUniquenessChecker _checker;
-        private readonly ISchoolRepository _schoolRepository;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IMapper _mapper;
 
         public EnrollMemberHandler(
             SchoolContext schoolContext,
             IEmailUniquenessChecker checker,
-            ISchoolRepository schoolRepository,
+            IAuthorizationService authorizationService,
             IMapper mapper)
         {
             _schoolContext = schoolContext;
             _checker = checker;
-            _schoolRepository = schoolRepository;
+            _authorizationService = authorizationService;
             _mapper = mapper;
         }
 
         public async Task<Result<UserDTO, RequestError>> Handle(EnrollMemberCommand command, CancellationToken cancellationToken)
         {
-            Maybe<School> school = await _schoolRepository.GetByIdAsync(command.SchoolId);
-            User currentUser;
+            Result<Tuple<School, User>, RequestError> result = await _authorizationService.GetAuthorizationContextAsync(command.SchoolId, command.AuthId);
+            if (result.IsFailure)
+                result.ConvertFailure<UserDTO>();
 
-            if (command.AuthId == User.Admin.Id)
-            {
-                if (school.HasNoValue)
-                    return Result.Failure<UserDTO, RequestError>(SharedErrors.General.NotFound(nameof(School), command.SchoolId.ToString()));
-                currentUser = User.Admin;
-            }
-            else {
-                if (school.HasNoValue)
-                    return Result.Failure<UserDTO, RequestError>(SharedErrors.General.Unauthorized(command.AuthId.ToString()));
-
-                Maybe<User> currentUserOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(school.Value.Id, command.AuthId);
-                if (currentUserOrNone.HasNoValue)
-                    return Result.Failure<UserDTO, RequestError>(SharedErrors.General.Unauthorized(command.AuthId.ToString()));
-
-                currentUser = currentUserOrNone.Value;
-            }
-
-
-
+            School school = result.Value.Item1;
+            User currentUser = result.Value.Item2;
             FirstName firstName = FirstName.Create(command.FirstName).Value;
             LastName lastName = LastName.Create(command.LastName).Value;
             Email email = Email.Create(command.Email).Value;
@@ -64,12 +50,10 @@ namespace SchoolManagement.Data.Schools.EnrollMember
             if(!_checker.IsUnique(email))
                 return Result.Failure<UserDTO, RequestError>(SharedErrors.User.EmailIsTaken(email.Value));
 
-            var memberOrError = currentUser.Role == Role.Administrator 
-                ? currentUser.CreateMemberAndEnrollToSchool(firstName, lastName, email, role, gender, school.Value)
-                : currentUser.CreateMemberAndEnrollToSchool(firstName, lastName, email, role, gender);
+            Result<User> memberOrError = currentUser.EnrollToSchool(firstName, lastName, email, role, gender, school);
 
             if (memberOrError.IsFailure)
-                return memberOrError.ConvertFailure<UserDTO>();
+                return Result.Failure<UserDTO, RequestError>(SharedErrors.General.BusinessRuleViolation(memberOrError.Error));
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

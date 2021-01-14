@@ -8,6 +8,7 @@ using SchoolManagement.Data.Database;
 using SchoolManagement.Data.DomainServices;
 using SchoolManagement.Data.Initializers;
 using SchoolManagement.Data.Repositories;
+using SchoolManagement.Data.Services;
 using System;
 
 namespace SchoolManagement.Data.Configuration
@@ -35,7 +36,7 @@ namespace SchoolManagement.Data.Configuration
                           .EnableSensitiveDataLogging();
                 }
             });
-            //services.AddScoped(x => new SchoolContext(connectionString, env.IsDevelopment(), new Mediator(x.GetRequiredService<ServiceFactory>().)));
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddHostedService<EnsureDatabaseCreatedService>();
         }
     }

@@ -49,7 +49,7 @@ namespace SchoolManagement.Data.Schools.RegisterSchool
             var schoolOrError = Admin.RegisterSchool(schoolName, firstName, lastName, email, gender);
 
             if (schoolOrError.IsFailure)
-                return schoolOrError.ConvertFailure<SchoolCreatedDTO>();
+                return Result.Failure<SchoolCreatedDTO, RequestError>(SharedErrors.General.BusinessRuleViolation(schoolOrError.Error));
 
             _schoolRepository.Add(schoolOrError.Value);
 
@@ -58,6 +58,5 @@ namespace SchoolManagement.Data.Schools.RegisterSchool
             SchoolCreatedDTO schoolDto = _mapper.Map<SchoolCreatedDTO>(schoolOrError.Value);
             return Result.Success<SchoolCreatedDTO, RequestError>(schoolDto);
         }
-
     }
 }

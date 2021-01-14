@@ -17,13 +17,13 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
 
         public UserEnrolledEvent(Guid userId, FirstName firstName, LastName lastName, Email email, Role role, Gender gender, Guid schoolId)
         {
-            UserId = userId;
+            UserId = userId == Guid.Empty ? throw new ArgumentNullException(nameof(userId)) : userId;
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
             Email = email ?? throw new ArgumentNullException(nameof(email));
             Role = role ?? throw new ArgumentNullException(nameof(role));
             Gender = gender ?? throw new ArgumentNullException(nameof(gender));
-            SchoolId = schoolId;
+            SchoolId = schoolId == Guid.Empty ? throw new ArgumentNullException(nameof(schoolId)) : schoolId;
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
 using Fundraiser.SharedKernel.Utils;
 using SchoolManagement.Core.SchoolAggregate.Groups;
 using SchoolManagement.Core.SchoolAggregate.Schools.Events;
@@ -20,41 +19,37 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
         public string LogoId { get; private set; }
         public virtual IReadOnlyList<User> Members => _members.AsReadOnly();
         public virtual IReadOnlyList<Group> Groups => _groups.AsReadOnly();
+
         protected School()
         {
         }
-        internal School(Name name)
+
+        internal School(Name name, FirstName firstName, LastName lastName, Email email, Gender gender)
             : base(Guid.NewGuid())
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
+
+            var headmaster = User.Create(firstName, lastName, email, Role.Headmaster, gender, this);
+            _members.Add(headmaster.Value);
         }
 
-        internal Result<bool, RequestError> Enroll(User candidate)
+        internal Result Enroll(User candidate)
         {
             if (candidate == null)
                 throw new ArgumentNullException(nameof(candidate));
 
-            var validationResult = CanBeEnrolled(candidate);
-            if (validationResult.IsFailure)
-                return validationResult;
+            if (candidate.Role > Role.Headmaster)
+                return Result.Failure("Role out of school members' scope!");
+
+            if (candidate.Role == Role.Headmaster && Members.Any(m => m.Role == Role.Headmaster))
+                return Result.Failure("School already have a headmaster, only one headmaster per school is allowed!");
 
             _members.Add(candidate);
 
             AddDomainEvent(new UserEnrolledEvent(candidate.Id, candidate.FirstName,
                 candidate.LastName, candidate.Email, candidate.Role, candidate.Gender, Id));
 
-            return Result.Success<bool, RequestError>(true);
-        }
-
-        private Result<bool, RequestError> CanBeEnrolled(User candidate)
-        {
-            if (candidate.Role > Role.Headmaster)
-                return Result.Failure<bool, RequestError>(SharedErrors.General.BusinessRuleViolation("Role out of scope for school members!"));
-
-            if (candidate.Role == Role.Headmaster && (_members.Any(m => m.Role == Role.Headmaster) || Members.Any(m => m.Role == Role.Headmaster)))
-                return Result.Failure<bool, RequestError>(SharedErrors.General.BusinessRuleViolation("School already have a headmaster, only one headmaster per school is allowed!"));
-
-            return Result.Success<bool, RequestError>(true);
+            return Result.Success();
         }
     }
 }

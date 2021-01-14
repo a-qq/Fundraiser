@@ -21,7 +21,7 @@ namespace SchoolManagement.Data.Schools.RegisterSchool
             HeadmasterLastName = lastName;
             HeadmasterEmail = email;
             HeadmasterGender = gender;
-            AuthId = authId;
+            AuthId = authId == Guid.Empty ? throw new ArgumentNullException(nameof(authId)) : authId; 
         }
     }
 }
