@@ -16,8 +16,8 @@ namespace SchoolManagement.Data.Schools.CreateGroup
         {
             Number = number;
             Sign = sign;
-            SchoolId = schoolId == Guid.Empty ? throw new ArgumentNullException(nameof(schoolId)) : schoolId;
-            AuthId = schoolId == Guid.Empty ? throw new ArgumentNullException(nameof(authId)) : authId;
+            SchoolId = schoolId;
+            AuthId = schoolId; 
         }
     }
 }

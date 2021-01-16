@@ -44,7 +44,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
             Email headmasterEmail, Gender headmasterGender)
         {
             if(this.Role != Role.Administrator)
-                Result.Failure<School>("Insufficient role for school registration!");
+                throw new UnauthorizedAccessException($"UserId: {Id}");
 
             School school = new School(schoolName, headmasterFirstName, headmasterLastName, headmasterEmail, headmasterGender);
 
@@ -61,7 +61,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
                 throw new ArgumentNullException(nameof(school));
 
             if (this.Role < Role.Headmaster)
-                return Result.Failure<User>("Insufficient role for member enrollment!");
+                throw new UnauthorizedAccessException($"UserId: {Id}");
 
             if (this.Role == Role.Headmaster)
             {
@@ -80,13 +80,14 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
         public Result<Group> CreateGroup(Number number, Sign sign, School school)
         {
             if (this.Role < Role.Headmaster)
-                return Result.Failure<Group>("Insufficient role to create groups!");
+                throw new UnauthorizedAccessException($"UserId: {Id}");
 
             if (this.Role == Role.Headmaster)
             {
                 if (this.School != school)
                     throw new InvalidOperationException(nameof(CreateGroup));
             }
+
             Result<Group> group = school.AddGroup(number, sign);
 
             return group;

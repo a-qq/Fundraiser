@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Core.SchoolAggregate.Users;
@@ -13,9 +14,14 @@ namespace SchoolManagement.Data.Repositories
     internal sealed class SchoolRepository : ISchoolRepository
     {
         private readonly DbSet<School> _dbSet;
-        public SchoolRepository(SchoolContext schoolContext)
+        private readonly IMemoryCache _cache;
+
+        public SchoolRepository(
+            SchoolContext schoolContext,
+            IMemoryCache memoryCache)
         {
             _dbSet = schoolContext.Schools;
+            _cache = memoryCache;
         }
         public async Task<Maybe<School>> GetByIdAsync(Guid id)
         {
@@ -38,11 +44,23 @@ namespace SchoolManagement.Data.Repositories
             if (memberId == Guid.Empty)
                 throw new ArgumentNullException(nameof(memberId));
 
-            return Maybe<User>.From(
-                await _dbSet.Include(m => m.Members)
-                    .Where(s => s.Id == id)
-                    .SelectMany(s => s.Members)
-                    .SingleOrDefaultAsync(m => m.Id == memberId));
+            var userOrNone = Maybe<User>.From(_cache.Get<User>(memberId));
+            if (userOrNone.HasNoValue)
+            {
+                userOrNone = Maybe<User>.From(
+                      await _dbSet
+                          .Where(s => s.Id == id)
+                          .SelectMany(s => s.Members)
+                          .Include(u => u.School)
+                          .FirstOrDefaultAsync(m => m.Id == memberId));
+
+                if (userOrNone.HasValue)
+                    _cache.Set(memberId, userOrNone.Value, new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(new TimeSpan(0, 0, 5))
+                        .SetSlidingExpiration(new TimeSpan(0, 0, 3)));
+            }
+
+            return userOrNone;
         }
 
         public void Add(School school)
@@ -51,5 +69,6 @@ namespace SchoolManagement.Data.Repositories
                 throw new ArgumentNullException(nameof(school));
             _dbSet.Add(school);
         }
+
     }
 }

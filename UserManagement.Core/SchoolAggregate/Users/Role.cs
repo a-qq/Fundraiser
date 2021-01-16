@@ -7,7 +7,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
     public class Role : ValueObject
     {
         public static readonly Role Administrator = Create(RoleEnum.Administrator.ToString()).Value;
-        internal static readonly Role Headmaster = Create(RoleEnum.Headmaster.ToString()).Value;
+        public static readonly Role Headmaster = Create(RoleEnum.Headmaster.ToString()).Value;
         internal static readonly Role Teacher = Create(RoleEnum.Teacher.ToString()).Value;
         internal static readonly Role Student = Create(RoleEnum.Student.ToString()).Value;
 

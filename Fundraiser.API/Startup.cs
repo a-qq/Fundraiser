@@ -1,5 +1,8 @@
 using AutoMapper;
 using FluentValidation.AspNetCore;
+using Fundraiser.API.Authorization;
+using Fundraiser.API.Authorization.SubMustMatchAdminId;
+using Fundraiser.API.Authorization.UserMustExistInSchoolWithSchoolId;
 using Fundraiser.API.Extensions;
 using Fundraiser.API.Filters;
 using Fundraiser.API.Middleware;
@@ -60,6 +63,7 @@ namespace Fundraiser.API
             services.AddSchoolManagementInfrastructureModule(Env, _connectionString);
             services.AddIDPInfrastructureModule(Env, _connectionString);
             services.AddSharedKernelModule(_connectionString);
+            services.AddAuthorizationHandlers();
 
             services.AddSwaggerConfiguration();
 
@@ -82,16 +86,21 @@ namespace Fundraiser.API
             {
                 options.AddPolicy("MustBeAdmin", builder =>
                 {
-                    builder.RequireRole(RoleEnum.Administrator.ToString());
-                    builder.RequireAuthenticatedUser();
+                    builder.RequireRole(Role.Administrator);
+                    builder.RequireClaim("sub");
                     builder.AddAuthenticationSchemes(IdentityServerAuthenticationDefaults.AuthenticationScheme);
+                    builder.RequireAuthenticatedUser();
+                    builder.AddRequirements(new SubMustMatchAdminIdRequirement());
                 });
 
                 options.AddPolicy("MustBeHeadmaster", builder =>
                 {
-                    builder.RequireRole(RoleEnum.Headmaster.ToString());
+                    builder.RequireRole(Role.Headmaster);
+                    builder.RequireClaim("sub");
+                    builder.RequireClaim("school_id");
                     builder.RequireAuthenticatedUser();
                     builder.AddAuthenticationSchemes(IdentityServerAuthenticationDefaults.AuthenticationScheme);
+                    builder.AddRequirements(new UserMustExistInSchoolWithSchoolIdRequirement());
                 });
             });
 
