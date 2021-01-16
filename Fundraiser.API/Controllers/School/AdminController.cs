@@ -1,5 +1,4 @@
-﻿using CSharpFunctionalExtensions;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.Commands.RegisterSchool;
@@ -31,38 +30,30 @@ namespace Fundraiser.API.Controllers.School
             var result = await Handle(command);
             IActionResult response = FromResultOk(result);
 
-            //var response = errorResponseOrNull.HasNoValue
-            //    ? Ok(result.Value)/* CreatedAtRoute("GetSchool", new { result.Value.Id }, Envelope.Ok(result.Value))*/
-            //    : errorResponseOrNull.Value;
-
             return response;
         }
 
-        [HttpPost("schools/{id}/members")]
-        public async Task<IActionResult> EnrollMember(Guid id, EnrollMemberRequest request)
+        [HttpPost("schools/{schoolId}/members")]
+        public async Task<IActionResult> EnrollMember(Guid schoolId, EnrollMemberRequest request)
 
         {
             var command = new EnrollMemberCommand(request.FirstName, request.LastName,
-                request.Email, request.Role, request.Gender, AuthId, id);
+                request.Email, request.Role, request.Gender, AuthId, schoolId);
 
             var result = await Handle(command);
             IActionResult response = FromResultOk(result);
-
-            //var response = errorResponseOrNull.HasNoValue
-            //    ? Ok(result.Value)/* CreatedAtRoute("GetSchool", new { result.Value.Id }, Envelope.Ok(result.Value))*/
-            //    : errorResponseOrNull.Value;
 
             return response;
         }
 
-        [HttpPost("schools/{id}/groups")]
-        public async Task<IActionResult> CreateGroup(Guid id, CreateGroupRequest request)
+        [HttpPost("schools/{schoolId}/groups")]
+        public async Task<IActionResult> CreateGroup(Guid schoolId, CreateGroupRequest request)
         {
-            var command = new CreateGroupCommand(request.Number, request.Sign, AuthId, id);
+            var command = new CreateGroupCommand(request.Number, request.Sign, AuthId, schoolId);
 
             var result = await Handle(command);
-
             IActionResult response = FromResultOk(result);
+
             return response;
         }
     }

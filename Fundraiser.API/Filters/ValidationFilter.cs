@@ -2,6 +2,7 @@
 using Fundraiser.SharedKernel.ResultErrors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,33 +13,61 @@ namespace Fundraiser.API.Filters
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            if (!context.ModelState.IsValid && !(context.Controller is Controller))
-            {
-                var errorsInModelState = context.ModelState
-                    .Where(x => x.Value.Errors.Count > 0)
-                    .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(x => x.ErrorMessage)).ToArray();
 
+            if (!(context.Controller is Controller))
+            {
                 var errorList = new List<dynamic>();
-                foreach (var error in errorsInModelState)
+
+                if (context.HttpContext.Request.RouteValues.Keys.Any(k => k.Contains("id", StringComparison.OrdinalIgnoreCase)))
                 {
-                    foreach (var subError in error.Value)
+                    var values = context.HttpContext.Request.RouteValues
+                        .Where(rv => rv.Key.Contains("id", StringComparison.OrdinalIgnoreCase)
+                            && Guid.TryParse(rv.Value as string, out Guid Id)
+                            && (Id == Guid.Empty))
+                        .Select(rv => rv.Key);
+
+                    foreach (var value in values)
                     {
-                        var errorModel = new 
+                        var errorModel = new
                         {
-                            FieldName = error.Key,
-                            Message = new List<string>() { subError }
+                            RouteKey = value,
+                            Message = $"{value} cannot be equal {Guid.Empty}!"
                         };
-                        var previousError = errorList.FirstOrDefault(x => x.FieldName == errorModel.FieldName);
-                        if (previousError != null)
-                            previousError.Message.Add(errorModel.Message.First());
-                        else errorList.Add(errorModel);
+
+                        errorList.Add(errorModel);
                     }
                 }
-                var errorResponse = SharedErrors.General.UnprocessableEntity(errorList);
-                context.Result = new UnprocessableEntityObjectResult(Envelope.Error(errorResponse));
-                return;
-            }
 
+                if (!context.ModelState.IsValid)
+                {
+                    var errorsInModelState = context.ModelState
+                        .Where(x => x.Value.Errors.Count > 0)
+                        .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(x => x.ErrorMessage)).ToArray();
+
+                    foreach (var error in errorsInModelState)
+                    {
+                        foreach (var subError in error.Value)
+                        {
+                            var errorModel = new
+                            {
+                                FieldName = error.Key,
+                                Message = new List<string>() { subError }
+                            };
+                            var previousError = errorList.FirstOrDefault(x => x.FieldName == errorModel.FieldName);
+                            if (previousError != null)
+                                previousError.Message.Add(errorModel.Message.First());
+                            else errorList.Add(errorModel);
+                        }
+                    }
+                }
+
+                if (errorList.Count != 0)
+                {
+                    var errorResponse = SharedErrors.General.UnprocessableEntity(errorList);
+                    context.Result = new UnprocessableEntityObjectResult(Envelope.Error(errorResponse));
+                    return;
+                }
+            }
             await next();
         }
     }

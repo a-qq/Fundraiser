@@ -21,7 +21,7 @@ namespace Fundraiser.SharedKernel.ResultErrors
             public static RequestError BusinessRuleViolation(string message)
                 => new RequestError("business.rule.violation", message);
             public static RequestError UnprocessableEntity(dynamic message) =>
-                new RequestError("invalid.property.values", message);
+                new RequestError("invalid.input.values", message);
             /*KeyValuePair<string, IEnumerable<string>>[]*/
             public static RequestError NotFound(string entityName = "Record", string id = null)
             {
