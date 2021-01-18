@@ -9,7 +9,6 @@ using SchoolManagement.Data.DomainServices;
 using SchoolManagement.Data.Initializers;
 using SchoolManagement.Data.Repositories;
 using SchoolManagement.Data.Services;
-using System;
 
 namespace SchoolManagement.Data.Configuration
 {
@@ -37,6 +36,7 @@ namespace SchoolManagement.Data.Configuration
                 }
             });
             services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IStorageService, LocalStorageService>();
             services.AddHostedService<EnsureDatabaseCreatedService>();
         }
     }

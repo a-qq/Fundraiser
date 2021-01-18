@@ -44,6 +44,11 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             this.Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
+        internal void EditLogo()
+        {
+            this.LogoId = Guid.NewGuid().ToString();
+        }
+
         internal Result<User> EnrollCandidate(FirstName firstName, LastName lastName, Email email, Role role, Gender gender)
         {
             User candidate = new User(firstName, lastName, email, role, gender, this);

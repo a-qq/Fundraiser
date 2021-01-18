@@ -67,6 +67,13 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
             school.EditInfo(description);
         }
 
+        public void EditSchoolLogo(School school)
+        {
+            AuthorizeCurrentUserAsAtLeastHeadmaster(school, nameof(EditSchoolLogo));
+
+            school.EditLogo();
+        }
+
         /// <summary>
         ///    Creates and enrolls a new member to <paramref name="school"/>. Returns successfull or failure result depending on bussinsess rule validation.
         ///    Throws if calling User is a Headmaster and isn't member of a <paramref name="school"/>.</summary>
@@ -99,7 +106,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
             if (school == null)
                 throw new ArgumentNullException(nameof(school));
 
-            if (this.Role < Role.Headmaster || !this.IsActive)
+            if (this.Role < Role.Headmaster || (this.Role != Role.Administrator && !this.IsActive))
                 throw new UnauthorizedAccessException($"UserId: {Id}");
 
             if (this.Role == Role.Headmaster)

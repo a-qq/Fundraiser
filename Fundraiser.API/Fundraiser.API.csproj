@@ -27,5 +27,9 @@
     <ProjectReference Include="..\UserManagment.Data\SchoolManagement.Data.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\logos\" />
+  </ItemGroup>
+
 
 </Project>

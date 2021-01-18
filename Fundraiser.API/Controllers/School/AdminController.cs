@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.Commands.RegisterSchool;
 using SchoolManagement.Data.Schools.CreateGroup;
 using SchoolManagement.Data.Schools.EditSchool.Admin;
+using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
 using SchoolManagement.Data.Schools.RegisterSchool;
 using System;
@@ -35,9 +36,20 @@ namespace Fundraiser.API.Controllers.School
         }
 
         [HttpPut("schools/{schoolId}/edit")]
-        public async Task<IActionResult> EditSchoolInfo(Guid schoolId, EditSchoolRequest request)
+        public async Task<IActionResult> EditSchool(Guid schoolId, EditSchoolRequest request)
         {
             var command = new EditSchoolCommand(request.Description, AuthId, schoolId);
+
+            var result = await Handle(command);
+            IActionResult response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [HttpPut("schools/{schoolId}/edit-logo")]
+        public async Task<IActionResult> EditSchoolLogo(Guid schoolId, [FromForm] EditSchoolLogoRequest request)
+        {
+            var command = new EditSchoolLogoCommand(request.Logo, AuthId, schoolId);
 
             var result = await Handle(command);
             IActionResult response = FromResultNoContent(result);
