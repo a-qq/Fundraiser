@@ -40,36 +40,44 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
             School = school ?? throw new ArgumentNullException(nameof(school));
         }
 
-        public Result<School> RegisterSchool(Name schoolName, FirstName headmasterFirstName, LastName headmasterLastName, 
+        public Result<School> RegisterSchool(Name schoolName, FirstName headmasterFirstName, LastName headmasterLastName,
             Email headmasterEmail, Gender headmasterGender)
         {
-            if(this.Role != Role.Administrator)
-                throw new UnauthorizedAccessException($"UserId: {Id}");
+            AuthorizeCurrentUserAsAdmin();
 
             School school = new School(schoolName, headmasterFirstName, headmasterLastName, headmasterEmail, headmasterGender);
 
             return Result.Success(school);
         }
 
+        public void EditSchool(Name name, Description description, School school)
+        {
+            AuthorizeCurrentUserAsAdmin();
+
+            if (school == null)
+                throw new ArgumentNullException(nameof(school));
+
+            school.Edit(name, description);
+        }
+
+        public void EditSchoolInfo(Description description, School school)
+        {
+            AuthorizeCurrentUserAsAtLeastHeadmaster(school, nameof(EditSchoolInfo));
+
+            school.EditInfo(description);
+        }
+
         /// <summary>
         ///    Creates and enrolls a new member to <paramref name="school"/>. Returns successfull or failure result depending on bussinsess rule validation.
         ///    Throws if calling User is a Headmaster and isn't member of a <paramref name="school"/>.</summary>
         public Result<User> EnrollToSchool(FirstName firstName, LastName lastName, Email email,
-            Role role, Gender gender, School school) 
+            Role role, Gender gender, School school)
         {
-            if (school == null)
-                throw new ArgumentNullException(nameof(school));
+            AuthorizeCurrentUserAsAtLeastHeadmaster(school, nameof(EnrollToSchool));
 
-            if (this.Role < Role.Headmaster)
-                throw new UnauthorizedAccessException($"UserId: {Id}");
-
-            if (this.Role == Role.Headmaster)
+            if (this.Role == Role.Headmaster && this.Role == role)
             {
-                if (this.School != school)
-                    throw new InvalidOperationException(nameof(EnrollToSchool));
-
-                if (this.Role == role) //prevents additional call to db in later validation
-                    return Result.Failure<User>("School already have a headmaster, only one headmaster per school is allowed!");
+                return Result.Failure<User>("School already have a headmaster, only one headmaster per school is allowed!");
             }
 
             Result<User> member = school.EnrollCandidate(firstName, lastName, email, role, gender);
@@ -79,18 +87,32 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
 
         public Result<Group> CreateGroup(Number number, Sign sign, School school)
         {
-            if (this.Role < Role.Headmaster)
+            AuthorizeCurrentUserAsAtLeastHeadmaster(school, nameof(CreateGroup));
+
+            Result<Group> group = school.AddGroup(number, sign);
+
+            return group;
+        }
+
+        private void AuthorizeCurrentUserAsAtLeastHeadmaster(School school, string actionName)
+        {
+            if (school == null)
+                throw new ArgumentNullException(nameof(school));
+
+            if (this.Role < Role.Headmaster || !this.IsActive)
                 throw new UnauthorizedAccessException($"UserId: {Id}");
 
             if (this.Role == Role.Headmaster)
             {
                 if (this.School != school)
-                    throw new InvalidOperationException(nameof(CreateGroup));
+                    throw new InvalidOperationException(actionName);
             }
+        }
 
-            Result<Group> group = school.AddGroup(number, sign);
-
-            return group;
+        private void AuthorizeCurrentUserAsAdmin()
+        {
+            if (this.Role != Role.Administrator)
+                throw new UnauthorizedAccessException($"UserId: {Id}");
         }
     }
 }

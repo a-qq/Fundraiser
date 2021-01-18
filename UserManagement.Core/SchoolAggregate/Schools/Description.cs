@@ -14,7 +14,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
         public static Result<Description> Create(string description)
         {
-            Result validationResult = ValidateDescription(description);
+            Result validationResult = Validate(description);
 
             if (validationResult.IsFailure)
                 return validationResult.ConvertFailure<Description>();
@@ -22,7 +22,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             return Result.Success(new Description(description));
         }
 
-        private static Result ValidateDescription(string description, string propertyName = nameof(Description))
+        public static Result Validate(string description, string propertyName = nameof(Description))
         {
             return Result.FailureIf(!string.IsNullOrEmpty(description) && description.Length > MaxLength,
                     $"{propertyName} should contain max {MaxLength} characters!");

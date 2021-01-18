@@ -27,10 +27,21 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
         internal School(Name name, FirstName firstName, LastName lastName, Email email, Gender gender)
             : base(Guid.NewGuid())
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
 
             Result<User> headmaster = EnrollCandidate(firstName, lastName, email, Role.Headmaster, gender);
             _members.Add(headmaster.Value);
+        }
+
+        internal void Edit(Name name, Description description)
+        {
+            this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            EditInfo(description);
+        }
+
+        internal void EditInfo(Description description)
+        {
+            this.Description = description ?? throw new ArgumentNullException(nameof(description));
         }
 
         internal Result<User> EnrollCandidate(FirstName firstName, LastName lastName, Email email, Role role, Gender gender)

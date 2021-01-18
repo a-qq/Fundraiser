@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.CreateGroup;
+using SchoolManagement.Data.Schools.EditSchool.Headmaster;
 using SchoolManagement.Data.Schools.EnrollMember;
 using System.Threading.Tasks;
 
@@ -41,6 +42,19 @@ namespace Fundraiser.API.Controllers.School
             var result = await Handle(command);
 
             var response = FromResultOk(result);
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpPut("edit-info")]
+        public async Task<IActionResult> EditSchoolInfo(EditSchoolInfoRequest request)
+        {
+            var command = new EditSchoolInfoCommand(request.Description, AuthId, SchoolId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
             return response;
         }
 
