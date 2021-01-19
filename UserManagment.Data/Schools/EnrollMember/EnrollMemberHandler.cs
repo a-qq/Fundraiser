@@ -5,7 +5,7 @@ using Fundraiser.SharedKernel.Utils;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Schools;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Data.Database;
 using SchoolManagement.Data.Services;
 using System;
@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace SchoolManagement.Data.Schools.EnrollMember
 {
-    public class EnrollMemberHandler : IRequestHandler<EnrollMemberCommand, Result<UserDTO, RequestError>>
+    public class EnrollMemberHandler : IRequestHandler<EnrollMemberCommand, Result<MemberDTO, RequestError>>
     {
         private readonly SchoolContext _schoolContext;
         private readonly IEmailUniquenessChecker _checker;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IAuthorizationService _authService;
         private readonly IMapper _mapper;
 
         public EnrollMemberHandler(
@@ -29,18 +29,18 @@ namespace SchoolManagement.Data.Schools.EnrollMember
         {
             _schoolContext = schoolContext;
             _checker = checker;
-            _authorizationService = authorizationService;
+            _authService = authorizationService;
             _mapper = mapper;
         }
 
-        public async Task<Result<UserDTO, RequestError>> Handle(EnrollMemberCommand command, CancellationToken cancellationToken)
+        public async Task<Result<MemberDTO, RequestError>> Handle(EnrollMemberCommand command, CancellationToken cancellationToken)
         {
-            Result<Tuple<School, User>, RequestError> result = await _authorizationService.GetAuthorizationContextAsync(command.SchoolId, command.AuthId);
-            if (result.IsFailure)
-                result.ConvertFailure<UserDTO>();
+            Result<School, RequestError> schoolOrError =
+                await _authService.VerifyAuthorizationAsync(command.SchoolId, command.AuthId, Role.Headmaster);
 
-            School school = result.Value.Item1;
-            User currentUser = result.Value.Item2;
+            if (schoolOrError.IsFailure)
+                schoolOrError.ConvertFailure<MemberDTO>();
+
             FirstName firstName = FirstName.Create(command.FirstName).Value;
             LastName lastName = LastName.Create(command.LastName).Value;
             Email email = Email.Create(command.Email).Value;
@@ -48,17 +48,17 @@ namespace SchoolManagement.Data.Schools.EnrollMember
             Role role = Role.Create(command.Role).Value;
 
             if(!_checker.IsUnique(email))
-                return Result.Failure<UserDTO, RequestError>(SharedErrors.User.EmailIsTaken(email.Value));
+                return Result.Failure<MemberDTO, RequestError>(SharedErrors.User.EmailIsTaken(email.Value));
 
-            Result<User> memberOrError = currentUser.EnrollToSchool(firstName, lastName, email, role, gender, school);
+            Result<Member> memberOrError = schoolOrError.Value.EnrollCandidate(firstName, lastName, email, role, gender);
 
             if (memberOrError.IsFailure)
-                return Result.Failure<UserDTO, RequestError>(SharedErrors.General.BusinessRuleViolation(memberOrError.Error));
+                return Result.Failure<MemberDTO, RequestError>(SharedErrors.General.BusinessRuleViolation(memberOrError.Error));
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 
-            UserDTO userDTO = _mapper.Map<UserDTO>(memberOrError.Value);
-            return Result.Success<UserDTO, RequestError>(userDTO);
+            MemberDTO userDTO = _mapper.Map<MemberDTO>(memberOrError.Value);
+            return Result.Success<MemberDTO, RequestError>(userDTO);
         }
     }
 }

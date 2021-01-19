@@ -21,7 +21,7 @@ namespace IDP.Infrastructure.IntegrationHandlers.Management
         {
             var connection = this._sqlConnectionFactory.GetOpenConnection();
 
-            const string sqlUpdate1 = "UPDATE [management].[Users] SET IsActive = 1 WHERE Id = (@Id)";
+            const string sqlUpdate1 = "UPDATE [management].[Members] SET IsActive = 1 WHERE Id = (@Id)";
 
             await connection.ExecuteAsync(sqlUpdate1, new
             {

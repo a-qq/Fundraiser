@@ -2,11 +2,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace SchoolManagement.Core.SchoolAggregate.Users
+namespace SchoolManagement.Core.SchoolAggregate.Members
 {
     public class Role : ValueObject
     {
-        public static readonly Role Administrator = Create(RoleEnum.Administrator.ToString()).Value;
         public static readonly Role Headmaster = Create(RoleEnum.Headmaster.ToString()).Value;
         internal static readonly Role Teacher = Create(RoleEnum.Teacher.ToString()).Value;
         internal static readonly Role Student = Create(RoleEnum.Student.ToString()).Value;
@@ -80,8 +79,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Users
     {
         Student = 1,
         Teacher = 2,
-        Headmaster = 3,
-        Administrator = 4
+        Headmaster = 3
     }
 }
 

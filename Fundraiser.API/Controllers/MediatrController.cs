@@ -63,9 +63,6 @@ namespace Fundraiser.API.Controllers
             if (result.Error == SharedErrors.General.NotFound("", ""))
                 return NotFound(Envelope.Error(result.Error));
 
-            if (result.Error == SharedErrors.General.Unauthorized(""))
-                return Unauthorized(Envelope.Error(result.Error));
-
             return BadRequest(Envelope.Error(result.Error));
 
         }

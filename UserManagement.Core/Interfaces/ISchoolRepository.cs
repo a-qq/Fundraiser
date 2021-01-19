@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Core.SchoolAggregate.Schools;
-using SchoolManagement.Core.SchoolAggregate.Users;
 using System;
 using System.Threading.Tasks;
 
@@ -10,7 +10,7 @@ namespace SchoolManagement.Core.Interfaces
     {
         Task<Maybe<School>> GetByIdAsync(Guid id);
         Task<bool> ExistByIdAsync(Guid id);
-        Task<Maybe<User>> GetSchoolMemberByIdAsync(Guid id, Guid memberId);
+        Task<Maybe<Member>> GetSchoolMemberByIdAsync(Guid schoolId, Guid memberId);
         void Add(School school);
     }
 }

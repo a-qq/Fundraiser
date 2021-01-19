@@ -1,11 +1,11 @@
 ﻿using CSharpFunctionalExtensions;
 using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.Utils;
 using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Schools;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using System;
 using System.Threading.Tasks;
-using static SchoolManagement.Core.SchoolAggregate.Users.User;
 
 namespace SchoolManagement.Data.Services
 {
@@ -13,13 +13,10 @@ namespace SchoolManagement.Data.Services
     {
         private readonly ISchoolRepository _schoolRepository;
 
-
         public AuthorizationService(ISchoolRepository schoolRepository)
-        {
-            _schoolRepository = schoolRepository;
+            => _schoolRepository = schoolRepository;
 
-        }
-        public async Task<Result<Tuple<School, User>, RequestError>> GetAuthorizationContextAsync(Guid schoolId, Guid userId)
+        public async Task<Result<School, RequestError>> VerifyAuthorizationAsync(Guid schoolId, Guid userId, Role role)
         {
             if (schoolId == Guid.Empty)
                 throw new ArgumentNullException(nameof(schoolId));
@@ -27,25 +24,20 @@ namespace SchoolManagement.Data.Services
             if (userId == Guid.Empty)
                 throw new ArgumentNullException(nameof(userId));
 
-            if (userId == Admin.Id)
+            if (Administrator.FromId(userId) != null)
             {
                 Maybe<School> schoolOrNone = await _schoolRepository.GetByIdAsync(schoolId);
                 if (schoolOrNone.HasNoValue)
-                    return Result.Failure<Tuple<School, User>, RequestError>(SharedErrors.General.NotFound(nameof(School), schoolId.ToString()));
+                    return Result.Failure<School, RequestError>(SharedErrors.General.NotFound(schoolId, nameof(School)));
 
-                return Result.Success<Tuple<School, User>, RequestError>(new Tuple<School, User>(schoolOrNone.Value, Admin));
+                return Result.Success<School, RequestError>(schoolOrNone.Value);
             }
 
-            Maybe<User> userOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(schoolId, userId);
-            if (userOrNone.HasNoValue || !userOrNone.Value.IsActive) 
+            Maybe<Member> userOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(schoolId, userId);
+            if (userOrNone.HasNoValue || !userOrNone.Value.IsActive || userOrNone.Value.Role < role) 
                 throw new UnauthorizedAccessException($"SchoolId: {schoolId}, UserId: {userId}");
-            
-            //only if Admin would be loaded from cache
-            if (userOrNone.Value.School == null)
-                throw new InvalidOperationException(nameof(GetAuthorizationContextAsync));
-
-
-            return Result.Success<Tuple<School, User>, RequestError>(new Tuple<School, User>(userOrNone.Value.School, userOrNone.Value));
+           
+            return Result.Success<School, RequestError>(userOrNone.Value.School);
         }
     }
 }

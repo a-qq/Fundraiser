@@ -3,7 +3,7 @@ using Fundraiser.SharedKernel.Utils;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace SchoolManagement.Core.SchoolAggregate.Users
+namespace SchoolManagement.Core.SchoolAggregate.Members
 {
     public class FirstName : ValueObject
     {

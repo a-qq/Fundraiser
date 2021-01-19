@@ -3,7 +3,7 @@ using FluentValidation;
 using Fundraiser.API.Validators.Rules;
 using Fundraiser.SharedKernel.Utils;
 using SchoolManagement.Core.SchoolAggregate.Schools;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Data.Schools.Commands.RegisterSchool;
 
 namespace Fundraiser.API.Validators.Management

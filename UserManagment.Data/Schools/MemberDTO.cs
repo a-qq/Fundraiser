@@ -2,7 +2,7 @@
 
 namespace SchoolManagement.Data.Schools
 {
-    public class UserDTO
+    public class MemberDTO
     {
         public Guid Id { get; set; }
         public string FirstName { get; set; }

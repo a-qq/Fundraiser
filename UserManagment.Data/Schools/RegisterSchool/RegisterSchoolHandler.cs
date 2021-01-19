@@ -5,11 +5,11 @@ using Fundraiser.SharedKernel.Utils;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Schools;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Data.Database;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using static SchoolManagement.Core.SchoolAggregate.Users.User;
 
 namespace SchoolManagement.Data.Schools.RegisterSchool
 {
@@ -34,8 +34,8 @@ namespace SchoolManagement.Data.Schools.RegisterSchool
 
         public async Task<Result<SchoolCreatedDTO, RequestError>> Handle(RegisterSchoolCommand command, CancellationToken cancellationToken)
         {
-            if (command.AuthId != Admin.Id)
-                return Result.Failure<SchoolCreatedDTO, RequestError>(SharedErrors.General.Unauthorized(command.AuthId.ToString()));
+            if (Administrator.FromId(command.AuthId) == null)
+                throw new UnauthorizedAccessException($"UserId: {command.AuthId}");
             //fail fast
             Name schoolName = Name.Create(command.Name).Value;
             FirstName firstName = FirstName.Create(command.HeadmasterFirstName).Value;
@@ -46,16 +46,13 @@ namespace SchoolManagement.Data.Schools.RegisterSchool
             if (!_checker.IsUnique(email))
                 return Result.Failure<SchoolCreatedDTO, RequestError>(SharedErrors.User.EmailIsTaken(email.Value));
 
-            var schoolOrError = Admin.RegisterSchool(schoolName, firstName, lastName, email, gender);
+            School school = new School(schoolName, firstName, lastName, email, gender);
 
-            if (schoolOrError.IsFailure)
-                return Result.Failure<SchoolCreatedDTO, RequestError>(SharedErrors.General.BusinessRuleViolation(schoolOrError.Error));
-
-            _schoolRepository.Add(schoolOrError.Value);
+            _schoolRepository.Add(school);
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 
-            SchoolCreatedDTO schoolDto = _mapper.Map<SchoolCreatedDTO>(schoolOrError.Value);
+            SchoolCreatedDTO schoolDto = _mapper.Map<SchoolCreatedDTO>(school);
             return Result.Success<SchoolCreatedDTO, RequestError>(schoolDto);
         }
     }

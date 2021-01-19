@@ -23,7 +23,7 @@ namespace SchoolManagement.Data.Database
             _eventPublisher = mediator;
         }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             //IEnumerable<EntityEntry> enumerationEntries = ChangeTracker.Entries()
             //    .Where(x => EnumerationTypes.Contains(x.Entity.GetType()));

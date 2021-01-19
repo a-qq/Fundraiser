@@ -1,15 +1,15 @@
 ﻿using Fundraiser.SharedKernel.Utils;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 
 namespace SchoolManagement.Data.Database
 {
-    internal sealed class UserConfiguration : IEntityTypeConfiguration<User>
+    internal sealed class MemberConfiguration : IEntityTypeConfiguration<Member>
     {
-        public void Configure(EntityTypeBuilder<User> b)
+        public void Configure(EntityTypeBuilder<Member> b)
         {
-            b.ToTable("Users", SchemaNames.Management).HasKey(p => p.Id);
+            b.ToTable("Members", SchemaNames.Management).HasKey(p => p.Id);
 
             b.Property(p => p.Id).ValueGeneratedNever();
 

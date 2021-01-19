@@ -5,7 +5,7 @@ using System;
 
 namespace SchoolManagement.Data.Schools.EnrollMember
 {
-    public class EnrollMemberCommand : ICommand<Result<UserDTO, RequestError>>
+    public class EnrollMemberCommand : ICommand<Result<MemberDTO, RequestError>>
     {
         public string FirstName { get; }
         public string LastName { get; }

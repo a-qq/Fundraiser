@@ -6,6 +6,6 @@ namespace SchoolManagement.Data.Schools.RegisterSchool
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public UserDTO Headmaster { get; set; }
+        public MemberDTO Headmaster { get; set; }
     }
 }

@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SchoolManagement.Core.SchoolAggregate.Users
+namespace SchoolManagement.Core.SchoolAggregate.Members
 {
     public class Gender : ValueObject
     {

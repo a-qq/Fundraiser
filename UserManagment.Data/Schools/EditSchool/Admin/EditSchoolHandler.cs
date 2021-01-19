@@ -1,9 +1,9 @@
 ﻿using CSharpFunctionalExtensions;
 using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.Utils;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Schools;
-using SchoolManagement.Core.SchoolAggregate.Users;
 using SchoolManagement.Data.Database;
 using System;
 using System.Threading;
@@ -26,17 +26,18 @@ namespace SchoolManagement.Data.Schools.EditSchool.Admin
 
         public async Task<Result<bool, RequestError>> Handle(EditSchoolCommand request, CancellationToken cancellationToken)
         {
-            if(request.AuthId != User.Admin.Id)
+            if (Administrator.FromId(request.AuthId) == null)
                 throw new UnauthorizedAccessException($"UserId: {request.AuthId}");
 
             Maybe<School> schoolOrNone = await _schoolRepository.GetByIdAsync(request.SchoolId);
+
             if (schoolOrNone.HasNoValue)
-                return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(nameof(School), request.SchoolId.ToString()));
+                return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(request.SchoolId, nameof(School)));
 
             Name name = Name.Create(request.Name).Value;
             Description description = Description.Create(request.Description).Value;
 
-            User.Admin.EditSchool(name, description, schoolOrNone.Value);
+            schoolOrNone.Value.Edit(name, description);
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

@@ -2,10 +2,9 @@
 using Fundraiser.SharedKernel.ResultErrors;
 using MediatR;
 using SchoolManagement.Core.SchoolAggregate.Schools;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Data.Database;
 using SchoolManagement.Data.Services;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,17 +25,15 @@ namespace SchoolManagement.Data.Schools.EditSchool.Headmaster
 
         public async Task<Result<bool, RequestError>> Handle(EditSchoolInfoCommand request, CancellationToken cancellationToken)
         {
-            Result<Tuple<School, User>, RequestError> authContext = 
-                await _authorizationService.GetAuthorizationContextAsync(request.SchoolId, request.AuthId);
+            Result<School, RequestError> schoolOrError = 
+                await _authorizationService.VerifyAuthorizationAsync(request.SchoolId, request.AuthId, Role.Headmaster);
 
-            if (authContext.IsFailure)
-                return authContext.ConvertFailure<bool>();
+            if (schoolOrError.IsFailure)
+                return schoolOrError.ConvertFailure<bool>();
 
-            User currentUser = authContext.Value.Item2;
-            School school = authContext.Value.Item1;
             Description description = Description.Create(request.Description).Value;
 
-            currentUser.EditSchoolInfo(description, school);
+            schoolOrError.Value.EditInfo(description);
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

@@ -1,23 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using SchoolManagement.Core.Interfaces;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Fundraiser.API.Authorization.UserMustExistInSchoolWithSchoolId
+namespace Fundraiser.API.Authorization.UserMustBeSchoolMember
 {
-    public sealed class UserMustExistInSchoolWithSchoolIdHandler : AuthorizationHandler<UserMustExistInSchoolWithSchoolIdRequirement>
+    public sealed class UserMustBeSchoolMemberHandler : AuthorizationHandler<UserMustBeSchoolMemberRequirement>
     {
         private readonly ISchoolRepository _schoolRepository;
 
-        public UserMustExistInSchoolWithSchoolIdHandler(ISchoolRepository schoolRepository)
+        public UserMustBeSchoolMemberHandler(ISchoolRepository schoolRepository)
         {
             _schoolRepository = schoolRepository;
         }
 
-        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, UserMustExistInSchoolWithSchoolIdRequirement requirement)
+        protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, UserMustBeSchoolMemberRequirement requirement)
         {
             string subAsString = context.User.FindFirstValue("sub");
 
@@ -45,12 +45,6 @@ namespace Fundraiser.API.Authorization.UserMustExistInSchoolWithSchoolId
             }
 
             Role userRole = Role.Create(schoolRole.Value).Value;
-
-            if (userRole == Role.Administrator)
-            {
-                context.Fail();
-                return;
-            }
 
             var currentUser = await _schoolRepository.GetSchoolMemberByIdAsync(schoolId, userId);
 

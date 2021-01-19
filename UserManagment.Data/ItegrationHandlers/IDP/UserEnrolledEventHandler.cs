@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace SchoolManagement.Data.IntegrationHandlers.IDP
 {
-    public class UserEnrolledEventHandler : INotificationHandler<UserEnrolledEvent>
+    public class UserEnrolledEventHandler : INotificationHandler<MemberEnrolledEvent>
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
         private readonly IMailManager _mailManager;
@@ -28,7 +28,7 @@ namespace SchoolManagement.Data.IntegrationHandlers.IDP
             _frontendSettings = mailOptions.Value;
         }
 
-        public async Task Handle(UserEnrolledEvent notification, CancellationToken cancellationToken)
+        public async Task Handle(MemberEnrolledEvent notification, CancellationToken cancellationToken)
         {
             var connection = this._sqlConnectionFactory.GetOpenConnection();
 

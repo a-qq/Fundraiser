@@ -2,12 +2,11 @@
 using Fundraiser.SharedKernel.ResultErrors;
 using MediatR;
 using SchoolManagement.Core.SchoolAggregate.Schools;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Data.Database;
 using SchoolManagement.Data.Services;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,7 +14,7 @@ namespace SchoolManagement.Data.Schools.EditSchoolLogo
 {
     public class EditSchoolLogoHandler : IRequestHandler<EditSchoolLogoCommand, Result<bool, RequestError>>
     {
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IAuthorizationService _authService;
         private readonly IStorageService _storageService;
         private readonly SchoolContext _schoolContext;
 
@@ -24,29 +23,26 @@ namespace SchoolManagement.Data.Schools.EditSchoolLogo
             IStorageService storageService,
             SchoolContext schoolContext)
         {
-            _authorizationService = authorizationService;
+            _authService = authorizationService;
             _storageService = storageService;
             _schoolContext = schoolContext;
         }
 
         public async Task<Result<bool, RequestError>> Handle(EditSchoolLogoCommand request, CancellationToken cancellationToken)
         {
-            Result<Tuple<School, User>, RequestError> authContext =
-                await _authorizationService.GetAuthorizationContextAsync(request.SchoolId, request.AuthId);
+            Result<School, RequestError> schoolOrError =
+                await _authService.VerifyAuthorizationAsync(request.SchoolId, request.AuthId, Role.Headmaster);
 
-            if (authContext.IsFailure)
-                authContext.ConvertFailure<bool>();
+            if (schoolOrError.IsFailure)
+                schoolOrError.ConvertFailure<bool>();
 
-            User currentUser = authContext.Value.Item2;
-            School school = authContext.Value.Item1;
-            string oldLogoId = school.LogoId;
-
-            currentUser.EditSchoolLogo(school);
-
-            if (!string.IsNullOrWhiteSpace(oldLogoId))
+            if (!string.IsNullOrWhiteSpace(schoolOrError.Value.LogoId))
             {
-                await _storageService.DeleteAsync(oldLogoId);
+                //TODO: is it possible to rollback static file deletion (?) + pass token for future AzureBlob implementation
+                await _storageService.DeleteAsync(schoolOrError.Value.LogoId);
             }
+
+            schoolOrError.Value.EditLogo();
 
             using (var logo = Image.Load(request.Logo.OpenReadStream()))
             {
@@ -62,10 +58,11 @@ namespace SchoolManagement.Data.Schools.EditSchoolLogo
                 })
                 .BackgroundColor(Color.Transparent));
 
-                await _storageService.SaveAsync(logo, school, cancellationToken);
+                await _storageService.SaveAsync(logo, schoolOrError.Value);
             }
 
-            await _schoolContext.SaveChangesAsync(cancellationToken);
+            //as old photo already has been deleted, don't pass token
+            await _schoolContext.SaveChangesAsync();
 
             return Result.Success<bool, RequestError>(true);
         }

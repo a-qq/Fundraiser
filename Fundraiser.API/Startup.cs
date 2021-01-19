@@ -2,7 +2,7 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using Fundraiser.API.Authorization;
 using Fundraiser.API.Authorization.SubMustMatchAdminId;
-using Fundraiser.API.Authorization.UserMustExistInSchoolWithSchoolId;
+using Fundraiser.API.Authorization.UserMustBeSchoolMember;
 using Fundraiser.API.Extensions;
 using Fundraiser.API.Filters;
 using Fundraiser.API.Middleware;
@@ -10,6 +10,7 @@ using Fundraiser.API.Validators;
 using Fundraiser.IDP;
 using Fundraiser.SharedKernel.Configuration;
 using Fundraiser.SharedKernel.Settings;
+using Fundraiser.SharedKernel.Utils;
 using IdentityServer4.AccessTokenValidation;
 using IDP.Infrastructure.Configuration;
 using IDP.Infrastructure.IntegrationHandlers;
@@ -19,7 +20,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Data.Configuration;
 using SchoolManagement.Data.IntegrationHandlers;
 using SchoolManagement.Data.Profiles;
@@ -58,7 +59,7 @@ namespace Fundraiser.API
                 fv.RegisterValidatorsFromAssemblyContaining<IMarkerValidator>();
             });
 
-            services.AddMediatR(cfg => cfg.AsScoped(), typeof(UserDTO), typeof(IHandler), typeof(IHandlerIDP));
+            services.AddMediatR(cfg => cfg.AsScoped(), typeof(MemberDTO), typeof(IHandler), typeof(IHandlerIDP));
             services.AddAutoMapper(typeof(SchoolProfile));
             services.AddSchoolManagementInfrastructureModule(Env, _connectionString);
             services.AddIDPInfrastructureModule(Env, _connectionString);
@@ -86,7 +87,7 @@ namespace Fundraiser.API
             {
                 options.AddPolicy("MustBeAdmin", builder =>
                 {
-                    builder.RequireRole(Role.Administrator);
+                    builder.RequireRole(nameof(Administrator));
                     builder.RequireClaim("sub");
                     builder.AddAuthenticationSchemes(IdentityServerAuthenticationDefaults.AuthenticationScheme);
                     builder.RequireAuthenticatedUser();
@@ -100,7 +101,7 @@ namespace Fundraiser.API
                     builder.RequireClaim("school_id");
                     builder.RequireAuthenticatedUser();
                     builder.AddAuthenticationSchemes(IdentityServerAuthenticationDefaults.AuthenticationScheme);
-                    builder.AddRequirements(new UserMustExistInSchoolWithSchoolIdRequirement());
+                    builder.AddRequirements(new UserMustBeSchoolMemberRequirement());
                 });
             });
 

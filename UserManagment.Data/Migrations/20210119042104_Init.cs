@@ -26,7 +26,7 @@ namespace SchoolManagement.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                name: "Members",
                 schema: "management",
                 columns: table => new
                 {
@@ -42,9 +42,9 @@ namespace SchoolManagement.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Id);
+                    table.PrimaryKey("PK_Members", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Schools_SchoolId",
+                        name: "FK_Members_Schools_SchoolId",
                         column: x => x.SchoolId,
                         principalSchema: "management",
                         principalTable: "Schools",
@@ -68,10 +68,10 @@ namespace SchoolManagement.Data.Migrations
                 {
                     table.PrimaryKey("PK_Groups", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Groups_Users_FormTutorId",
+                        name: "FK_Groups_Members_FormTutorId",
                         column: x => x.FormTutorId,
                         principalSchema: "management",
-                        principalTable: "Users",
+                        principalTable: "Members",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
@@ -105,28 +105,28 @@ namespace SchoolManagement.Data.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Email",
+                name: "IX_Members_Email",
                 schema: "management",
-                table: "Users",
+                table: "Members",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_GroupId",
+                name: "IX_Members_GroupId",
                 schema: "management",
-                table: "Users",
+                table: "Members",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_SchoolId",
+                name: "IX_Members_SchoolId",
                 schema: "management",
-                table: "Users",
+                table: "Members",
                 column: "SchoolId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Users_Groups_GroupId",
+                name: "FK_Members_Groups_GroupId",
                 schema: "management",
-                table: "Users",
+                table: "Members",
                 column: "GroupId",
                 principalSchema: "management",
                 principalTable: "Groups",
@@ -137,12 +137,12 @@ namespace SchoolManagement.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Groups_Users_FormTutorId",
+                name: "FK_Groups_Members_FormTutorId",
                 schema: "management",
                 table: "Groups");
 
             migrationBuilder.DropTable(
-                name: "Users",
+                name: "Members",
                 schema: "management");
 
             migrationBuilder.DropTable(

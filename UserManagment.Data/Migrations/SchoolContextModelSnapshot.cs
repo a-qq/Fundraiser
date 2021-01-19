@@ -81,7 +81,7 @@ namespace SchoolManagement.Data.Migrations
                     b.ToTable("Schools","management");
                 });
 
-            modelBuilder.Entity("SchoolManagement.Core.SchoolAggregate.Users.User", b =>
+            modelBuilder.Entity("SchoolManagement.Core.SchoolAggregate.Users.Member", b =>
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
@@ -130,12 +130,12 @@ namespace SchoolManagement.Data.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.ToTable("Users","management");
+                    b.ToTable("Members","management");
                 });
 
             modelBuilder.Entity("SchoolManagement.Core.SchoolAggregate.Groups.Group", b =>
                 {
-                    b.HasOne("SchoolManagement.Core.SchoolAggregate.Users.User", "FormTutor")
+                    b.HasOne("SchoolManagement.Core.SchoolAggregate.Users.Member", "FormTutor")
                         .WithOne()
                         .HasForeignKey("SchoolManagement.Core.SchoolAggregate.Groups.Group", "FormTutorId");
 
@@ -146,7 +146,7 @@ namespace SchoolManagement.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SchoolManagement.Core.SchoolAggregate.Users.User", b =>
+            modelBuilder.Entity("SchoolManagement.Core.SchoolAggregate.Users.Member", b =>
                 {
                     b.HasOne("SchoolManagement.Core.SchoolAggregate.Groups.Group", "Group")
                         .WithMany("Members")

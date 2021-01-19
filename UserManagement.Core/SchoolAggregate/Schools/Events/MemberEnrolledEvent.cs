@@ -1,11 +1,11 @@
 ﻿using Fundraiser.SharedKernel.Utils;
 using MediatR;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using System;
 
 namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
 {
-    public sealed class UserEnrolledEvent : INotification
+    public sealed class MemberEnrolledEvent : INotification
     {
         public Guid UserId { get; }
         public FirstName FirstName { get; }
@@ -15,9 +15,9 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
         public Gender Gender { get; }
         public Guid SchoolId { get; }
 
-        public UserEnrolledEvent(Guid userId, FirstName firstName, LastName lastName, Email email, Role role, Gender gender, Guid schoolId)
+        public MemberEnrolledEvent(Guid memberId, FirstName firstName, LastName lastName, Email email, Role role, Gender gender, Guid schoolId)
         {
-            UserId = userId == Guid.Empty ? throw new ArgumentNullException(nameof(userId)) : userId;
+            UserId = memberId == Guid.Empty ? throw new ArgumentNullException(nameof(memberId)) : memberId;
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
             Email = email ?? throw new ArgumentNullException(nameof(email));

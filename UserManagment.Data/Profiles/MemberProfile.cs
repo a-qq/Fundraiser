@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Data.Schools;
 
 namespace SchoolManagement.Data.Profiles
 {
-    public class UserProfile : Profile
+    public class MemberProfile : Profile
     {
-        public UserProfile()
+        public MemberProfile()
         {
-            CreateMap<User, UserDTO>()
+            CreateMap<Member, MemberDTO>()
                 .ForMember(m => m.FirstName, o => o.MapFrom(src => src.FirstName.Value))
                 .ForMember(m => m.LastName, o => o.MapFrom(src => src.LastName.Value))
                 .ForMember(m => m.Email, o => o.MapFrom(src => src.Email.Value))

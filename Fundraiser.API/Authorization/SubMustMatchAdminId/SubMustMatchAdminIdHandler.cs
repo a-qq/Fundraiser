@@ -1,8 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Fundraiser.SharedKernel.Utils;
+using Microsoft.AspNetCore.Authorization;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using static SchoolManagement.Core.SchoolAggregate.Users.User;
 
 namespace Fundraiser.API.Authorization.SubMustMatchAdminId
 {
@@ -18,7 +18,7 @@ namespace Fundraiser.API.Authorization.SubMustMatchAdminId
                 return Task.CompletedTask;
             }
 
-            if (userId != Admin.Id)
+            if (Administrator.FromId(userId) == null)
             {
                 context.Fail();
                 return Task.CompletedTask;

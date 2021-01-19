@@ -1,10 +1,10 @@
 ﻿using FluentValidation;
 using Fundraiser.SharedKernel.Utils;
-using SchoolManagement.Core.SchoolAggregate.Users;
+using SchoolManagement.Core.SchoolAggregate.Members;
 
 namespace Fundraiser.API.Validators.Rules
 {
-    public static class UserRules
+    public static class MemberRules
     {
         public static IRuleBuilderInitial<T, string> FirstNameMustBeValid<T>(this IRuleBuilder<T, string> ruleBuilder)
         {
