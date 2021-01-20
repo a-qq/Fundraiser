@@ -16,6 +16,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
         public Name Name { get; private set; }
         public Description Description { get; private set; }
+        public GroupMembersLimit GroupMembersLimit { get; private set; }
         public string LogoId { get; private set; }
         public virtual IReadOnlyList<Member> Members => _members.AsReadOnly();
         public virtual IReadOnlyList<Group> Groups => _groups.AsReadOnly();
@@ -33,15 +34,16 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             _members.Add(headmaster.Value);
         }
 
-        public void Edit(Name name, Description description)
+        public void Edit(Name name, Description description, GroupMembersLimit limit)
         {
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
-            EditInfo(description);
+            EditInfo(description, limit);
         }
 
-        public void EditInfo(Description description)
+        public void EditInfo(Description description, GroupMembersLimit groupMembersLimit)
         {
             this.Description = description ?? throw new ArgumentNullException(nameof(description));
+            this.GroupMembersLimit = groupMembersLimit ?? throw new ArgumentNullException(nameof(groupMembersLimit));
         }
 
         public void EditLogo()
@@ -69,10 +71,19 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             if (Groups.Any(g => g.Code == number + sign))
                 return Result.Failure<Group>($"Group with code {number + sign} already exist!");
 
-             Group group = new Group(number, sign, this);
+            Group group = new Group(number, sign, this);
             _groups.Add(group);
 
             return Result.Success(group);
+        }
+
+        public Result<bool, Error> AssignMembersToGroup(Group group, IList<Member> members)
+        {
+            if (group.School != this)
+                throw new InvalidOperationException(nameof(AssignMembersToGroup));
+
+            Result<bool, Error> result = group.AssignMembers(members);
+            return result;
         }
     }
 }

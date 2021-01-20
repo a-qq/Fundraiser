@@ -32,8 +32,9 @@ namespace SchoolManagement.Data.Schools.EditSchool.Headmaster
                 return schoolOrError.ConvertFailure<bool>();
 
             Description description = Description.Create(request.Description).Value;
+            GroupMembersLimit limit = GroupMembersLimit.Create(request.GroupMembersLimit).Value;
 
-            schoolOrError.Value.EditInfo(description);
+            schoolOrError.Value.EditInfo(description, limit);
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

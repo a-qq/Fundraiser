@@ -20,18 +20,18 @@ namespace Fundraiser.API.Filters
 
                 if (context.HttpContext.Request.RouteValues.Keys.Any(k => k.Contains("id", StringComparison.OrdinalIgnoreCase)))
                 {
-                    var values = context.HttpContext.Request.RouteValues
+                    var idKeyValuePairs = context.HttpContext.Request.RouteValues
                         .Where(rv => rv.Key.Contains("id", StringComparison.OrdinalIgnoreCase)
-                            && Guid.TryParse(rv.Value as string, out Guid Id)
-                            && (Id == Guid.Empty))
-                        .Select(rv => rv.Key);
+                            && (Guid.TryParse(rv.Value as string, out Guid IdAsGuid) && (IdAsGuid == Guid.Empty))
+                             || (long.TryParse(rv.Value as string, out long IdAsLong) && (IdAsLong == 0)));
+                        
 
-                    foreach (var value in values)
+                    foreach (var pair in idKeyValuePairs)
                     {
                         var errorModel = new
                         {
-                            RouteKey = value,
-                            Message = $"{value} cannot be equal {Guid.Empty}!"
+                            RouteKey = pair.Key,
+                            Message = $"{pair.Key} cannot be equal {pair.Value}!"
                         };
 
                         errorList.Add(errorModel);
@@ -40,6 +40,7 @@ namespace Fundraiser.API.Filters
 
                 if (!context.ModelState.IsValid)
                 {
+                    var bodyErrorList = new List<dynamic>();
                     var errorsInModelState = context.ModelState
                         .Where(x => x.Value.Errors.Count > 0)
                         .ToDictionary(kvp => kvp.Key, kvp => kvp.Value.Errors.Select(x => x.ErrorMessage)).ToArray();
@@ -53,12 +54,14 @@ namespace Fundraiser.API.Filters
                                 FieldName = error.Key,
                                 Message = new List<string>() { subError }
                             };
-                            var previousError = errorList.FirstOrDefault(x => x.FieldName == errorModel.FieldName);
+                            var previousError = bodyErrorList.FirstOrDefault(x => x.FieldName == errorModel.FieldName);
                             if (previousError != null)
                                 previousError.Message.Add(errorModel.Message.First());
-                            else errorList.Add(errorModel);
+                            else bodyErrorList.Add(errorModel);
                         }
                     }
+
+                    errorList.AddRange(bodyErrorList);
                 }
 
                 if (errorList.Count != 0)

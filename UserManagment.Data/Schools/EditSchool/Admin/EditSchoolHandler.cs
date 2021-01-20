@@ -36,8 +36,9 @@ namespace SchoolManagement.Data.Schools.EditSchool.Admin
 
             Name name = Name.Create(request.Name).Value;
             Description description = Description.Create(request.Description).Value;
+            GroupMembersLimit limit = GroupMembersLimit.Create(request.GroupMembersLimit).Value;
 
-            schoolOrNone.Value.Edit(name, description);
+            schoolOrNone.Value.Edit(name, description, limit);
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

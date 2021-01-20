@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace SchoolManagement.Data.IntegrationHandlers.IDP
 {
-    public class UserEnrolledEventHandler : INotificationHandler<MemberEnrolledEvent>
+    public class MemberEnrolledEventHandler : INotificationHandler<MemberEnrolledEvent>
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
         private readonly IMailManager _mailManager;
         private readonly FrontendSettings _frontendSettings;
 
-        public UserEnrolledEventHandler(
+        public MemberEnrolledEventHandler(
             ISqlConnectionFactory sqlConnectionFactory,
             IMailManager mailManager,
             IOptions<FrontendSettings> mailOptions)
@@ -37,7 +37,7 @@ namespace SchoolManagement.Data.IntegrationHandlers.IDP
             var securityCode = GenerateSecurityCode();
             await connection.ExecuteAsync(sqlInsert1, new
             {
-                Subject = notification.UserId.ToString(),
+                Subject = notification.MemberId.ToString(),
                 Email = notification.Email.Value,
                 IsActive = false,
                 SecurityCode = securityCode,
@@ -50,35 +50,35 @@ namespace SchoolManagement.Data.IntegrationHandlers.IDP
 
             await connection.ExecuteAsync(sqlInsert2, new
             {
-                UserId = notification.UserId.ToString(),
+                UserId = notification.MemberId.ToString(),
                 Type = "given_name",
                 Value = notification.FirstName.Value
             });
 
             await connection.ExecuteAsync(sqlInsert2, new
             {
-                UserId = notification.UserId.ToString(),
+                UserId = notification.MemberId.ToString(),
                 Type = "family_name",
                 Value = notification.LastName.Value
             });
 
             await connection.ExecuteAsync(sqlInsert2, new
             {
-                UserId = notification.UserId.ToString(),
+                UserId = notification.MemberId.ToString(),
                 Type = "role",
                 Value = notification.Role.ToString()
             });
 
             await connection.ExecuteAsync(sqlInsert2, new
             {
-                UserId = notification.UserId.ToString(),
+                UserId = notification.MemberId.ToString(),
                 Type = "school_id",
                 Value = notification.SchoolId.ToString()
             });
 
             await connection.ExecuteAsync(sqlInsert2, new
             {
-                UserId = notification.UserId.ToString(),
+                UserId = notification.MemberId.ToString(),
                 Type = "gender",
                 Value = notification.Gender.ToString()
             });

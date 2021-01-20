@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagement.Data.Schools.AddStudentsToGroup;
 using SchoolManagement.Data.Schools.Commands.RegisterSchool;
 using SchoolManagement.Data.Schools.CreateGroup;
 using SchoolManagement.Data.Schools.EditSchool.Admin;
@@ -38,7 +39,8 @@ namespace Fundraiser.API.Controllers.School
         [HttpPut("schools/{schoolId}/edit")]
         public async Task<IActionResult> EditSchool(Guid schoolId, EditSchoolRequest request)
         {
-            var command = new EditSchoolCommand(request.Description, AuthId, schoolId);
+            var command = new EditSchoolCommand(
+                request.Name, request.Description, request.MaxNumberOfMembersInGroup, AuthId, schoolId);
 
             var result = await Handle(command);
             IActionResult response = FromResultNoContent(result);
@@ -77,6 +79,19 @@ namespace Fundraiser.API.Controllers.School
 
             var result = await Handle(command);
             IActionResult response = FromResultOk(result);
+
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpPut("schools/{schoolId}/groups/{groupId}")]
+        public async Task<IActionResult> AddStudentsToGroup(Guid schoolId, int groupId, AddStudentsToGroupRequest request)
+        {
+            var command = new AddStudentsToGroupCommand(request.StudentIds, AuthId, schoolId, groupId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
 
             return response;
         }

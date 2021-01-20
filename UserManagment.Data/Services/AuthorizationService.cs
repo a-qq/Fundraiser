@@ -14,7 +14,9 @@ namespace SchoolManagement.Data.Services
         private readonly ISchoolRepository _schoolRepository;
 
         public AuthorizationService(ISchoolRepository schoolRepository)
-            => _schoolRepository = schoolRepository;
+        {
+            _schoolRepository = schoolRepository;
+        }
 
         public async Task<Result<School, RequestError>> VerifyAuthorizationAsync(Guid schoolId, Guid userId, Role role)
         {
@@ -33,11 +35,11 @@ namespace SchoolManagement.Data.Services
                 return Result.Success<School, RequestError>(schoolOrNone.Value);
             }
 
-            Maybe<Member> userOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(schoolId, userId);
-            if (userOrNone.HasNoValue || !userOrNone.Value.IsActive || userOrNone.Value.Role < role) 
+            Maybe<Member> memberOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(schoolId, userId);
+            if (memberOrNone.HasNoValue || !memberOrNone.Value.IsActive || memberOrNone.Value.Role < role) 
                 throw new UnauthorizedAccessException($"SchoolId: {schoolId}, UserId: {userId}");
            
-            return Result.Success<School, RequestError>(userOrNone.Value.School);
+            return Result.Success<School, RequestError>(memberOrNone.Value.School);
         }
     }
 }

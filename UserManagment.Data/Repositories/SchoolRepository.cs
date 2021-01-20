@@ -2,10 +2,12 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using SchoolManagement.Core.Interfaces;
-using SchoolManagement.Core.SchoolAggregate.Members;
+using SchoolManagement.Core.SchoolAggregate.Groups;
 using SchoolManagement.Core.SchoolAggregate.Schools;
+using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Data.Database;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -44,23 +46,23 @@ namespace SchoolManagement.Data.Repositories
             if (memberId == Guid.Empty)
                 throw new ArgumentNullException(nameof(memberId));
 
-            var userOrNone = Maybe<Member>.From(_cache.Get<Member>(memberId));
-            if (userOrNone.HasNoValue)
+            var memberOrNone = Maybe<Member>.From(_cache.Get<Member>(memberId));
+            if (memberOrNone.HasNoValue)
             {
-                userOrNone = Maybe<Member>.From(
+                memberOrNone = Maybe<Member>.From(
                       await _dbSet
                           .Where(s => s.Id == schoolId)
                           .SelectMany(s => s.Members)
                           .Include(u => u.School)
                           .FirstOrDefaultAsync(m => m.Id == memberId));
 
-                if (userOrNone.HasValue)
-                    _cache.Set(memberId, userOrNone.Value, new MemoryCacheEntryOptions()
+                if (memberOrNone.HasValue)
+                    _cache.Set(memberId, memberOrNone.Value, new MemoryCacheEntryOptions()
                         .SetAbsoluteExpiration(new TimeSpan(0, 0, 5))
                         .SetSlidingExpiration(new TimeSpan(0, 0, 3)));
             }
 
-            return userOrNone;
+            return memberOrNone;
         }
 
         public void Add(School school)
@@ -69,4 +71,39 @@ namespace SchoolManagement.Data.Repositories
                 throw new ArgumentNullException(nameof(school));
             _dbSet.Add(school);
         }
+
+        public async Task<List<Member>> GetSchoolMembersByIdAsync(Guid schoolId, IEnumerable<Guid> userIds)
+        {
+            if (schoolId == Guid.Empty)
+                throw new ArgumentNullException(nameof(schoolId));
+
+            if (userIds == null || !userIds.Any())
+                throw new ArgumentNullException(nameof(userIds));
+
+            return await _dbSet
+                .Where(s => s.Id == schoolId)
+                .SelectMany(s => s.Members)
+                .Include(u => u.School)
+                .Include(u => u.Group)
+                .Where(u => userIds.Contains(u.Id))
+                .ToListAsync();
+        }
+
+        public async Task<Maybe<Group>> GetGroupByIdAsync(Guid schoolId, long groupId)
+        {
+            if (schoolId == Guid.Empty)
+                throw new ArgumentNullException(nameof(schoolId));
+
+            if (groupId < 1)
+                throw new ArgumentOutOfRangeException(nameof(groupId));
+
+            return Maybe<Group>.From(
+                      await _dbSet
+                          .Where(s => s.Id == schoolId)
+                          .SelectMany(s => s.Groups)
+                          .Include(g => g.School)
+                          .Include(g => g.Members)
+                          .FirstOrDefaultAsync(g => g.Id == groupId));
+        }
+    }
 }

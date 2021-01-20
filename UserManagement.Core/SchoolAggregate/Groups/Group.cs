@@ -3,6 +3,8 @@ using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Core.SchoolAggregate.Members;
 using System;
 using System.Collections.Generic;
+using Fundraiser.SharedKernel.Utils;
+using System.Linq;
 
 namespace SchoolManagement.Core.SchoolAggregate.Groups
 {
@@ -26,6 +28,39 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             Number = number ?? throw new ArgumentNullException();
             Sign = sign ?? throw new ArgumentNullException();
             School = school ?? throw new ArgumentNullException();
+        }
+
+        internal Result<bool, Error> AssignMembers(IEnumerable<Member> members)
+        {
+            if (members.Count() != members.Distinct().Count())
+                throw new InvalidOperationException(nameof(AssignMembers));
+
+            if (this.School.GroupMembersLimit != null && (this.Members.Count + members.Count() > this.School.GroupMembersLimit))
+            {
+                var diff = this.School.GroupMembersLimit - this.Members.Count;
+                string diffMessage = diff > 0 ? $"Maximally'{diff}' members can be added" : "Cannot add any more members";
+                string message = "Group's member limit exceeded! " + diffMessage + $" to group '{this.Code}!";
+                return Result.Failure<bool, Error>(new Error(message));
+            }
+                
+
+            Result<bool, Error> validationResult = Result.Success<bool, Error>(true);
+            foreach (var member in members)
+            {
+                if (member.School != this.School)
+                    throw new InvalidOperationException(nameof(AssignMembers));
+
+                validationResult = Result.Combine(validationResult,
+                    Result.FailureIf(member.Group != null, true, new Error($"'{member.Email.Value}'(Id: '{member.Id}') is already member of group '{this.Code}'!")),
+                    Result.FailureIf(member.Role != Role.Student, true, new Error($"'{member.Email.Value}'(Id: '{member.Id}') is not a {Role.Student}!'")));
+            }
+
+            if (validationResult.IsFailure)
+                return validationResult;
+
+            _members.AddRange(members);
+
+            return Result.Success<bool, Error>(true);
         }
     }
 }

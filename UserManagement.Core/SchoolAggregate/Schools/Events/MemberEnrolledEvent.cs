@@ -7,7 +7,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
 {
     public sealed class MemberEnrolledEvent : INotification
     {
-        public Guid UserId { get; }
+        public Guid MemberId { get; }
         public FirstName FirstName { get; }
         public LastName LastName { get; }
         public Email Email { get; }
@@ -17,7 +17,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
 
         public MemberEnrolledEvent(Guid memberId, FirstName firstName, LastName lastName, Email email, Role role, Gender gender, Guid schoolId)
         {
-            UserId = memberId == Guid.Empty ? throw new ArgumentNullException(nameof(memberId)) : memberId;
+            MemberId = memberId == Guid.Empty ? throw new ArgumentNullException(nameof(memberId)) : memberId;
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));
             LastName = lastName ?? throw new ArgumentNullException(nameof(lastName));
             Email = email ?? throw new ArgumentNullException(nameof(email));

@@ -9,19 +9,14 @@ namespace SchoolManagement.Data.Schools.EditSchool.Admin
     {
         public string Name { get; }
         public string Description { get; }
+        public int? GroupMembersLimit { get; }
         public Guid AuthId { get; }
         public Guid SchoolId { get; }
 
-        public EditSchoolCommand(string name, string description, Guid authId, Guid schoolId)
+        public EditSchoolCommand(string name, string description, int? groupMembersLimit, Guid authId, Guid schoolId)
         {
             Name = name;
-            Description = description;
-            AuthId = authId;
-            SchoolId = schoolId;
-        }
-
-        public EditSchoolCommand(string description, Guid authId, Guid schoolId)
-        {
+            GroupMembersLimit = groupMembersLimit;
             Description = description;
             AuthId = authId;
             SchoolId = schoolId;

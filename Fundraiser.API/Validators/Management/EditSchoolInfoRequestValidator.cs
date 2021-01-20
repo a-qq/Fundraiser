@@ -9,6 +9,7 @@ namespace Fundraiser.API.Validators.Management
         public EditSchoolInfoRequestValidator()
         {
             RuleFor(p => p.Description).DescriptionMustBeValid();
+            RuleFor(p => p.MaxNumberOfMembersInGroup).GroupMembersLimitMustBeValid();
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Fundraiser.API.Validators.Rules
         {
             return ruleBuilder.Custom((property, context) =>
             {
-                var result = Name.Validate(property);
+                var result = Name.Validate(property, context.PropertyName);
                 if (result.IsFailure)
                     context.AddFailure(result.Error);
             });
@@ -19,7 +19,17 @@ namespace Fundraiser.API.Validators.Rules
         {
             return ruleBuilder.Custom((property, context) =>
             {
-                var result = Description.Validate(property);
+                var result = Description.Validate(property, context.PropertyName);
+                if (result.IsFailure)
+                    context.AddFailure(result.Error);
+            });
+        }
+
+        public static IRuleBuilderInitial<T, int?> GroupMembersLimitMustBeValid<T>(this IRuleBuilder<T, int?> ruleBuilder)
+        {
+            return ruleBuilder.Custom((property, context) =>
+            {
+                var result = GroupMembersLimit.Validate(property, context.PropertyName);
                 if (result.IsFailure)
                     context.AddFailure(result.Error);
             });

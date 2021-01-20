@@ -22,8 +22,8 @@ namespace SchoolManagement.Data.DomainServices
             var connection = this._sqlConnectionFactory.GetOpenConnection();
 
             const string sql = "SELECT TOP 1 1" +
-                               "FROM [management].[Users] AS [User] " +
-                               "WHERE [User].[Email] = @Email";
+                               "FROM [management].[Members] AS [Member] " +
+                               "WHERE [Member].[Email] = @Email";
 
             var usersNumber = connection.QuerySingleOrDefault<int?>(sql,
                             new

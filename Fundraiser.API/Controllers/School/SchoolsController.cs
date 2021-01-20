@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SchoolManagement.Data.Schools.AddStudentsToGroup;
 using SchoolManagement.Data.Schools.CreateGroup;
 using SchoolManagement.Data.Schools.EditSchool.Headmaster;
 using SchoolManagement.Data.Schools.EditSchoolLogo;
@@ -16,10 +17,38 @@ namespace Fundraiser.API.Controllers.School
 
         public SchoolsController(IMediator mediator)
             : base(mediator) {  }
-        
+
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpPut("edit-info")]
+        public async Task<IActionResult> EditSchoolInfo(EditSchoolInfoRequest request)
+        {
+            var command = new EditSchoolInfoCommand(
+                request.Description, request.MaxNumberOfMembersInGroup, AuthId, SchoolId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpPut("edit-logo")]
+        public async Task<IActionResult> EditSchoolLogo([FromForm] EditSchoolLogoRequest request)
+        {
+            var command = new EditSchoolLogoCommand(request.Logo, AuthId, SchoolId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
+            return response;
+        }
+
         [Authorize("MustBeHeadmaster")]
         [HttpPost("enroll")]
-        public async Task<IActionResult> Enroll(EnrollMemberRequest request)
+        public async Task<IActionResult> EnrollMember(EnrollMemberRequest request)
         {
             var command = new EnrollMemberCommand(request.FirstName, request.LastName,
                 request.Email, request.Role, request.Gender, AuthId, SchoolId);
@@ -47,23 +76,10 @@ namespace Fundraiser.API.Controllers.School
         }
 
         [Authorize("MustBeHeadmaster")]
-        [HttpPut("edit-info")]
-        public async Task<IActionResult> EditSchoolInfo(EditSchoolInfoRequest request)
+        [HttpPut("groups/{groupId}")]
+        public async Task<IActionResult> AddStudentsToGroup(long groupId, AddStudentsToGroupRequest request)
         {
-            var command = new EditSchoolInfoCommand(request.Description, AuthId, SchoolId);
-
-            var result = await Handle(command);
-
-            var response = FromResultNoContent(result);
-
-            return response;
-        }
-
-        [Authorize("MustBeHeadmaster")]
-        [HttpPut("edit-logo")]
-        public async Task<IActionResult> EditSchoolLogo([FromForm] EditSchoolLogoRequest request)
-        {
-            var command = new EditSchoolLogoCommand(request.Logo, AuthId, SchoolId);
+            var command = new AddStudentsToGroupCommand(request.StudentIds, AuthId, SchoolId, groupId);
 
             var result = await Handle(command);
 

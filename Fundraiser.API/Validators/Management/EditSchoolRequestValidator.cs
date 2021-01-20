@@ -10,6 +10,7 @@ namespace Fundraiser.API.Validators.Management
         {
             RuleFor(p => p.Name).NameMustBeValid();
             RuleFor(p => p.Description).DescriptionMustBeValid();
+            RuleFor(p => p.MaxNumberOfMembersInGroup).GroupMembersLimitMustBeValid(); 
         }
     }
 }

@@ -17,7 +17,7 @@ namespace SchoolManagement.Data.Schools.CreateGroup
             Number = number;
             Sign = sign;
             SchoolId = schoolId;
-            AuthId = schoolId; 
+            AuthId = authId; 
         }
     }
 }
