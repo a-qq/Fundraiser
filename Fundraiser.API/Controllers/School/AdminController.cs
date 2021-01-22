@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.AddStudentsToGroup;
 using SchoolManagement.Data.Schools.Commands.RegisterSchool;
 using SchoolManagement.Data.Schools.CreateGroup;
+using SchoolManagement.Data.Schools.DivestFormTutor;
 using SchoolManagement.Data.Schools.EditSchool.Admin;
 using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
@@ -108,5 +109,16 @@ namespace Fundraiser.API.Controllers.School
             return response;
         }
 
+        [HttpDelete("schools/{schoolId}/groups/{groupId}/form-tutor")]
+        public async Task<IActionResult> DivestFormTutor(Guid schoolId, long groupId)
+        {
+            var command = new DivestFormTutorCommand(groupId, schoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
+            return response;
+        }
     }
 }

@@ -26,6 +26,7 @@ namespace SchoolManagement.Data.Repositories
             _dbSet = schoolContext.Schools;
             _cache = memoryCache;
         }
+
         public async Task<Maybe<School>> GetByIdAsync(Guid id)
         {
             if (id == Guid.Empty)
@@ -66,6 +67,7 @@ namespace SchoolManagement.Data.Repositories
         {
             if (school == null)
                 throw new ArgumentNullException(nameof(school));
+
             _dbSet.Add(school);
         }
 

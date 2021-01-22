@@ -108,6 +108,20 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             return result;
         }
 
+        public Result DivestFormTutor(Group group)
+        {
+            if (group.School != this)
+                throw new InvalidOperationException(nameof(MakeTeacherFormTutor));
+
+            Maybe<Member> formTutor = Maybe<Member>.From(group.FormTutor);
+
+            Result result = group.DivestFormTutor();
+            if (result.IsSuccess && formTutor.HasValue)
+                AddDomainEvent(new FormTutorDivestedEvent(formTutor.Value.Id));
+
+            return result;
+        }
+
         internal Result CanBeFormTutor(Member member)
         {
             if(member.School != this || member.IsArchived)

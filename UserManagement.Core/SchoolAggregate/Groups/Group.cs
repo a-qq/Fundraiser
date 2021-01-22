@@ -78,5 +78,16 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
             return Result.Success();
         }
+
+        internal Result DivestFormTutor()
+        {
+            if (this.IsArchived)
+                throw new InvalidOperationException(nameof(AssignFormTutor));
+
+            if (this.FormTutor == null)
+                return Result.Failure($"Group '{Code}'(Id: '{Id}') doest not have a form tutor!");
+
+            return Result.Success();
+        }
     }
 }
