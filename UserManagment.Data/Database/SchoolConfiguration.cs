@@ -11,6 +11,7 @@ namespace SchoolManagement.Data.Database
         {
             b.ToTable("Schools", SchemaNames.Management).HasKey(p => p.Id);
             b.Property(p => p.Name).HasConversion(p => p.Value, p => Name.Create(p).Value).IsRequired().HasMaxLength(500);
+            b.Property(p => p.YearsOfEducation).HasConversion(p => p.Value, p => YearsOfEducation.Create(p).Value).IsRequired();
             b.Property(p => p.Description).HasConversion(p => p.Value, p => Description.Create(p).Value).HasMaxLength(3000);
             b.Property(p => p.GroupMembersLimit).HasConversion(p => p.Value, p => GroupMembersLimit.Create(p.Value).Value);
             b.Property(p => p.LogoId).HasMaxLength(36);

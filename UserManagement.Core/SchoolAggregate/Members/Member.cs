@@ -14,6 +14,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Members
         public Email Email { get; }
         public Gender Gender { get; }
         public bool IsActive { get; }
+        public bool IsArchived { get; private set; }
         public virtual School School { get; }
         public virtual Group Group { get; private set; }
 
@@ -31,6 +32,8 @@ namespace SchoolManagement.Core.SchoolAggregate.Members
             Role = role ?? throw new ArgumentNullException(nameof(role));
             Gender = gender ?? throw new ArgumentNullException(nameof(gender));
             School = school ?? throw new ArgumentNullException(nameof(school));
+            IsActive = false;
+            IsArchived = false;
         }
     }
 }

@@ -3,6 +3,7 @@
     public sealed class RegisterSchoolRequest
     {
         public string Name { get; set; }
+        public int YearsOfEducation { get; set; }
         public string HeadmasterFirstName { get; set; }
         public string HeadmasterLastName { get; set; }
         public string HeadmasterEmail { get; set; }

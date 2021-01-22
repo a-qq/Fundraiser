@@ -38,6 +38,7 @@ namespace SchoolManagement.Data.Schools.RegisterSchool
                 throw new UnauthorizedAccessException($"UserId: {command.AuthId}");
             //fail fast
             Name schoolName = Name.Create(command.Name).Value;
+            YearsOfEducation years = YearsOfEducation.Create(command.YearsOfEdcuation).Value;
             FirstName firstName = FirstName.Create(command.HeadmasterFirstName).Value;
             LastName lastName = LastName.Create(command.HeadmasterLastName).Value;
             Email email = Email.Create(command.HeadmasterEmail).Value;
@@ -46,7 +47,7 @@ namespace SchoolManagement.Data.Schools.RegisterSchool
             if (!_checker.IsUnique(email))
                 return Result.Failure<SchoolCreatedDTO, RequestError>(SharedErrors.User.EmailIsTaken(email.Value));
 
-            School school = new School(schoolName, firstName, lastName, email, gender);
+            School school = new School(schoolName, years, firstName, lastName, email, gender);
 
             _schoolRepository.Add(school);
 

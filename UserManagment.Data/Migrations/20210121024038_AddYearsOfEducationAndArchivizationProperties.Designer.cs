@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SchoolManagement.Data.Database;
 
 namespace SchoolManagement.Data.Migrations
 {
     [DbContext(typeof(SchoolContext))]
-    partial class SchoolContextModelSnapshot : ModelSnapshot
+    [Migration("20210121024038_AddYearsOfEducationAndArchivizationProperties")]
+    partial class AddYearsOfEducationAndArchivizationProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,7 +55,8 @@ namespace SchoolManagement.Data.Migrations
 
                     b.HasIndex("SchoolId");
 
-                    b.HasIndex("Number", "Sign")
+                    b.HasIndex("Id", "Number", "Sign")
+                        .IsUnique()
                         .HasName("Index_Code");
 
                     b.ToTable("Groups","management");

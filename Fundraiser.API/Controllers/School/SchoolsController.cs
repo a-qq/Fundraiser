@@ -6,6 +6,7 @@ using SchoolManagement.Data.Schools.CreateGroup;
 using SchoolManagement.Data.Schools.EditSchool.Headmaster;
 using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
+using SchoolManagement.Data.Schools.MakeTeacherFormTutor;
 using System.Threading.Tasks;
 
 namespace Fundraiser.API.Controllers.School
@@ -76,10 +77,23 @@ namespace Fundraiser.API.Controllers.School
         }
 
         [Authorize("MustBeHeadmaster")]
-        [HttpPut("groups/{groupId}")]
+        [HttpPut("groups/{groupId}/students")]
         public async Task<IActionResult> AddStudentsToGroup(long groupId, AddStudentsToGroupRequest request)
         {
             var command = new AddStudentsToGroupCommand(request.StudentIds, AuthId, SchoolId, groupId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpPut("groups/{groupId}/form-tutor")]
+        public async Task<IActionResult> MakeTeacherFormTutor(long groupId, MakeTeacherFormTutorRequest request)
+        {
+            var command = new MakeTeacherFormTutorCommand(request.TeacherId, groupId, SchoolId, AuthId);
 
             var result = await Handle(command);
 

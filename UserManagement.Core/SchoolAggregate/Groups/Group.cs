@@ -10,15 +10,16 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 {
     public class Group : Entity
     {
-        private readonly List<Member> _members = new List<Member>();
+        private readonly List<Member> _students = new List<Member>();
 
         public Number Number { get; private set; }
         public Sign Sign { get; private set; }
         public string Code => Number + Sign;
+        public bool IsArchived { get; private set; }
         public virtual Member FormTutor { get; private set; }
         public virtual School School { get; private set; }
-        public virtual IReadOnlyList<Member> Members => _members.AsReadOnly();
-
+        public virtual IReadOnlyList<Member> Students => _students.AsReadOnly();
+        
         protected Group()
         {
         }
@@ -28,6 +29,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             Number = number ?? throw new ArgumentNullException();
             Sign = sign ?? throw new ArgumentNullException();
             School = school ?? throw new ArgumentNullException();
+            IsArchived = false;
         }
 
         internal Result<bool, Error> AssignMembers(IEnumerable<Member> members)
@@ -35,9 +37,9 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             if (members.Count() != members.Distinct().Count())
                 throw new InvalidOperationException(nameof(AssignMembers));
 
-            if (this.School.GroupMembersLimit != null && (this.Members.Count + members.Count() > this.School.GroupMembersLimit))
+            if (this.School.GroupMembersLimit != null && (this.Students.Count + members.Count() > this.School.GroupMembersLimit))
             {
-                var diff = this.School.GroupMembersLimit - this.Members.Count;
+                var diff = this.School.GroupMembersLimit - this.Students.Count;
                 string diffMessage = diff > 0 ? $"Maximally'{diff}' members can be added" : "Cannot add any more members";
                 string message = "Group's member limit exceeded! " + diffMessage + $" to group '{this.Code}!";
                 return Result.Failure<bool, Error>(new Error(message));
@@ -47,7 +49,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             Result<bool, Error> validationResult = Result.Success<bool, Error>(true);
             foreach (var member in members)
             {
-                if (member.School != this.School)
+                if (member.School != this.School || member.IsArchived)
                     throw new InvalidOperationException(nameof(AssignMembers));
 
                 validationResult = Result.Combine(validationResult,
@@ -58,9 +60,23 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             if (validationResult.IsFailure)
                 return validationResult;
 
-            _members.AddRange(members);
+            _students.AddRange(members);
 
             return Result.Success<bool, Error>(true);
+        }
+
+        internal Result AssignFormTutor(Member member)
+        {
+            if (this.IsArchived)
+                throw new InvalidOperationException(nameof(AssignFormTutor));
+
+            Result validation = this.School.CanBeFormTutor(member);
+            if (validation.IsFailure)
+                return validation;
+
+            this.FormTutor = member;
+
+            return Result.Success();
         }
     }
 }

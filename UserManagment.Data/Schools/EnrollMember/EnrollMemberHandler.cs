@@ -17,17 +17,20 @@ namespace SchoolManagement.Data.Schools.EnrollMember
     public class EnrollMemberHandler : IRequestHandler<EnrollMemberCommand, Result<MemberDTO, RequestError>>
     {
         private readonly SchoolContext _schoolContext;
+        private readonly ISchoolRepository _schoolRepository;
         private readonly IEmailUniquenessChecker _checker;
         private readonly IAuthorizationService _authService;
         private readonly IMapper _mapper;
 
         public EnrollMemberHandler(
             SchoolContext schoolContext,
+            ISchoolRepository schoolRepository,
             IEmailUniquenessChecker checker,
             IAuthorizationService authorizationService,
             IMapper mapper)
         {
             _schoolContext = schoolContext;
+            _schoolRepository = schoolRepository;
             _checker = checker;
             _authService = authorizationService;
             _mapper = mapper;
@@ -35,11 +38,11 @@ namespace SchoolManagement.Data.Schools.EnrollMember
 
         public async Task<Result<MemberDTO, RequestError>> Handle(EnrollMemberCommand command, CancellationToken cancellationToken)
         {
-            Result<School, RequestError> schoolOrError =
-                await _authService.VerifyAuthorizationAsync(command.SchoolId, command.AuthId, Role.Headmaster);
+            await _authService.VerifyAuthorizationAsync(command.SchoolId, command.AuthId, Role.Headmaster);
 
-            if (schoolOrError.IsFailure)
-                schoolOrError.ConvertFailure<MemberDTO>();
+            Maybe<School> schoolOrNone = await _schoolRepository.GetByIdAsync(command.SchoolId);
+            if (schoolOrNone.HasNoValue)
+                return Result.Failure<MemberDTO, RequestError>(SharedErrors.General.NotFound(command.SchoolId, nameof(School)));
 
             FirstName firstName = FirstName.Create(command.FirstName).Value;
             LastName lastName = LastName.Create(command.LastName).Value;
@@ -50,7 +53,7 @@ namespace SchoolManagement.Data.Schools.EnrollMember
             if(!_checker.IsUnique(email))
                 return Result.Failure<MemberDTO, RequestError>(SharedErrors.User.EmailIsTaken(email.Value));
 
-            Result<Member> memberOrError = schoolOrError.Value.EnrollCandidate(firstName, lastName, email, role, gender);
+            Result<Member> memberOrError = schoolOrNone.Value.EnrollCandidate(firstName, lastName, email, role, gender);
 
             if (memberOrError.IsFailure)
                 return Result.Failure<MemberDTO, RequestError>(SharedErrors.General.BusinessRuleViolation(memberOrError.Error));

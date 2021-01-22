@@ -17,6 +17,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
         public Name Name { get; private set; }
         public Description Description { get; private set; }
         public GroupMembersLimit GroupMembersLimit { get; private set; }
+        public YearsOfEducation YearsOfEducation { get; }
         public string LogoId { get; private set; }
         public virtual IReadOnlyList<Member> Members => _members.AsReadOnly();
         public virtual IReadOnlyList<Group> Groups => _groups.AsReadOnly();
@@ -25,10 +26,11 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
         {
         }
 
-        public School(Name name, FirstName firstName, LastName lastName, Email email, Gender gender)
+        public School(Name name, YearsOfEducation yearsOfEducation, FirstName firstName, LastName lastName, Email email, Gender gender)
             : base(Guid.NewGuid())
         {
             this.Name = name ?? throw new ArgumentNullException(nameof(name));
+            this.YearsOfEducation = yearsOfEducation ?? throw new ArgumentNullException(nameof(yearsOfEducation));
 
             Result<Member> headmaster = EnrollCandidate(firstName, lastName, email, Role.Headmaster, gender);
             _members.Add(headmaster.Value);
@@ -84,6 +86,41 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
             Result<bool, Error> result = group.AssignMembers(members);
             return result;
+        }
+
+        public Result MakeTeacherFormTutor(Member member, Group group)
+        {
+            if (group.School != this)
+                throw new InvalidOperationException(nameof(MakeTeacherFormTutor));
+
+            Maybe<Member> previousFormTutor = Maybe<Member>.From(group.FormTutor);
+
+            Result result = group.AssignFormTutor(member);
+
+            if(result.IsSuccess)
+            {
+                if (previousFormTutor.HasValue)
+                    AddDomainEvent(new FormTutorDivestedEvent(previousFormTutor.Value.Id));
+
+                AddDomainEvent(new FormTutorAssignedEvent(group.FormTutor.Id));
+            }
+
+            return result;
+        }
+
+        internal Result CanBeFormTutor(Member member)
+        {
+            if(member.School != this || member.IsArchived)
+                throw new InvalidOperationException(nameof(CanBeFormTutor));
+
+            if(member.Role != Role.Teacher)
+                return Result.Failure($"'{member.Email.Value}'(Id: '{member.Id}') is not a {Role.Teacher}!");
+
+            Maybe<Group> groupOrNone = this.Groups.TryFirst(g => g.FormTutor == member);
+            if (groupOrNone.HasValue)
+                return Result.Failure($"'{member.Email.Value}'(Id: '{member.Id}') is already form tutor of group '{groupOrNone.Value.Code}'!");
+
+            return Result.Success();
         }
     }
 }

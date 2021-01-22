@@ -34,5 +34,15 @@ namespace Fundraiser.API.Validators.Rules
                     context.AddFailure(result.Error);
             });
         }
+
+        public static IRuleBuilderInitial<T, int> YearsOfEducationMustBeValid<T>(this IRuleBuilder<T, int> ruleBuilder)
+        {
+            return ruleBuilder.Custom((property, context) =>
+            {
+                var result = YearsOfEducation.Validate(property, context.PropertyName);
+                if (result.IsFailure)
+                    context.AddFailure(result.Error);
+            });
+        }
     }
 }

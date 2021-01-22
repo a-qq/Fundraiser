@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Fundraiser.SharedKernel.Utils;
 
 namespace SchoolManagement.Data.Repositories
 {
@@ -46,20 +47,16 @@ namespace SchoolManagement.Data.Repositories
             if (memberId == Guid.Empty)
                 throw new ArgumentNullException(nameof(memberId));
 
-            var memberOrNone = Maybe<Member>.From(_cache.Get<Member>(memberId));
+            var memberOrNone = Maybe<Member>.From(_cache.Get<Member>(SchemaNames.Management + memberId));
+
             if (memberOrNone.HasNoValue)
             {
                 memberOrNone = Maybe<Member>.From(
                       await _dbSet
                           .Where(s => s.Id == schoolId)
                           .SelectMany(s => s.Members)
-                          .Include(u => u.School)
+                          .Include(m => m.School) // without this context won't cache school to retrive with find
                           .FirstOrDefaultAsync(m => m.Id == memberId));
-
-                if (memberOrNone.HasValue)
-                    _cache.Set(memberId, memberOrNone.Value, new MemoryCacheEntryOptions()
-                        .SetAbsoluteExpiration(new TimeSpan(0, 0, 5))
-                        .SetSlidingExpiration(new TimeSpan(0, 0, 3)));
             }
 
             return memberOrNone;
@@ -83,13 +80,12 @@ namespace SchoolManagement.Data.Repositories
             return await _dbSet
                 .Where(s => s.Id == schoolId)
                 .SelectMany(s => s.Members)
-                .Include(u => u.School)
                 .Include(u => u.Group)
                 .Where(u => userIds.Contains(u.Id))
                 .ToListAsync();
         }
 
-        public async Task<Maybe<Group>> GetGroupByIdAsync(Guid schoolId, long groupId)
+        public async Task<Maybe<Group>> GetGroupWithStudentsByIdAsync(Guid schoolId, long groupId)
         {
             if (schoolId == Guid.Empty)
                 throw new ArgumentNullException(nameof(schoolId));
@@ -101,9 +97,36 @@ namespace SchoolManagement.Data.Repositories
                       await _dbSet
                           .Where(s => s.Id == schoolId)
                           .SelectMany(s => s.Groups)
-                          .Include(g => g.School)
-                          .Include(g => g.Members)
+                          .Include(g => g.Students)
                           .FirstOrDefaultAsync(g => g.Id == groupId));
+        }
+
+        public async Task<Maybe<Group>> GetGroupWithFormTutorByIdAsync(Guid schoolId, long groupId)
+        {
+            if (schoolId == Guid.Empty)
+                throw new ArgumentNullException(nameof(schoolId));
+
+            if (groupId < 1)
+                throw new ArgumentOutOfRangeException(nameof(groupId));
+
+            return Maybe<Group>.From(
+                      await _dbSet
+                          .Where(s => s.Id == schoolId)
+                          .SelectMany(s => s.Groups)
+                          .Include(g => g.FormTutor)
+                          .FirstOrDefaultAsync(g => g.Id == groupId));
+        }
+
+        public async Task<Maybe<School>> GetSchoolWithGroupAndFormTutors(Guid schoolId)
+        {
+            if (schoolId == Guid.Empty)
+                throw new ArgumentNullException(nameof(schoolId));
+
+            return Maybe<School>.From(
+                      await _dbSet
+                          .Include(s => s.Groups)
+                            .ThenInclude(g => g.FormTutor)
+                          .FirstOrDefaultAsync(s => s.Id == schoolId));
         }
     }
 }

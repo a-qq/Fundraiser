@@ -46,10 +46,13 @@ namespace SchoolManagement.Data.Database
 
             b.Property(p => p.IsActive);
 
+            b.Property(p => p.IsArchived);
+
             b.HasOne(p => p.School).WithMany(p => p.Members).IsRequired();
 
-            b.HasOne(p => p.Group).WithMany(p => p.Members).IsRequired(false);
-                
+            b.HasOne(p => p.Group).WithMany(p => p.Students).IsRequired(false);
+
+            b.HasQueryFilter(p => !p.IsArchived);
         }
     }
 }

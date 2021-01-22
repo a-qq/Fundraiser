@@ -15,7 +15,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
         public Gender Gender { get; }
         public Guid SchoolId { get; }
 
-        public MemberEnrolledEvent(Guid memberId, FirstName firstName, LastName lastName, Email email, Role role, Gender gender, Guid schoolId)
+        internal MemberEnrolledEvent(Guid memberId, FirstName firstName, LastName lastName, Email email, Role role, Gender gender, Guid schoolId)
         {
             MemberId = memberId == Guid.Empty ? throw new ArgumentNullException(nameof(memberId)) : memberId;
             FirstName = firstName ?? throw new ArgumentNullException(nameof(firstName));

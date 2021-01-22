@@ -1,20 +1,26 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Memory;
 using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Members;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Fundraiser.SharedKernel.Utils;
 
 namespace Fundraiser.API.Authorization.UserMustBeSchoolMember
 {
     public sealed class UserMustBeSchoolMemberHandler : AuthorizationHandler<UserMustBeSchoolMemberRequirement>
     {
         private readonly ISchoolRepository _schoolRepository;
+        private readonly IMemoryCache _cache;
 
-        public UserMustBeSchoolMemberHandler(ISchoolRepository schoolRepository)
+        public UserMustBeSchoolMemberHandler(
+            ISchoolRepository schoolRepository,
+            IMemoryCache memoryCache)
         {
             _schoolRepository = schoolRepository;
+            _cache = memoryCache;
         }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, UserMustBeSchoolMemberRequirement requirement)
@@ -48,11 +54,16 @@ namespace Fundraiser.API.Authorization.UserMustBeSchoolMember
 
             var currentUser = await _schoolRepository.GetSchoolMemberByIdAsync(schoolId, userId);
 
-            if (currentUser.HasNoValue || !currentUser.Value.IsActive || currentUser.Value.Role != userRole)
+            if (currentUser.HasNoValue || !currentUser.Value.IsActive 
+                 || currentUser.Value.Role != userRole || currentUser.Value.IsArchived)
             {
                 context.Fail();
                 return;
             }
+
+            _cache.Set(SchemaNames.Management + userId, currentUser.Value, new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(new TimeSpan(0, 0, 5))
+                        .SetSlidingExpiration(new TimeSpan(0, 0, 3)));
 
             context.Succeed(requirement);
 

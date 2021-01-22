@@ -3,25 +3,22 @@ using Fundraiser.SharedKernel.ResultErrors;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Groups;
-using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Core.SchoolAggregate.Members;
+using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Data.Database;
 using SchoolManagement.Data.Services;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Fundraiser.SharedKernel.Utils;
 
-namespace SchoolManagement.Data.Schools.AddStudentsToGroup
+namespace SchoolManagement.Data.Schools.MakeTeacherFormTutor
 {
-    public class AddStudentsToGroupHandler : IRequestHandler<AddStudentsToGroupCommand, Result<bool, RequestError>>
+    public sealed class MakeTeacherFormTutorHandler : IRequestHandler<MakeTeacherFormTutorCommand, Result<bool, RequestError>>
     {
         private readonly IAuthorizationService _authService;
         private readonly ISchoolRepository _schoolRepository;
         private readonly SchoolContext _schoolContext;
 
-        public AddStudentsToGroupHandler(
+        public MakeTeacherFormTutorHandler(
             IAuthorizationService authorizationService,
             ISchoolRepository schoolRepository,
             SchoolContext schoolContext)
@@ -31,26 +28,23 @@ namespace SchoolManagement.Data.Schools.AddStudentsToGroup
             _schoolContext = schoolContext;
         }
 
-        public async Task<Result<bool, RequestError>> Handle(AddStudentsToGroupCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool, RequestError>> Handle(MakeTeacherFormTutorCommand request, CancellationToken cancellationToken)
         {
             await _authService.VerifyAuthorizationAsync(request.SchoolId, request.AuthId, Role.Headmaster);
 
-            if (!await _schoolRepository.ExistByIdAsync(request.SchoolId))
+            Maybe<School> schoolOrNone = await _schoolRepository.GetSchoolWithGroupAndFormTutors(request.SchoolId);
+            if (schoolOrNone.HasNoValue)
                 return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(request.SchoolId, nameof(School)));
 
-            Maybe<Group> groupOrNone = await _schoolRepository.GetGroupWithStudentsByIdAsync(request.SchoolId, request.GroupId);
-
-            if (groupOrNone.HasNoValue)
+            Maybe<Group> groupOrNone = schoolOrNone.Value.Groups.TryFirst(g => g.Id == request.GroupId);
+            if(groupOrNone.HasNoValue)
                 return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(request.GroupId, nameof(Group)));
 
-            List<Member> membersToAdd = await _schoolRepository.GetSchoolMembersByIdAsync(request.SchoolId, request.StudentIds);
-            if (membersToAdd.Count != request.StudentIds.Count)
-            {
-                var missingMembersIds = request.StudentIds.Except(membersToAdd.Select(m => m.Id));
-                return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(missingMembersIds, nameof(Member)));
-            }
+            Maybe<Member> teacherOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(request.SchoolId, request.TeacherId);
+            if (teacherOrNone.HasNoValue)
+                return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(request.AuthId, nameof(Member)));
 
-            Result<bool, Error> result = groupOrNone.Value.School.AssignMembersToGroup(groupOrNone.Value, membersToAdd);
+            Result result = schoolOrNone.Value.MakeTeacherFormTutor(teacherOrNone.Value, groupOrNone.Value);
             if (result.IsFailure)
                 return Result.Failure<bool, RequestError>(SharedErrors.General.BusinessRuleViolation(result.Error));
 

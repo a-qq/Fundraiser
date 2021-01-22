@@ -9,20 +9,24 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.Threading;
 using System.Threading.Tasks;
+using SchoolManagement.Core.Interfaces;
 
 namespace SchoolManagement.Data.Schools.EditSchoolLogo
 {
     public class EditSchoolLogoHandler : IRequestHandler<EditSchoolLogoCommand, Result<bool, RequestError>>
     {
+        private readonly ISchoolRepository _schoolRepository;
         private readonly IAuthorizationService _authService;
         private readonly IStorageService _storageService;
         private readonly SchoolContext _schoolContext;
 
         public EditSchoolLogoHandler(
+            ISchoolRepository schoolRepository,
             IAuthorizationService authorizationService,
             IStorageService storageService,
             SchoolContext schoolContext)
         {
+            _schoolRepository = schoolRepository;
             _authService = authorizationService;
             _storageService = storageService;
             _schoolContext = schoolContext;
@@ -30,19 +34,19 @@ namespace SchoolManagement.Data.Schools.EditSchoolLogo
 
         public async Task<Result<bool, RequestError>> Handle(EditSchoolLogoCommand request, CancellationToken cancellationToken)
         {
-            Result<School, RequestError> schoolOrError =
-                await _authService.VerifyAuthorizationAsync(request.SchoolId, request.AuthId, Role.Headmaster);
+            await _authService.VerifyAuthorizationAsync(request.SchoolId, request.AuthId, Role.Headmaster);
 
-            if (schoolOrError.IsFailure)
-                schoolOrError.ConvertFailure<bool>();
+            Maybe<School> schoolOrNone = await _schoolRepository.GetByIdAsync(request.SchoolId);
+            if(schoolOrNone.HasNoValue)
+                return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(request.SchoolId, nameof(School)));
 
-            if (!string.IsNullOrWhiteSpace(schoolOrError.Value.LogoId))
+            if (!string.IsNullOrWhiteSpace(schoolOrNone.Value.LogoId))
             {
                 //TODO: is it possible to rollback static file deletion (?) + pass token for future AzureBlob implementation
-                await _storageService.DeleteAsync(schoolOrError.Value.LogoId);
+                await _storageService.DeleteAsync(schoolOrNone.Value.LogoId);
             }
 
-            schoolOrError.Value.EditLogo();
+            schoolOrNone.Value.EditLogo();
 
             using (var logo = Image.Load(request.Logo.OpenReadStream()))
             {
@@ -58,7 +62,7 @@ namespace SchoolManagement.Data.Schools.EditSchoolLogo
                 })
                 .BackgroundColor(Color.Transparent));
 
-                await _storageService.SaveAsync(logo, schoolOrError.Value);
+                await _storageService.SaveAsync(logo, schoolOrNone.Value);
             }
 
             //as old photo already has been deleted, don't pass token

@@ -7,6 +7,7 @@ using SchoolManagement.Data.Schools.CreateGroup;
 using SchoolManagement.Data.Schools.EditSchool.Admin;
 using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
+using SchoolManagement.Data.Schools.MakeTeacherFormTutor;
 using SchoolManagement.Data.Schools.RegisterSchool;
 using System;
 using System.Threading.Tasks;
@@ -27,7 +28,7 @@ namespace Fundraiser.API.Controllers.School
         public async Task<IActionResult> RegisterSchool(RegisterSchoolRequest request)
 
         {
-            var command = new RegisterSchoolCommand(request.Name, request.HeadmasterFirstName,
+            var command = new RegisterSchoolCommand(request.Name, request.YearsOfEducation, request.HeadmasterFirstName,
                 request.HeadmasterLastName, request.HeadmasterEmail, request.HeadmasterGender, AuthId);
 
             var result = await Handle(command);
@@ -83,11 +84,22 @@ namespace Fundraiser.API.Controllers.School
             return response;
         }
 
-        [Authorize("MustBeHeadmaster")]
-        [HttpPut("schools/{schoolId}/groups/{groupId}")]
+        [HttpPut("schools/{schoolId}/groups/{groupId}/students")]
         public async Task<IActionResult> AddStudentsToGroup(Guid schoolId, int groupId, AddStudentsToGroupRequest request)
         {
             var command = new AddStudentsToGroupCommand(request.StudentIds, AuthId, schoolId, groupId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [HttpPut("schools/{schoolId}/groups/{groupId}/form-tutor")]
+        public async Task<IActionResult> MakeTeacherFormTutor(Guid schoolId, long groupId, MakeTeacherFormTutorRequest request)
+        {
+            var command = new MakeTeacherFormTutorCommand(request.TeacherId, groupId, schoolId, AuthId);
 
             var result = await Handle(command);
 
