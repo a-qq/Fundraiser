@@ -62,8 +62,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
             _members.Add(candidate);
 
-            AddDomainEvent(new MemberEnrolledEvent(candidate.Id, candidate.FirstName,
-                candidate.LastName, candidate.Email, candidate.Role, candidate.Gender, Id));
+            AddDomainEvent(new MemberEnrolledEvent(candidate.Id));
 
             return Result.Success(candidate);
         }
@@ -97,7 +96,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
             Result result = group.AssignFormTutor(member);
 
-            if(result.IsSuccess)
+            if (result.IsSuccess)
             {
                 if (previousFormTutor.HasValue)
                     AddDomainEvent(new FormTutorDivestedEvent(previousFormTutor.Value.Id));
@@ -124,10 +123,10 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
         internal Result CanBeFormTutor(Member member)
         {
-            if(member.School != this || member.IsArchived)
+            if (member.School != this || member.IsArchived)
                 throw new InvalidOperationException(nameof(CanBeFormTutor));
 
-            if(member.Role != Role.Teacher)
+            if (member.Role != Role.Teacher)
                 return Result.Failure($"'{member.Email.Value}'(Id: '{member.Id}') is not a {Role.Teacher}!");
 
             Maybe<Group> groupOrNone = this.Groups.TryFirst(g => g.FormTutor == member);
@@ -135,6 +134,22 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
                 return Result.Failure($"'{member.Email.Value}'(Id: '{member.Id}') is already form tutor of group '{groupOrNone.Value.Code}'!");
 
             return Result.Success();
+        }
+
+        public void MergeEnrollmentEvents()
+        {
+            var eventsToMerge = DomainEvents.OfType<MemberEnrolledEvent>().ToList();
+            var otherEvents = DomainEvents.Except(eventsToMerge).ToList();
+
+            ClearEvents();
+
+            IEnumerable<Guid> memberIds = eventsToMerge.Select(e => e.MemberId);
+            var bulkEvent = new MembersEnrolledEvent(memberIds);
+
+            AddDomainEvent(bulkEvent);
+            if (otherEvents.Any())
+                foreach (var other in otherEvents)
+                    AddDomainEvent(other);
         }
     }
 }

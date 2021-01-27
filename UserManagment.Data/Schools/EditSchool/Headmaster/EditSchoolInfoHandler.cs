@@ -1,13 +1,13 @@
 ﻿using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using MediatR;
-using SchoolManagement.Core.SchoolAggregate.Schools;
+using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Members;
+using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Data.Database;
 using SchoolManagement.Data.Services;
 using System.Threading;
 using System.Threading.Tasks;
-using SchoolManagement.Core.Interfaces;
 
 namespace SchoolManagement.Data.Schools.EditSchool.Headmaster
 {
@@ -34,7 +34,7 @@ namespace SchoolManagement.Data.Schools.EditSchool.Headmaster
             Maybe<School> schoolOrNone = await _schoolRepository.GetByIdAsync(request.SchoolId);
 
             if (schoolOrNone.HasNoValue)
-                return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(request.SchoolId, nameof(School)));
+                return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.SchoolId, nameof(School)));
 
             Description description = Description.Create(request.Description).Value;
             GroupMembersLimit limit = GroupMembersLimit.Create(request.GroupMembersLimit).Value;

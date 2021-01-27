@@ -7,6 +7,7 @@ using SchoolManagement.Data.Schools.DivestFormTutor;
 using SchoolManagement.Data.Schools.EditSchool.Headmaster;
 using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
+using SchoolManagement.Data.Schools.EnrollMembersFromCsv;
 using SchoolManagement.Data.Schools.MakeTeacherFormTutor;
 using System.Threading.Tasks;
 
@@ -49,7 +50,7 @@ namespace Fundraiser.API.Controllers.School
         }
 
         [Authorize("MustBeHeadmaster")]
-        [HttpPost("enroll")]
+        [HttpPost("members")]
         public async Task<IActionResult> EnrollMember(EnrollMemberRequest request)
         {
             var command = new EnrollMemberCommand(request.FirstName, request.LastName,
@@ -61,6 +62,19 @@ namespace Fundraiser.API.Controllers.School
             //var response = errorResponseOrNull.HasNoValue
             //    ? CreatedAtRoute("GetMember", new { result.Value.Id }, Envelope.Ok(result.Value))
             //    : errorResponseOrNull.Value;
+
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpPost("members/csv")]
+        public async Task<IActionResult> EnrollMembersFromCsv([FromForm] EnrollMembersFromCsvRequest request)
+        {
+            var command = new EnrollMembersFromCsvCommand(request.File, SchoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultOk(result);
 
             return response;
         }

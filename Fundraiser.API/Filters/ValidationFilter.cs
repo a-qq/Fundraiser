@@ -1,5 +1,5 @@
 ﻿using Fundraiser.API.Controllers;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using System;
@@ -66,7 +66,7 @@ namespace Fundraiser.API.Filters
 
                 if (errorList.Count != 0)
                 {
-                    var errorResponse = SharedErrors.General.UnprocessableEntity(errorList);
+                    var errorResponse = SharedRequestError.General.UnprocessableEntity(errorList);
                     context.Result = new UnprocessableEntityObjectResult(Envelope.Error(errorResponse));
                     return;
                 }

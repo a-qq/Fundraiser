@@ -5,6 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\EmailTemplate.html" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="9.3.0" />
     <PackageReference Include="IdentityServer4" Version="4.1.1" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
@@ -29,6 +33,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\logos\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\templates\WelcomeEmailTemplate2.html" />
   </ItemGroup>
 
 

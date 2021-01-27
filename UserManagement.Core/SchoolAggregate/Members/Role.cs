@@ -8,7 +8,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Members
     {
         public static readonly Role Headmaster = Create(RoleEnum.Headmaster.ToString()).Value;
         internal static readonly Role Teacher = Create(RoleEnum.Teacher.ToString()).Value;
-        internal static readonly Role Student = Create(RoleEnum.Student.ToString()).Value;
+        public static readonly Role Student = Create(RoleEnum.Student.ToString()).Value;
 
         public RoleEnum Value { get; }
         private Role(RoleEnum value)
@@ -49,9 +49,9 @@ namespace SchoolManagement.Core.SchoolAggregate.Members
             return Value.ToString();
         }
 
-        public static implicit operator string(Role gender)
+        public static implicit operator string(Role role)
         {
-            return gender.Value.ToString();
+            return role.Value.ToString();
         }
 
         public static bool operator >(Role a, Role b)

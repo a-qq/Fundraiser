@@ -41,10 +41,14 @@ namespace Fundraiser.SharedKernel.Utils
             yield return Value;
         }
 
+        public override string ToString()
+        {
+            return this.Value;
+        }
+
         public static implicit operator string(Email email)
         {
             return email.Value;
         }
-
     }
 }

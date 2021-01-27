@@ -16,7 +16,7 @@ namespace Fundraiser.API.Extensions
                     Title = "Fundraiser",
                     Version = "v1"
                 });
-
+                options.DescribeAllEnumsAsStrings();
                 options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
                 {
                     Type = SecuritySchemeType.OAuth2,

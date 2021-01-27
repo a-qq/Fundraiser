@@ -38,6 +38,10 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             return number.Value.ToString();
         }
 
+        public override string ToString()
+        {
+            return this.Value.ToString();
+        }
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;

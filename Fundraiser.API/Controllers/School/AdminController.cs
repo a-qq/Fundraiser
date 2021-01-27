@@ -8,6 +8,7 @@ using SchoolManagement.Data.Schools.DivestFormTutor;
 using SchoolManagement.Data.Schools.EditSchool.Admin;
 using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
+using SchoolManagement.Data.Schools.EnrollMembersFromCsv;
 using SchoolManagement.Data.Schools.MakeTeacherFormTutor;
 using SchoolManagement.Data.Schools.RegisterSchool;
 using System;
@@ -70,6 +71,18 @@ namespace Fundraiser.API.Controllers.School
 
             var result = await Handle(command);
             IActionResult response = FromResultOk(result);
+
+            return response;
+        }
+
+        [HttpPost("schools/{schoolId}/members/csv")]
+        public async Task<IActionResult> EnrollMembersFromCsv(Guid schoolId, [FromForm] EnrollMembersFromCsvRequest request)
+        {
+            var command = new EnrollMembersFromCsvCommand(request.File, schoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultOk(result);
 
             return response;
         }

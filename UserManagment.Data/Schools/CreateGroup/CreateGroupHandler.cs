@@ -1,15 +1,15 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using MediatR;
+using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Groups;
-using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Core.SchoolAggregate.Members;
+using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Data.Database;
 using SchoolManagement.Data.Services;
 using System.Threading;
 using System.Threading.Tasks;
-using SchoolManagement.Core.Interfaces;
 
 namespace SchoolManagement.Data.Schools.CreateGroup
 {
@@ -38,7 +38,7 @@ namespace SchoolManagement.Data.Schools.CreateGroup
 
             Maybe<School> schoolOrNone = await _schoolRepository.GetByIdAsync(command.SchoolId);
             if (schoolOrNone.HasNoValue)
-                return Result.Failure<GroupDTO, RequestError>(SharedErrors.General.NotFound(command.SchoolId, nameof(School)));
+                return Result.Failure<GroupDTO, RequestError>(SharedRequestError.General.NotFound(command.SchoolId, nameof(School)));
 
             Number number = Number.Create(command.Number).Value;
             Sign sign = Sign.Create(command.Sign).Value;
@@ -46,7 +46,7 @@ namespace SchoolManagement.Data.Schools.CreateGroup
             Result<Group> groupOrError = schoolOrNone.Value.CreateGroup(number, sign);
 
             if (groupOrError.IsFailure)
-                return Result.Failure<GroupDTO, RequestError>(SharedErrors.General.BusinessRuleViolation(groupOrError.Error));
+                return Result.Failure<GroupDTO, RequestError>(SharedRequestError.General.BusinessRuleViolation(groupOrError.Error));
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

@@ -1,9 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using IdentityModel;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SchoolManagement.Core.ResultErrors;
 using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -13,14 +12,17 @@ namespace Fundraiser.API.Controllers
     public class MediatrController : ControllerBase
     {
         private readonly IMediator _mediator;
-        protected Guid AuthId => string.IsNullOrWhiteSpace(User.FindFirstValue(JwtClaimTypes.Subject)) ? Guid.Empty : Guid.Parse(User.FindFirstValue(JwtClaimTypes.Subject));
-        protected Guid SchoolId => string.IsNullOrWhiteSpace(User.FindFirstValue("school_id")) ? Guid.Empty : Guid.Parse(User.FindFirstValue("school_id"));
+        protected Guid AuthId => string.IsNullOrWhiteSpace(User.FindFirstValue(JwtClaimTypes.Subject))
+            ? Guid.Empty : Guid.Parse(User.FindFirstValue(JwtClaimTypes.Subject));
+        protected Guid SchoolId => string.IsNullOrWhiteSpace(User.FindFirstValue("school_id"))
+            ? Guid.Empty : Guid.Parse(User.FindFirstValue("school_id"));
 
 
         protected MediatrController(IMediator mediator)
         {
             _mediator = mediator;
         }
+
         protected async Task<T> Handle<T>(IRequest<T> request)
         {
             return await _mediator.Send(request);
@@ -46,6 +48,7 @@ namespace Fundraiser.API.Controllers
 
             return base.CreatedAtRoute(routeName, Envelope.Ok(result.Value));
         }
+
         protected IActionResult FromResultOk<T>(Result<T, RequestError> result)
         {
             var errorResultOrNone = ErrorFromResult(result);
@@ -60,11 +63,10 @@ namespace Fundraiser.API.Controllers
             if (result.IsSuccess)
                 return Maybe<IActionResult>.None;
 
-            if (result.Error == SharedErrors.General.NotFound("", ""))
+            if (result.Error == SharedRequestError.General.NotFound(string.Empty, string.Empty))
                 return NotFound(Envelope.Error(result.Error));
 
             return BadRequest(Envelope.Error(result.Error));
-
         }
 
     }

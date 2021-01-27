@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using Fundraiser.SharedKernel.Utils;
 using System;
 using System.Collections.Generic;

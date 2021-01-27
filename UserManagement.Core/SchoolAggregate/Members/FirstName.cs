@@ -45,6 +45,11 @@ namespace SchoolManagement.Core.SchoolAggregate.Members
             yield return Value;
         }
 
+        public override string ToString()
+        {
+            return this.Value;
+        }
+
         public static implicit operator string(FirstName firstName)
         {
             return firstName.Value;

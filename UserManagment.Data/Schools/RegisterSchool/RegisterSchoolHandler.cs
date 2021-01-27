@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using Fundraiser.SharedKernel.Utils;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
-using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Core.SchoolAggregate.Members;
+using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Data.Database;
 using System;
 using System.Threading;
@@ -44,8 +44,8 @@ namespace SchoolManagement.Data.Schools.RegisterSchool
             Email email = Email.Create(command.HeadmasterEmail).Value;
             Gender gender = Gender.Create(command.HeadmasterGender).Value;
 
-            if (!_checker.IsUnique(email))
-                return Result.Failure<SchoolCreatedDTO, RequestError>(SharedErrors.User.EmailIsTaken(email.Value));
+            if (!await _checker.IsUnique(email))
+                return Result.Failure<SchoolCreatedDTO, RequestError>(SharedRequestError.User.EmailIsTaken(email));
 
             School school = new School(schoolName, years, firstName, lastName, email, gender);
 

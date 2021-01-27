@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Groups;
@@ -34,15 +34,15 @@ namespace SchoolManagement.Data.Schools.DivestFormTutor
 
             Maybe<School> schoolOrNone = await _schoolRepository.GetSchoolWithGroupAndFormTutors(request.SchoolId);
             if (schoolOrNone.HasNoValue)
-                return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(request.SchoolId, nameof(School)));
+                return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.SchoolId, nameof(School)));
 
             Maybe<Group> groupOrNone = await _schoolRepository.GetGroupWithFormTutorByIdAsync(request.SchoolId, request.GroupId);
             if (groupOrNone.HasNoValue)
-                return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(request.GroupId, nameof(Group)));
+                return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.GroupId, nameof(Group)));
 
             Result result = schoolOrNone.Value.DivestFormTutor(groupOrNone.Value);
             if (result.IsFailure)
-                return Result.Failure<bool, RequestError>(SharedErrors.General.BusinessRuleViolation(result.Error));
+                return Result.Failure<bool, RequestError>(SharedRequestError.General.BusinessRuleViolation(result.Error));
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

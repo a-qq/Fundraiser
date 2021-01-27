@@ -5,8 +5,9 @@ using Fundraiser.SharedKernel.Utils;
 using MediatR;
 using Microsoft.Extensions.Options;
 using SchoolManagement.Core.SchoolAggregate.Schools.Events;
+using SchoolManagement.Data.ItegrationHandlers.IDP;
 using System;
-using System.Security.Cryptography;
+using System.Data;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,76 +31,69 @@ namespace SchoolManagement.Data.IntegrationHandlers.IDP
 
         public async Task Handle(MemberEnrolledEvent notification, CancellationToken cancellationToken)
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
-
-            const string sqlInsert1 = "INSERT INTO [auth].[Users] ([Subject], [Email], [IsActive], [SecurityCode], [SecurityCodeIssuedAt]) VALUES " +
-                                     "(@Subject, @Email, @IsActive, @SecurityCode, @SecurityCodeIssuedAt)";
-            var securityCode = GenerateSecurityCode();
-            await connection.ExecuteAsync(sqlInsert1, new
+            MemberAuthInsertDTO member = null;
+            using (var connection = this._sqlConnectionFactory.GetOpenConnection())
             {
-                Subject = notification.MemberId.ToString(),
-                Email = notification.Email.Value,
-                IsActive = false,
-                SecurityCode = securityCode,
-                SecurityCodeIssuedAt = DateTime.UtcNow
-            });
+                const string sqlQuery = "SELECT [m].Id, [m].FirstName, [m].LastName, " +
+                             "[m].Email, [m].SchoolId, [m].Role, [m].Gender " +
+                             "FROM [management].[Members] AS [m]" +
+                             "WHERE [m].Id = @MemberId";
 
-            const string sqlInsert2 = "INSERT INTO[auth].[Claims]([UserSubject], [Type], [Value]) VALUES " +
-                                     "(@UserId, @Type, @Value)";
+                member = await connection.QueryFirstOrDefaultAsync<MemberAuthInsertDTO>(sqlQuery, new
+                {
+                    MemberId = notification.MemberId
+                });
 
+                connection.Close();
 
-            await connection.ExecuteAsync(sqlInsert2, new
-            {
-                UserId = notification.MemberId.ToString(),
-                Type = "given_name",
-                Value = notification.FirstName.Value
-            });
+                if (member == null)
+                    return;
 
-            await connection.ExecuteAsync(sqlInsert2, new
-            {
-                UserId = notification.MemberId.ToString(),
-                Type = "family_name",
-                Value = notification.LastName.Value
-            });
+                member.GenereteSecurityCode();
 
-            await connection.ExecuteAsync(sqlInsert2, new
-            {
-                UserId = notification.MemberId.ToString(),
-                Type = "role",
-                Value = notification.Role.ToString()
-            });
+                const string sqlInsert = "INSERT INTO [auth].[Users]([Subject], [Email], [SecurityCode], [SecurityCodeIssuedAt], [IsActive]) " +
+                                    "VALUES (@Subject, @Email, @Code, @Issued, @IsActive)";
 
-            await connection.ExecuteAsync(sqlInsert2, new
-            {
-                UserId = notification.MemberId.ToString(),
-                Type = "school_id",
-                Value = notification.SchoolId.ToString()
-            });
+                var claims = DapperBulkOperationsHelper.GetClaimsInsertTable(member);
 
-            await connection.ExecuteAsync(sqlInsert2, new
-            {
-                UserId = notification.MemberId.ToString(),
-                Type = "gender",
-                Value = notification.Gender.ToString()
-            });
+                connection.Open();
+                using (var trans = connection.BeginTransaction())
+                {
+                    try
+                    {
+                        await connection.ExecuteAsync(sqlInsert, new
+                        {
+                            Subject = member.Id.ToString(),
+                            Email = member.Email,
+                            Code = member.SecurityCode,
+                            Issued = DateTime.UtcNow,
+                            IsActive = false
+                        }, trans);
 
-            await _mailManager.SendMailAsync(
-                notification.Email.Value,
-                $"{notification.FirstName.Value}, welcome in your school's managment system!",
-                $"<hmtl><body>Dear {notification.FirstName.Value}<br/>" +
-                $"<p>Please click the link below to complete registration proccess!" +
-                $"</p><p><a href='{_frontendSettings.IDPUrl}Registration/Register/?SecurityCode={securityCode.Replace("+", "%2B")}'>Register</a></p>" +
-                $"<p>Have a great day!</p></body></html>");
-            //&ReturnUrl=client_id=fundraiserclient&redirect_uri={_frontendSettings.ClientUrl}index.html
-        }
+                        await connection.ExecuteAsync("[auth].[spClaim_InsertSet]", new
+                        {
+                            claims = claims
+                        }, trans, null, CommandType.StoredProcedure);
 
-        private string GenerateSecurityCode()
-        {
-            using (var randomNumberGenerator = new RNGCryptoServiceProvider())
-            {
-                var securityCodeData = new byte[128];
-                randomNumberGenerator.GetBytes(securityCodeData);
-                return Convert.ToBase64String(securityCodeData);
+                        trans.Commit();
+                    }
+                    catch (Exception ex)
+                    {
+                        trans.Rollback();
+                        const string sqlDelete = "DELETE FROM [management].[Members] " +
+                                     "WHERE [Id] = @MemberId";
+                        await connection.ExecuteAsync(sqlDelete, new
+                        {
+                            MemberId = member.Id
+                        });
+
+                        throw ex;
+                    }
+                }
+                var subject = $"{member.FirstName}, welcome in your school's managment system!";
+                var url = $"{_frontendSettings.IDPUrl}Registration/Register/?SecurityCode={member.SecurityCode.Replace("+", "%2B")}";
+                string body = _mailManager.PopulateWelcomeTemplate(subject, member.FirstName, member.Email, url);
+                await _mailManager.SendMailAsync(member.Email, subject, body);
             }
         }
     }

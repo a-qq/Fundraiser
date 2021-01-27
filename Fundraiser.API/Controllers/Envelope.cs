@@ -1,4 +1,4 @@
-﻿using Fundraiser.SharedKernel.ResultErrors;
+﻿using Fundraiser.SharedKernel.RequestErrors;
 using System;
 
 namespace Fundraiser.API.Controllers

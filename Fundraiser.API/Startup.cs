@@ -26,6 +26,7 @@ using SchoolManagement.Data.IntegrationHandlers;
 using SchoolManagement.Data.Profiles;
 using SchoolManagement.Data.Schools;
 using System;
+using System.Text.Json.Serialization;
 
 namespace Fundraiser.API
 {
@@ -57,6 +58,10 @@ namespace Fundraiser.API
             {
                 fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
                 fv.RegisterValidatorsFromAssemblyContaining<IMarkerValidator>();
+            }).AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                //options.JsonSerializerOptions.IgnoreNullValues = true;
             });
 
             services.AddMediatR(cfg => cfg.AsScoped(), typeof(MemberDTO), typeof(IHandler), typeof(IHandlerIDP));

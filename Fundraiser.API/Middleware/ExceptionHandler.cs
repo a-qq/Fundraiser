@@ -1,5 +1,5 @@
 ﻿using Fundraiser.API.Controllers;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
@@ -37,8 +37,8 @@ namespace Fundraiser.API.Middleware
         {
             //TODO: Log exception here
             string result = _env.IsProduction() 
-                ? JsonConvert.SerializeObject(Envelope.Error(SharedErrors.General.InternalServerError("Internal server error")))
-                : JsonConvert.SerializeObject(Envelope.Error(SharedErrors.General.InternalServerError(exception.Message)));
+                ? JsonConvert.SerializeObject(Envelope.Error(SharedRequestError.General.InternalServerError()))
+                : JsonConvert.SerializeObject(Envelope.Error(SharedRequestError.General.InternalServerError(exception.Message)));
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
             return context.Response.WriteAsync(result);

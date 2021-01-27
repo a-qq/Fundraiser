@@ -37,10 +37,10 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             if (members.Count() != members.Distinct().Count())
                 throw new InvalidOperationException(nameof(AssignMembers));
 
-            if (this.School.GroupMembersLimit != null && (this.Students.Count + members.Count() > this.School.GroupMembersLimit))
+            if (this.School.GroupMembersLimit != null && (this.Students.Count + members.Count()) > this.School.GroupMembersLimit)
             {
                 var diff = this.School.GroupMembersLimit - this.Students.Count;
-                string diffMessage = diff > 0 ? $"Maximally'{diff}' members can be added" : "Cannot add any more members";
+                string diffMessage = diff > 0 ? $"Maximally '{diff}' members can be added" : "Cannot add any more members";
                 string message = "Group's member limit exceeded! " + diffMessage + $" to group '{this.Code}!";
                 return Result.Failure<bool, Error>(new Error(message));
             }

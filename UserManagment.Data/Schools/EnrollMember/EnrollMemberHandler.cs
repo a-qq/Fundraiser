@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using Fundraiser.SharedKernel.Utils;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
-using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Core.SchoolAggregate.Members;
+using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Data.Database;
 using SchoolManagement.Data.Services;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -42,7 +41,7 @@ namespace SchoolManagement.Data.Schools.EnrollMember
 
             Maybe<School> schoolOrNone = await _schoolRepository.GetByIdAsync(command.SchoolId);
             if (schoolOrNone.HasNoValue)
-                return Result.Failure<MemberDTO, RequestError>(SharedErrors.General.NotFound(command.SchoolId, nameof(School)));
+                return Result.Failure<MemberDTO, RequestError>(SharedRequestError.General.NotFound(command.SchoolId, nameof(School)));
 
             FirstName firstName = FirstName.Create(command.FirstName).Value;
             LastName lastName = LastName.Create(command.LastName).Value;
@@ -50,13 +49,13 @@ namespace SchoolManagement.Data.Schools.EnrollMember
             Gender gender = Gender.Create(command.Gender).Value;
             Role role = Role.Create(command.Role).Value;
 
-            if(!_checker.IsUnique(email))
-                return Result.Failure<MemberDTO, RequestError>(SharedErrors.User.EmailIsTaken(email.Value));
+            if(!await _checker.IsUnique(email))
+                return Result.Failure<MemberDTO, RequestError>(SharedRequestError.User.EmailIsTaken(email));
 
             Result<Member> memberOrError = schoolOrNone.Value.EnrollCandidate(firstName, lastName, email, role, gender);
 
             if (memberOrError.IsFailure)
-                return Result.Failure<MemberDTO, RequestError>(SharedErrors.General.BusinessRuleViolation(memberOrError.Error));
+                return Result.Failure<MemberDTO, RequestError>(SharedRequestError.General.BusinessRuleViolation(memberOrError.Error));
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

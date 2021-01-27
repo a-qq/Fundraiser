@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Fundraiser.SharedKernel.ResultErrors;
+using Fundraiser.SharedKernel.RequestErrors;
 using Fundraiser.SharedKernel.Utils;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
@@ -32,7 +32,7 @@ namespace SchoolManagement.Data.Schools.EditSchool.Admin
             Maybe<School> schoolOrNone = await _schoolRepository.GetByIdAsync(request.SchoolId);
 
             if (schoolOrNone.HasNoValue)
-                return Result.Failure<bool, RequestError>(SharedErrors.General.NotFound(request.SchoolId, nameof(School)));
+                return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.SchoolId, nameof(School)));
 
             Name name = Name.Create(request.Name).Value;
             Description description = Description.Create(request.Description).Value;
