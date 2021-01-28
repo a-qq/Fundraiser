@@ -35,9 +35,5 @@
     <Folder Include="wwwroot\logos\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Include="wwwroot\templates\WelcomeEmailTemplate2.html" />
-  </ItemGroup>
-
 
 </Project>

@@ -7,6 +7,8 @@ using IDP.Core.UserAggregate.ValueObjects;
 using IDP.Infrastructure.Database;
 using IDP.Infrastructure.DTOs;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Caching.Memory;
+using System;
 using System.Threading.Tasks;
 
 namespace IDP.Infrastructure.Services
@@ -16,15 +18,18 @@ namespace IDP.Infrastructure.Services
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher<User> _passwordHasher;
         private readonly IdentityDbContext _identityContext;
+        private readonly IMemoryCache _cache; 
 
         public LocalUserService(
             IUserRepository userRepository,
             IPasswordHasher<User> passwordHasher,
-            IdentityDbContext identityContext)
+            IdentityDbContext identityContext,
+            IMemoryCache memoryCache)
         {
             _userRepository = userRepository;
             _passwordHasher = passwordHasher;
             _identityContext = identityContext;
+            _cache = memoryCache;
         }
         public async Task<Result<UserDTO>> Login(string email, string password)
         {
@@ -44,6 +49,10 @@ namespace IDP.Infrastructure.Services
 
             if (!userOrNull.Value.IsActive)
                 return Result.Failure<UserDTO>("Your account has been suspended! Please contact headmaster or administrator!");
+
+            _cache.Set(SchemaNames.Authentiaction + userOrNull.Value.Subject, userOrNull.Value, new MemoryCacheEntryOptions()
+                .SetAbsoluteExpiration(new TimeSpan(0, 0, 3))
+                .SetSlidingExpiration(new TimeSpan(0, 0, 2)));
 
             return Result.Success(
                 new UserDTO(userOrNull.Value.Subject, userOrNull.Value.Email.Value));
