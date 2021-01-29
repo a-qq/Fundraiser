@@ -89,5 +89,19 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
             return Result.Success();
         }
+
+        internal void DisenrollStudent(Member student)
+        {
+            if (student == null)
+                throw new ArgumentNullException(nameof(student));
+
+            if (student.Group != this)
+                throw new InvalidOperationException(nameof(DisenrollStudent));
+
+            if (!this._students.Remove(student))
+                throw new InvalidOperationException(nameof(DisenrollStudent));
+
+            student.DisenrollFromGroup();
+        }
     }
 }

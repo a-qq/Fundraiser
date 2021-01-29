@@ -69,6 +69,12 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
         public Result<Group> CreateGroup(Number number, Sign sign)
         {
+            if (number == null)
+                throw new ArgumentNullException(nameof(number));
+
+            if (sign == null)
+                throw new ArgumentNullException(nameof(sign));
+
             if (Groups.Any(g => g.Code == number + sign))
                 return Result.Failure<Group>($"Group with code {number + sign} already exist!");
 
@@ -80,6 +86,9 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
         public Result<bool, Error> AssignMembersToGroup(Group group, IList<Member> members)
         {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
             if (group.School != this)
                 throw new InvalidOperationException(nameof(AssignMembersToGroup));
 
@@ -89,6 +98,9 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
         public Result MakeTeacherFormTutor(Member member, Group group)
         {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
             if (group.School != this)
                 throw new InvalidOperationException(nameof(MakeTeacherFormTutor));
 
@@ -109,6 +121,9 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
         public Result DivestFormTutor(Group group)
         {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
             if (group.School != this)
                 throw new InvalidOperationException(nameof(MakeTeacherFormTutor));
 
@@ -121,6 +136,18 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             return result;
         }
 
+        public void DisenrollStudentFromGroup(Group group, Member student)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            if (group.School != this)
+                throw new InvalidOperationException(nameof(DisenrollStudentFromGroup));
+
+            group.DisenrollStudent(student);
+        }
+
+        //validation&helper methods
         internal Result CanBeFormTutor(Member member)
         {
             if (member.School != this || member.IsArchived)

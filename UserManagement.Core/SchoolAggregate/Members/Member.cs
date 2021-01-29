@@ -35,5 +35,8 @@ namespace SchoolManagement.Core.SchoolAggregate.Members
             IsActive = false;
             IsArchived = false;
         }
+
+        internal void DisenrollFromGroup()
+            => Group = null;
     }
 }
