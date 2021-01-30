@@ -19,18 +19,18 @@ namespace SchoolManagement.Data.ItegrationHandlers.IDP
 
         public async Task Handle(FormTutorAssignedEvent notification, CancellationToken cancellationToken)
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
-
-            const string sqlInsert = "INSERT INTO[auth].[Claims]([UserSubject], [Type], [Value]) VALUES " +
-                                     "(@UserId, @Type, @Value)";
-
-            await connection.ExecuteAsync(sqlInsert, new
+            using (var connection = this._sqlConnectionFactory.GetOpenConnection())
             {
-                UserId = notification.MemberId.ToString(),
-                Type = "role",
-                Value = GroupRoles.FormTutor
-            });
+                const string sqlInsert = "INSERT INTO[auth].[Claims]([UserSubject], [Type], [Value]) VALUES " +
+                                         "(@UserId, @Type, @Value)";
 
+                await connection.ExecuteAsync(sqlInsert, new
+                {
+                    UserId = notification.MemberId.ToString(),
+                    Type = "role",
+                    Value = GroupRoles.FormTutor
+                });
+            }
         }
     }
 }

@@ -67,6 +67,19 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             return Result.Success(candidate);
         }
 
+        public void ExpellMember(Member member)
+        {
+            if (member.School != this)
+                throw new InvalidOperationException(nameof(ExpellMember));
+
+            if (!this._members.Remove(member))
+                throw new InvalidOperationException(nameof(ExpellMember));
+
+            //TODO: consider situation when formtutor or treasurer when adding fundraiser context
+            //^Include groups (?)
+            AddDomainEvent(new MemberExpelledEvent(member.Id));
+        }
+
         public Result<Group> CreateGroup(Number number, Sign sign)
         {
             if (number == null)

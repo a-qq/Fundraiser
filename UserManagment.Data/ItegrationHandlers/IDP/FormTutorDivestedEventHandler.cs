@@ -18,19 +18,19 @@ namespace SchoolManagement.Data.ItegrationHandlers.IDP
 
         public async Task Handle(FormTutorDivestedEvent notification, CancellationToken cancellationToken)
         {
-            var connection = this._sqlConnectionFactory.GetOpenConnection();
-
-            const string sqlDelete = "DELETE FROM [auth].[Claims] " +
-                                     "WHERE [UserSubject] = @MemberId AND " +
-                                     "[Type] = @Type AND [Value] = @Value";
-
-            await connection.ExecuteAsync(sqlDelete, new
+            using (var connection = this._sqlConnectionFactory.GetOpenConnection()) 
             {
-                MemberId = notification.MemberId.ToString(),
-                Type = "role",
-                Value = GroupRoles.FormTutor
-            });
+                const string sqlDelete = "DELETE FROM [auth].[Claims] " +
+                                         "WHERE [UserSubject] = @MemberId AND " +
+                                         "[Type] = @Type AND [Value] = @Value";
 
+                await connection.ExecuteAsync(sqlDelete, new
+                {
+                    MemberId = notification.MemberId.ToString(),
+                    Type = "role",
+                    Value = GroupRoles.FormTutor
+                });
+            }
         }
     }
 }

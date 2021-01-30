@@ -10,6 +10,7 @@ using SchoolManagement.Data.Schools.EditSchool.Admin;
 using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
 using SchoolManagement.Data.Schools.EnrollMembersFromCsv;
+using SchoolManagement.Data.Schools.ExpellMember;
 using SchoolManagement.Data.Schools.MakeTeacherFormTutor;
 using SchoolManagement.Data.Schools.RegisterSchool;
 using System;
@@ -84,6 +85,18 @@ namespace Fundraiser.API.Controllers.School
             var result = await Handle(command);
 
             var response = FromResultOk(result);
+
+            return response;
+        }
+
+        [HttpDelete("schools/{schoolId}/members/{memberId}")]
+        public async Task<IActionResult> ExpellMember(Guid schoolId, Guid memberId)
+        {
+            var command = new ExpellMemberCommand(memberId, schoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
 
             return response;
         }
