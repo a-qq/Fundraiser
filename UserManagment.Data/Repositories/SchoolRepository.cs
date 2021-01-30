@@ -130,5 +130,13 @@ namespace SchoolManagement.Data.Repositories
                             .ThenInclude(g => g.FormTutor)
                           .FirstOrDefaultAsync(s => s.Id == schoolId));
         }
+
+        public void Remove(School school)
+        {
+            if (school == null)
+                throw new ArgumentNullException(nameof(school));
+
+            _dbSet.Remove(school);
+        }
     }
 }

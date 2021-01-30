@@ -160,6 +160,24 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             group.DisenrollStudent(student);
         }
 
+        public void DeleteGroup(Group group)
+        {
+            if (group.School != this)
+                throw new InvalidOperationException(nameof(DeleteGroup));
+
+            foreach (var student in group.Students)
+                student.DisenrollFromGroup();
+
+            if (!_groups.Remove(group))
+                throw new InvalidOperationException(nameof(DeleteGroup));
+        }
+
+        public void Remove()
+        {
+            ClearEvents();
+            AddDomainEvent(new SchoolRemovedEvent(this.Id));
+        }
+
         //validation&helper methods
         internal Result CanBeFormTutor(Member member)
         {

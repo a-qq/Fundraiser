@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.AddStudentsToGroup;
 using SchoolManagement.Data.Schools.Commands.RegisterSchool;
 using SchoolManagement.Data.Schools.CreateGroup;
+using SchoolManagement.Data.Schools.DeleteGroup;
+using SchoolManagement.Data.Schools.DeleteSchool;
 using SchoolManagement.Data.Schools.DisenrollStudentFromGroup;
 using SchoolManagement.Data.Schools.DivestFormTutor;
 using SchoolManagement.Data.Schools.EditSchool.Admin;
@@ -60,6 +62,18 @@ namespace Fundraiser.API.Controllers.School
 
             var result = await Handle(command);
             IActionResult response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [HttpDelete("schools/{schoolId}")]
+        public async Task<IActionResult> DeleteSchool(Guid schoolId)
+        {
+            var command = new DeleteSchoolCommand(schoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
 
             return response;
         }
@@ -159,5 +173,18 @@ namespace Fundraiser.API.Controllers.School
 
             return response;
         }
+
+        [HttpDelete("schools/{schoolId}/groups/{groupId}")]
+        public async Task<IActionResult> DeleteGroup(Guid schoolId, long groupId)
+        {
+            var command = new DeleteGroupCommand(groupId, schoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultOk(result);
+
+            return response;
+        }
     }
 }
+

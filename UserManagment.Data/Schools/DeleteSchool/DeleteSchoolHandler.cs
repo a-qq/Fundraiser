@@ -9,15 +9,15 @@ using SchoolManagement.Data.Services;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SchoolManagement.Data.Schools.ExpellMember
+namespace SchoolManagement.Data.Schools.DeleteSchool
 {
-    internal sealed class ExpellMemberHandler : IRequestHandler<ExpellMemberCommand, Result<bool, RequestError>>
+    internal sealed class DeleteSchoolHandler : IRequestHandler<DeleteSchoolCommand, Result<bool, RequestError>>
     {
         private readonly IAuthorizationService _authService;
         private readonly ISchoolRepository _schoolRepository;
         private readonly SchoolContext _schoolContext;
 
-        public ExpellMemberHandler(
+        public DeleteSchoolHandler(
             IAuthorizationService authorizationService,
             ISchoolRepository schoolRepository,
             SchoolContext schoolContext)
@@ -26,19 +26,18 @@ namespace SchoolManagement.Data.Schools.ExpellMember
             this._schoolRepository = schoolRepository;
             this._schoolContext = schoolContext;
         }
-        public async Task<Result<bool, RequestError>> Handle(ExpellMemberCommand request, CancellationToken cancellationToken)
+
+        public async Task<Result<bool, RequestError>> Handle(DeleteSchoolCommand request, CancellationToken cancellationToken)
         {
             await _authService.VerifyAuthorizationAsync(request.SchoolId, request.AuthId, Role.Headmaster);
 
-            if(!await _schoolRepository.ExistByIdAsync(request.SchoolId))
+            Maybe<School> schoolOrNone = await _schoolRepository.GetByIdAsync(request.SchoolId);
+            if (schoolOrNone.HasNoValue)
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.SchoolId, nameof(School)));
 
-            //in order not to load full collection of members into memeory to delete one student
-            Maybe<Member> memberOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(request.SchoolId, request.MemberId);
-            if (memberOrNone.HasNoValue)
-                return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.MemberId, nameof(Member)));
+            schoolOrNone.Value.Remove();
 
-            memberOrNone.Value.School.ExpellMember(memberOrNone.Value);
+            _schoolRepository.Remove(schoolOrNone.Value);
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.AddStudentsToGroup;
 using SchoolManagement.Data.Schools.CreateGroup;
+using SchoolManagement.Data.Schools.DeleteGroup;
+using SchoolManagement.Data.Schools.DeleteSchool;
 using SchoolManagement.Data.Schools.DisenrollStudentFromGroup;
 using SchoolManagement.Data.Schools.DivestFormTutor;
 using SchoolManagement.Data.Schools.EditSchool.Headmaster;
@@ -45,6 +47,19 @@ namespace Fundraiser.API.Controllers.School
         public async Task<IActionResult> EditSchoolLogo([FromForm] EditSchoolLogoRequest request)
         {
             var command = new EditSchoolLogoCommand(request.Logo, AuthId, SchoolId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpDelete("school")]
+        public async Task<IActionResult> DeleteSchool()
+        {
+            var command = new DeleteSchoolCommand(SchoolId, AuthId);
 
             var result = await Handle(command);
 
@@ -157,6 +172,19 @@ namespace Fundraiser.API.Controllers.School
             var result = await Handle(command);
 
             var response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpDelete("groups/{groupId}")]
+        public async Task<IActionResult> DeleteGroup(long groupId)
+        {
+            var command = new DeleteGroupCommand(groupId, SchoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultOk(result);
 
             return response;
         }

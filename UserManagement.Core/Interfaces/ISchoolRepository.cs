@@ -18,5 +18,6 @@ namespace SchoolManagement.Core.Interfaces
         Task<List<Member>> GetSchoolMembersByIdAsync(Guid schoolId, IEnumerable<Guid> userIds);
         Task<Maybe<School>> GetSchoolWithGroupAndFormTutors(Guid schoolId);
         void Add(School school);
+        void Remove(School school);
     }
 }
