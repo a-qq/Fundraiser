@@ -1,8 +1,8 @@
 ﻿using CSharpFunctionalExtensions;
 using Fundraiser.SharedKernel.Utils;
 using SchoolManagement.Core.SchoolAggregate.Groups;
-using SchoolManagement.Core.SchoolAggregate.Schools.Events;
 using SchoolManagement.Core.SchoolAggregate.Members;
+using SchoolManagement.Core.SchoolAggregate.Schools.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -97,7 +97,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             return Result.Success(group);
         }
 
-        public Result<bool, Error> AssignMembersToGroup(Group group, IList<Member> members)
+        public Result<bool, Error> AssignMembersToGroup(Group group, IEnumerable<Member> members)
         {
             if (group == null)
                 throw new ArgumentNullException(nameof(group));
@@ -106,6 +106,34 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
                 throw new InvalidOperationException(nameof(AssignMembersToGroup));
 
             Result<bool, Error> result = group.AssignMembers(members);
+            return result;
+        }
+
+        public Result<bool, Error> ReassignStudentToGroup(Group group, Member member)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            if (member == null)
+                throw new ArgumentNullException(nameof(member));
+
+            if (group.School != this)
+                throw new InvalidOperationException(nameof(ReassignStudentToGroup));
+
+            if (member.School != this)
+                throw new InvalidOperationException(nameof(ReassignStudentToGroup));
+
+            var memberAsEnumerable = member.Yield();
+            if (member.Group != null) //prevalidate only if needed
+            {
+                Result validation = group.HaveSpaceFor(memberAsEnumerable);
+                if (validation.IsFailure)
+                    return Result.Failure<bool, Error>(new Error(validation.Error));
+
+                member.Group.DisenrollStudent(member);
+            }
+
+            var result = group.AssignMembers(memberAsEnumerable);
             return result;
         }
 

@@ -34,17 +34,9 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
         internal Result<bool, Error> AssignMembers(IEnumerable<Member> members)
         {
-            if (members.Count() != members.Distinct().Count())
-                throw new InvalidOperationException(nameof(AssignMembers));
-
-            if (this.School.GroupMembersLimit != null && (this.Students.Count + members.Count()) > this.School.GroupMembersLimit)
-            {
-                var diff = this.School.GroupMembersLimit - this.Students.Count;
-                string diffMessage = diff > 0 ? $"Maximally '{diff}' members can be added" : "Cannot add any more members";
-                string message = "Group's member limit exceeded! " + diffMessage + $" to group '{this.Code}!";
-                return Result.Failure<bool, Error>(new Error(message));
-            }
-                
+            Result initValidation = HaveSpaceFor(members);
+            if (initValidation.IsFailure)
+                return Result.Failure<bool, Error>(new Error(initValidation.Error));        
 
             Result<bool, Error> validationResult = Result.Success<bool, Error>(true);
             foreach (var member in members)
@@ -63,6 +55,22 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             _students.AddRange(members);
 
             return Result.Success<bool, Error>(true);
+        }
+
+        internal Result HaveSpaceFor(IEnumerable<Member> members)
+        {
+            if (!members.Any() || members.Count() != members.Distinct().Count())
+                throw new InvalidOperationException(nameof(HaveSpaceFor));
+
+            if (this.School.GroupMembersLimit != null && (this.Students.Count + members.Count()) > this.School.GroupMembersLimit)
+            {
+                var diff = this.School.GroupMembersLimit - this.Students.Count;
+                string diffMessage = diff > 0 ? $"Maximally '{diff}' members can be added" : "Cannot add any more members";
+                string message = "Group's member limit exceeded! " + diffMessage + $" to group '{this.Code}!";
+                return Result.Failure(message);
+            }
+
+            return Result.Success();
         }
 
         internal Result AssignFormTutor(Member member)
@@ -100,7 +108,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
             if (!this._students.Remove(student))
                 throw new InvalidOperationException(nameof(DisenrollStudent));
-
+            //TODO: Remove treasurer role here!!
             student.DisenrollFromGroup();
         }
     }

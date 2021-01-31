@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.AddStudentsToGroup;
+using SchoolManagement.Data.Schools.ChangeGroupAssignment;
 using SchoolManagement.Data.Schools.Commands.RegisterSchool;
 using SchoolManagement.Data.Schools.CreateGroup;
 using SchoolManagement.Data.Schools.DeleteGroup;
@@ -107,6 +108,18 @@ namespace Fundraiser.API.Controllers.School
         public async Task<IActionResult> ExpellMember(Guid schoolId, Guid memberId)
         {
             var command = new ExpellMemberCommand(memberId, schoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [HttpPut("schools/{schoolId}/members/{studentId}/group/{groupId}")]
+        public async Task<IActionResult> TransferStudent(Guid schoolId, Guid studentId, long groupId)
+        {
+            var command = new ChangeGroupAssignmentCommand(studentId, groupId, schoolId, AuthId);
 
             var result = await Handle(command);
 

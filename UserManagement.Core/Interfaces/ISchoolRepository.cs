@@ -15,7 +15,7 @@ namespace SchoolManagement.Core.Interfaces
         Task<Maybe<Member>> GetSchoolMemberByIdAsync(Guid schoolId, Guid memberId);
         Task<Maybe<Group>> GetGroupWithStudentsByIdAsync(Guid schoolId, long groupId);
         Task<Maybe<Group>> GetGroupWithFormTutorByIdAsync(Guid schoolId, long groupId);
-        Task<List<Member>> GetSchoolMembersByIdAsync(Guid schoolId, IEnumerable<Guid> userIds);
+        Task<List<Member>> GetSchoolMembersByIdAsync(Guid schoolId, IEnumerable<Guid> memberIds);
         Task<Maybe<School>> GetSchoolWithGroupAndFormTutors(Guid schoolId);
         void Add(School school);
         void Remove(School school);
