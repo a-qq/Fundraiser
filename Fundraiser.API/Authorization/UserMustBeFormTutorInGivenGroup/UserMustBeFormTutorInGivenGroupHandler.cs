@@ -68,11 +68,11 @@ namespace Fundraiser.API.Authorization.UserMustBeFormTutorInGivenGroup
 
             if (currentUser.Value.Role == Role.Teacher)
             {
-                //if (!roles.Any(c => c.Value == GroupRoles.FormTutor))
-                //{
-                //    context.Fail();
-                //    return;
-                //}
+                if (!roles.Any(c => c.Value == GroupRoles.FormTutor))
+                {
+                    context.Fail();
+                    return;
+                }
 
                 if (!_accessor.HttpContext.Request.RouteValues.TryGetValue("groupId", out var groupIdAsObject))
                     throw new InvalidOperationException(nameof(UserMustBeFormTutorInGivenGroupHandler));
