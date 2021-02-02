@@ -38,7 +38,9 @@ namespace SchoolManagement.Data.Schools.ExpellMember
             if (memberOrNone.HasNoValue)
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.MemberId, nameof(Member)));
 
-            memberOrNone.Value.School.ExpellMember(memberOrNone.Value);
+            Result result = memberOrNone.Value.School.ExpellMember(memberOrNone.Value);
+            if (result.IsFailure)
+                return Result.Failure<bool, RequestError>(SharedRequestError.General.BusinessRuleViolation(result.Error));
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

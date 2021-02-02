@@ -2,6 +2,7 @@ using AutoMapper;
 using FluentValidation.AspNetCore;
 using Fundraiser.API.Authorization;
 using Fundraiser.API.Authorization.SubMustMatchAdminId;
+using Fundraiser.API.Authorization.UserMustBeFormTutorInGivenGroup;
 using Fundraiser.API.Authorization.UserMustBeSchoolMember;
 using Fundraiser.API.Extensions;
 using Fundraiser.API.Filters;
@@ -107,6 +108,16 @@ namespace Fundraiser.API
                     builder.RequireAuthenticatedUser();
                     builder.AddAuthenticationSchemes(IdentityServerAuthenticationDefaults.AuthenticationScheme);
                     builder.AddRequirements(new UserMustBeSchoolMemberRequirement());
+                });
+
+                options.AddPolicy("MustBeFormTutor", builder =>
+                {
+                    builder.RequireRole(Role.Headmaster, Role.Teacher);
+                    builder.RequireClaim("sub");
+                    builder.RequireClaim("school_id");
+                    builder.RequireAuthenticatedUser();
+                    builder.AddAuthenticationSchemes(IdentityServerAuthenticationDefaults.AuthenticationScheme);
+                    builder.AddRequirements(new UserMustBeFormTutorInGivenGroupRequirement());
                 });
             });
 

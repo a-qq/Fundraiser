@@ -10,15 +10,15 @@ using SchoolManagement.Data.Services;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SchoolManagement.Data.Schools.MakeTeacherFormTutor
+namespace SchoolManagement.Data.Schools.PromoteTreasurer
 {
-    public sealed class MakeTeacherFormTutorHandler : IRequestHandler<MakeTeacherFormTutorCommand, Result<bool, RequestError>>
+    internal sealed class PromoteTreasurerHandler : IRequestHandler<PromoteTreasurerCommand, Result<bool, RequestError>>
     {
         private readonly IAuthorizationService _authService;
         private readonly ISchoolRepository _schoolRepository;
         private readonly SchoolContext _schoolContext;
 
-        public MakeTeacherFormTutorHandler(
+        public PromoteTreasurerHandler(
             IAuthorizationService authorizationService,
             ISchoolRepository schoolRepository,
             SchoolContext schoolContext)
@@ -28,23 +28,22 @@ namespace SchoolManagement.Data.Schools.MakeTeacherFormTutor
             _schoolContext = schoolContext;
         }
 
-        public async Task<Result<bool, RequestError>> Handle(MakeTeacherFormTutorCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool, RequestError>> Handle(PromoteTreasurerCommand request, CancellationToken cancellationToken)
         {
-            await _authService.VerifyAuthorizationAsync(request.SchoolId, request.AuthId, Role.Headmaster);
+            await _authService.VerifyFormTutorAuthorizationAsync(request.SchoolId, request.AuthId, request.GroupId);
 
-            Maybe<School> schoolOrNone = await _schoolRepository.GetSchoolWithGroupsAndFormTutors(request.SchoolId);
-            if (schoolOrNone.HasNoValue)
+            if (!await _schoolRepository.ExistByIdAsync(request.SchoolId))
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.SchoolId, nameof(School)));
 
-            Maybe<Group> groupOrNone = schoolOrNone.Value.Groups.TryFirst(g => g.Id == request.GroupId);
-            if(groupOrNone.HasNoValue)
+            Maybe<Group> groupOrNone = await _schoolRepository.GetGroupWithStudentsByIdAsync(request.SchoolId, request.GroupId);
+            if(groupOrNone.HasNoValue)    
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.GroupId, nameof(Group)));
 
-            Maybe<Member> teacherOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(request.SchoolId, request.TeacherId);
-            if (teacherOrNone.HasNoValue)
-                return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.TeacherId, "Teacher"));
+            Maybe<Member> studentOrNone = groupOrNone.Value.Students.TryFirst(s => s.Id == request.StudentId);
+            if (studentOrNone.HasNoValue)
+                return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.StudentId, "Student"));
 
-            Result result = schoolOrNone.Value.MakeTeacherFormTutor(teacherOrNone.Value, groupOrNone.Value);
+            Result result = groupOrNone.Value.School.PromoteTreasurer(groupOrNone.Value, studentOrNone.Value);
             if (result.IsFailure)
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.BusinessRuleViolation(result.Error));
 

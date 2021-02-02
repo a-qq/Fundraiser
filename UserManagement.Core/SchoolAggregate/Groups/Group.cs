@@ -17,6 +17,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
         public string Code => Number + Sign;
         public bool IsArchived { get; private set; }
         public virtual Member FormTutor { get; private set; }
+        public virtual Member Treasurer { get; private set; }
         public virtual School School { get; private set; }
         public virtual IReadOnlyList<Member> Students => _students.AsReadOnly();
         
@@ -75,7 +76,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
         internal Result AssignFormTutor(Member member)
         {
-            if (this.IsArchived)
+            if (this.IsArchived || member.IsArchived)
                 throw new InvalidOperationException(nameof(AssignFormTutor));
 
             Result validation = this.School.CanBeFormTutor(member);
@@ -98,6 +99,28 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             return Result.Success();
         }
 
+        internal void PromoteTreasurer(Member student)
+        {
+            if (this.IsArchived | this.Treasurer != null || student.Group != this 
+                || student.IsArchived || student.Role != Role.Student)
+                throw new InvalidOperationException(nameof(PromoteTreasurer));
+
+            this.Treasurer = student;
+        }
+
+        internal Result DivestTreasurer()
+        {
+            if (this.IsArchived)
+                throw new InvalidOperationException(nameof(AssignFormTutor));
+
+            if (this.Treasurer == null)
+                return Result.Failure($"Group '{Code}'(Id: '{Id}') doest not have a Treasurer!");
+
+            this.Treasurer = null;
+
+            return Result.Success();
+        }
+
         internal void DisenrollStudent(Member student)
         {
             if (student == null)
@@ -108,7 +131,10 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
             if (!this._students.Remove(student))
                 throw new InvalidOperationException(nameof(DisenrollStudent));
-            //TODO: Remove treasurer role here!!
+
+            if (this.Treasurer == student)
+                this.Treasurer = null;
+
             student.DisenrollFromGroup();
         }
     }

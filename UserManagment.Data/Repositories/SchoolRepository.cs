@@ -16,14 +16,14 @@ namespace SchoolManagement.Data.Repositories
 {
     internal sealed class SchoolRepository : ISchoolRepository
     {
-        private readonly DbSet<School> _dbSet;
+        private readonly SchoolContext _context;
         private readonly IMemoryCache _cache;
 
         public SchoolRepository(
             SchoolContext schoolContext,
             IMemoryCache memoryCache)
         {
-            _dbSet = schoolContext.Schools;
+            _context = schoolContext;
             _cache = memoryCache;
         }
 
@@ -32,7 +32,7 @@ namespace SchoolManagement.Data.Repositories
             if (id == Guid.Empty)
                 throw new ArgumentNullException(nameof(id));
 
-            return Maybe<School>.From(await _dbSet.FindAsync(id));
+            return Maybe<School>.From(await _context.Schools.FindAsync(id));
         }
 
         public async Task<bool> ExistByIdAsync(Guid id)
@@ -53,7 +53,7 @@ namespace SchoolManagement.Data.Repositories
             if (memberOrNone.HasNoValue)
             {
                 memberOrNone = Maybe<Member>.From(
-                      await _dbSet
+                      await _context.Schools
                           .Where(s => s.Id == schoolId)
                           .SelectMany(s => s.Members)
                           .Include(m => m.School) // without this context won't cache school to retrive with find
@@ -68,7 +68,7 @@ namespace SchoolManagement.Data.Repositories
             if (school == null)
                 throw new ArgumentNullException(nameof(school));
 
-            _dbSet.Add(school);
+            _context.Schools.Add(school);
         }
 
         public async Task<List<Member>> GetSchoolMembersByIdAsync(Guid schoolId, IEnumerable<Guid> userIds)
@@ -79,7 +79,7 @@ namespace SchoolManagement.Data.Repositories
             if (userIds == null || !userIds.Any())
                 throw new ArgumentNullException(nameof(userIds));
 
-            return await _dbSet
+            return await _context.Schools
                 .Where(s => s.Id == schoolId)
                 .SelectMany(s => s.Members)
                 .Include(u => u.Group)
@@ -87,6 +87,7 @@ namespace SchoolManagement.Data.Repositories
                 .ToListAsync();
         }
 
+        //note: it also includes FormTutor and Treasurer with left join on students as 1:M
         public async Task<Maybe<Group>> GetGroupWithStudentsByIdAsync(Guid schoolId, long groupId)
         {
             if (schoolId == Guid.Empty)
@@ -95,12 +96,23 @@ namespace SchoolManagement.Data.Repositories
             if (groupId < 1)
                 throw new ArgumentOutOfRangeException(nameof(groupId));
 
-            return Maybe<Group>.From(
-                      await _dbSet
+            var groupOrNone = Maybe<Group>.From(_cache.Get<Group>(SchemaNames.Management + nameof(Group) + groupId));
+
+            if (groupOrNone.HasNoValue)
+            {
+                groupOrNone = Maybe<Group>.From(
+                      await _context.Schools
                           .Where(s => s.Id == schoolId)
                           .SelectMany(s => s.Groups)
                           .Include(g => g.Students)
                           .FirstOrDefaultAsync(g => g.Id == groupId));
+            }
+            else
+            {
+                _context.Entry(groupOrNone.Value).Collection(g => g.Students).Load();
+            }
+
+            return groupOrNone;
         }
 
         public async Task<Maybe<Group>> GetGroupWithFormTutorByIdAsync(Guid schoolId, long groupId)
@@ -111,21 +123,55 @@ namespace SchoolManagement.Data.Repositories
             if (groupId < 1)
                 throw new ArgumentOutOfRangeException(nameof(groupId));
 
-            return Maybe<Group>.From(
-                      await _dbSet
-                          .Where(s => s.Id == schoolId)
-                          .SelectMany(s => s.Groups)
-                          .Include(g => g.FormTutor)
-                          .FirstOrDefaultAsync(g => g.Id == groupId));
+            var groupOrNone = Maybe<Group>.From(_cache.Get<Group>(SchemaNames.Management + nameof(Group) + groupId));
+
+            if (groupOrNone.HasNoValue)
+            {
+                groupOrNone = Maybe<Group>.From(
+                          await _context.Schools
+                              .Where(s => s.Id == schoolId)
+                              .SelectMany(s => s.Groups)
+                              .Include(g => g.FormTutor)
+                              .FirstOrDefaultAsync(g => g.Id == groupId));
+            }
+
+            return groupOrNone;
         }
 
-        public async Task<Maybe<School>> GetSchoolWithGroupAndFormTutors(Guid schoolId)
+        public async Task<Maybe<Group>> GetGroupWithTreasurerByIdAsync(Guid schoolId, long groupId)
+        {
+            if (schoolId == Guid.Empty)
+                throw new ArgumentNullException(nameof(schoolId));
+
+            if (groupId < 1)
+                throw new ArgumentOutOfRangeException(nameof(groupId));
+
+            var groupOrNone = Maybe<Group>.From(_cache.Get<Group>(SchemaNames.Management + nameof(Group) + groupId));
+
+            if (groupOrNone.HasNoValue)
+            {
+                groupOrNone = Maybe<Group>.From(
+                          await _context.Schools
+                              .Where(s => s.Id == schoolId)
+                              .SelectMany(s => s.Groups)
+                              .Include(g => g.Treasurer)
+                              .FirstOrDefaultAsync(g => g.Id == groupId));
+            }
+            else
+            {
+                _context.Entry(groupOrNone.Value).Reference(g => g.Treasurer).Load();
+            }
+
+            return groupOrNone;
+        }
+
+        public async Task<Maybe<School>> GetSchoolWithGroupsAndFormTutors(Guid schoolId)
         {
             if (schoolId == Guid.Empty)
                 throw new ArgumentNullException(nameof(schoolId));
 
             return Maybe<School>.From(
-                      await _dbSet
+                      await _context.Schools
                           .Include(s => s.Groups)
                             .ThenInclude(g => g.FormTutor)
                           .FirstOrDefaultAsync(s => s.Id == schoolId));
@@ -136,7 +182,7 @@ namespace SchoolManagement.Data.Repositories
             if (school == null)
                 throw new ArgumentNullException(nameof(school));
 
-            _dbSet.Remove(school);
+            _context.Schools.Remove(school);
         }
     }
 }

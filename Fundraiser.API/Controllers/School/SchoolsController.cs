@@ -8,12 +8,14 @@ using SchoolManagement.Data.Schools.DeleteGroup;
 using SchoolManagement.Data.Schools.DeleteSchool;
 using SchoolManagement.Data.Schools.DisenrollStudentFromGroup;
 using SchoolManagement.Data.Schools.DivestFormTutor;
+using SchoolManagement.Data.Schools.DivestTreasurer;
 using SchoolManagement.Data.Schools.EditSchool.Headmaster;
 using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
 using SchoolManagement.Data.Schools.EnrollMembersFromCsv;
 using SchoolManagement.Data.Schools.ExpellMember;
 using SchoolManagement.Data.Schools.MakeTeacherFormTutor;
+using SchoolManagement.Data.Schools.PromoteTreasurer;
 using System;
 using System.Threading.Tasks;
 
@@ -162,12 +164,37 @@ namespace Fundraiser.API.Controllers.School
             return response;
         }
 
-
         [Authorize("MustBeHeadmaster")]
         [HttpDelete("groups/{groupId}/form-tutor")]
         public async Task<IActionResult> DivestFormTutor(long groupId)
         {
             var command = new DivestFormTutorCommand(groupId, SchoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [Authorize("MustBeFormTutor")]
+        [HttpPut("groups/{groupId}/treasurer")]
+        public async Task<IActionResult> PromoteTreasurer(long groupId, PromoteTreasurerRequest request)
+        {
+            var command = new PromoteTreasurerCommand(groupId, request.StudentId, SchoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+
+            return response;
+        }
+
+        [Authorize("MustBeFormTutor")]
+        [HttpDelete("groups/{groupId}/treasurer")]
+        public async Task<IActionResult> DivestTreasurer(long groupId)
+        {
+            var command = new DivestTreasurerCommand(groupId, SchoolId, AuthId);
 
             var result = await Handle(command);
 

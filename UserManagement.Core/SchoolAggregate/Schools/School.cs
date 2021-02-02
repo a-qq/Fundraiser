@@ -67,10 +67,26 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             return Result.Success(candidate);
         }
 
-        public void ExpellMember(Member member)
+        public Result ExpellMember(Member member)
         {
             if (member.School != this)
                 throw new InvalidOperationException(nameof(ExpellMember));
+
+            if (member.Role == Role.Headmaster)
+                return Result.Failure("Headmaster cannot be expelled!");
+
+            if (member.Role == Role.Teacher)
+            {
+                Maybe<Group> groupOrNone = this.Groups.TryFirst(g => g.FormTutor == member);
+                if (groupOrNone.HasValue)
+                    groupOrNone.Value.DivestFormTutor();
+            }
+            else if (member.Role == Role.Student)
+            {
+                Maybe<Group> groupOrNone = Maybe<Group>.From(member.Group);
+                //if (groupOrNone.HasValue)
+                //    groupOrNone.Value.DivestTreasurer();
+            }
 
             if (!this._members.Remove(member))
                 throw new InvalidOperationException(nameof(ExpellMember));
@@ -78,6 +94,8 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             //TODO: consider situation when formtutor or treasurer when adding fundraiser context
             //^Include groups (?)
             AddDomainEvent(new MemberExpelledEvent(member.Id));
+
+            return Result.Success();
         }
 
         public Result<Group> CreateGroup(Number number, Sign sign)
@@ -173,6 +191,43 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             Result result = group.DivestFormTutor();
             if (result.IsSuccess && formTutor.HasValue)
                 AddDomainEvent(new FormTutorDivestedEvent(formTutor.Value.Id));
+
+            return result;
+        }
+
+        public Result PromoteTreasurer(Group group, Member student)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            if (group.School != this)
+                throw new InvalidOperationException(nameof(PromoteTreasurer));
+
+            if (group.Treasurer == student)
+                return Result.Failure($"'{student.Email.Value}'(Id: '{student.Id}') is already Treasurer of group '{group.Code}'!");
+
+            if (group.Treasurer != null)
+                DivestTreasurer(group);
+
+            group.PromoteTreasurer(student);
+            AddDomainEvent(new TreasurerPromotedEvent(student.Id));
+
+            return Result.Success();
+        }
+
+        public Result DivestTreasurer(Group group)
+        {
+            if (group == null)
+                throw new ArgumentNullException(nameof(group));
+
+            if (group.School != this)
+                throw new InvalidOperationException(nameof(DivestTreasurer));
+
+            Maybe<Member> treasurer = Maybe<Member>.From(group.Treasurer);
+
+            Result result = group.DivestTreasurer();
+            if (result.IsSuccess && treasurer.HasValue)
+                AddDomainEvent(new TreasurerDivestedEvent(treasurer.Value.Id));
 
             return result;
         }

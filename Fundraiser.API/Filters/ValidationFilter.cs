@@ -22,8 +22,8 @@ namespace Fundraiser.API.Filters
                 {
                     var idKeyValuePairs = context.HttpContext.Request.RouteValues
                         .Where(rv => rv.Key.Contains("id", StringComparison.OrdinalIgnoreCase)
-                            && (Guid.TryParse(rv.Value as string, out Guid IdAsGuid) && (IdAsGuid == Guid.Empty))
-                             || (long.TryParse(rv.Value as string, out long IdAsLong) && (IdAsLong == 0)));
+                            && ((Guid.TryParse(rv.Value as string, out Guid IdAsGuid) && (IdAsGuid == Guid.Empty))
+                             || (long.TryParse(rv.Value as string, out long IdAsLong) && (IdAsLong < 1))));
                         
 
                     foreach (var pair in idKeyValuePairs)

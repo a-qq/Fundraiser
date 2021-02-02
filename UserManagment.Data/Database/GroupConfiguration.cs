@@ -19,6 +19,7 @@ namespace SchoolManagement.Data.Database
             b.Property(p => p.IsArchived);
             b.HasMany(p => p.Students).WithOne(p => p.Group).OnDelete(DeleteBehavior.ClientSetNull);
             b.HasOne(p => p.FormTutor).WithOne().HasForeignKey<Group>("FormTutorId").OnDelete(DeleteBehavior.ClientSetNull);
+            b.HasOne(p => p.Treasurer).WithOne().HasForeignKey<Group>("TreasurerId").OnDelete(DeleteBehavior.ClientSetNull);
 
             b.HasQueryFilter(p => !p.IsArchived);
         }
