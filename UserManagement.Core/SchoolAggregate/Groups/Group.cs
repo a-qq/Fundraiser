@@ -96,6 +96,8 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             if (this.FormTutor == null)
                 return Result.Failure($"Group '{Code}'(Id: '{Id}') doest not have a form tutor!");
 
+            this.FormTutor = null;
+
             return Result.Success();
         }
 
