@@ -90,9 +90,6 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
         internal Result DivestFormTutor()
         {
-            if (this.IsArchived)
-                throw new InvalidOperationException(nameof(AssignFormTutor));
-
             if (this.FormTutor == null)
                 return Result.Failure($"Group '{Code}'(Id: '{Id}') doest not have a form tutor!");
 
@@ -112,9 +109,6 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
         internal Result DivestTreasurer()
         {
-            if (this.IsArchived)
-                throw new InvalidOperationException(nameof(AssignFormTutor));
-
             if (this.Treasurer == null)
                 return Result.Failure($"Group '{Code}'(Id: '{Id}') doest not have a Treasurer!");
 
@@ -131,13 +125,33 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             if (student.Group != this)
                 throw new InvalidOperationException(nameof(DisenrollStudent));
 
-            if (!this._students.Remove(student))
-                throw new InvalidOperationException(nameof(DisenrollStudent));
-
             if (this.Treasurer == student)
                 this.Treasurer = null;
 
-            student.DisenrollFromGroup();
+            if (!this._students.Remove(student))
+                throw new InvalidOperationException(nameof(DisenrollStudent));
+
+        }
+
+        internal void DisenrollAllStudents()
+        {
+            this._students.Clear();
+            this.Treasurer = null;
+        }
+
+        internal void Graduate()
+        {
+            if(this.Number == this.School.YearsOfEducation)
+            {
+                foreach (var student in this.Students)
+                    student.Archive();
+
+                this.IsArchived = true;
+            }
+            else
+            {
+                this.Number = Number.Create(this.Number + 1).Value;
+            }
         }
     }
 }

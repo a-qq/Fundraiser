@@ -14,6 +14,7 @@ using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
 using SchoolManagement.Data.Schools.EnrollMembersFromCsv;
 using SchoolManagement.Data.Schools.ExpellMember;
+using SchoolManagement.Data.Schools.Graduate;
 using SchoolManagement.Data.Schools.MakeTeacherFormTutor;
 using SchoolManagement.Data.Schools.PromoteTreasurer;
 using System;
@@ -139,6 +140,31 @@ namespace Fundraiser.API.Controllers.School
         }
 
         [Authorize("MustBeHeadmaster")]
+        [HttpPost("groups/graduate")]
+        public async Task<IActionResult> Graduate()
+        {
+            var command = new GraduateCommand(SchoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpDelete("groups/{groupId}")]
+        public async Task<IActionResult> DeleteGroup(long groupId)
+        {
+            var command = new DeleteGroupCommand(groupId, SchoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultOk(result);
+
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
         [HttpPut("groups/{groupId}/students")]
         public async Task<IActionResult> AddStudentsToGroup(long groupId, AddStudentsToGroupRequest request)
         {
@@ -212,19 +238,6 @@ namespace Fundraiser.API.Controllers.School
             var result = await Handle(command);
 
             var response = FromResultNoContent(result);
-
-            return response;
-        }
-
-        [Authorize("MustBeHeadmaster")]
-        [HttpDelete("groups/{groupId}")]
-        public async Task<IActionResult> DeleteGroup(long groupId)
-        {
-            var command = new DeleteGroupCommand(groupId, SchoolId, AuthId);
-
-            var result = await Handle(command);
-
-            var response = FromResultOk(result);
 
             return response;
         }

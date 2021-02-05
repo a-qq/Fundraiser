@@ -40,7 +40,7 @@ namespace SchoolManagement.Data.Repositories
             return (await GetByIdAsync(id)).HasValue;
         }
 
-        public async Task<Maybe<Member>> GetSchoolMemberByIdAsync(Guid schoolId, Guid memberId)
+        public async Task<Maybe<Member>> GetSchoolMemberByIdAsync(Guid schoolId, Guid memberId, bool disableFilter = false)
         {
             if (schoolId == Guid.Empty)
                 throw new ArgumentNullException(nameof(schoolId));
@@ -52,10 +52,13 @@ namespace SchoolManagement.Data.Repositories
 
             if (memberOrNone.HasNoValue)
             {
+                var query = _context.Schools.Where(s => s.Id == schoolId);
+
+                if (disableFilter)
+                    query = query.IgnoreQueryFilters();
+
                 memberOrNone = Maybe<Member>.From(
-                      await _context.Schools
-                          .Where(s => s.Id == schoolId)
-                          .SelectMany(s => s.Members)
+                      await query.SelectMany(s => s.Members)
                           .Include(m => m.School) // without this context won't cache school to retrive with find
                           .FirstOrDefaultAsync(m => m.Id == memberId));
             }
@@ -87,8 +90,8 @@ namespace SchoolManagement.Data.Repositories
                 .ToListAsync();
         }
 
-        //note: it also includes FormTutor and Treasurer with left join on students as 1:M
-        public async Task<Maybe<Group>> GetGroupWithStudentsByIdAsync(Guid schoolId, long groupId)
+        //note: it also includes Treasurer
+        public async Task<Maybe<Group>> GetGroupWithStudentsByIdAsync(Guid schoolId, long groupId, bool disableFilter = false)
         {
             if (schoolId == Guid.Empty)
                 throw new ArgumentNullException(nameof(schoolId));
@@ -100,10 +103,13 @@ namespace SchoolManagement.Data.Repositories
 
             if (groupOrNone.HasNoValue)
             {
+                var query = _context.Schools.Where(s => s.Id == schoolId);
+
+                if (disableFilter)
+                    query = query.IgnoreQueryFilters();
+
                 groupOrNone = Maybe<Group>.From(
-                      await _context.Schools
-                          .Where(s => s.Id == schoolId)
-                          .SelectMany(s => s.Groups)
+                      await query.SelectMany(s => s.Groups)
                           .Include(g => g.Students)
                           .FirstOrDefaultAsync(g => g.Id == groupId));
             }
@@ -165,13 +171,27 @@ namespace SchoolManagement.Data.Repositories
             return groupOrNone;
         }
 
-        public async Task<Maybe<School>> GetSchoolWithGroupsAndFormTutors(Guid schoolId)
+        public async Task<Maybe<School>> GetSchoolWithGroupsWithFormTutorsByIdAsync(Guid schoolId)
         {
             if (schoolId == Guid.Empty)
                 throw new ArgumentNullException(nameof(schoolId));
 
             return Maybe<School>.From(
                       await _context.Schools
+                          .Include(s => s.Groups)
+                            .ThenInclude(g => g.FormTutor)
+                          .FirstOrDefaultAsync(s => s.Id == schoolId));
+        }
+
+        public async Task<Maybe<School>> GetSchoolWithGroupsWithStudentsAndFormTutorsByIdAsync(Guid schoolId)
+        {
+            if (schoolId == Guid.Empty)
+                throw new ArgumentNullException(nameof(schoolId));
+
+            return Maybe<School>.From(
+                      await _context.Schools
+                          .Include(s => s.Groups)
+                            .ThenInclude(g => g.Students)
                           .Include(s => s.Groups)
                             .ThenInclude(g => g.FormTutor)
                           .FirstOrDefaultAsync(s => s.Id == schoolId));

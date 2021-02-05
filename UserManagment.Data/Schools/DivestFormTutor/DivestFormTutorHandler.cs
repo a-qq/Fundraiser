@@ -32,7 +32,7 @@ namespace SchoolManagement.Data.Schools.DivestFormTutor
         {
             await _authService.VerifyAuthorizationAsync(request.SchoolId, request.AuthId, Role.Headmaster);
 
-            Maybe<School> schoolOrNone = await _schoolRepository.GetSchoolWithGroupsAndFormTutors(request.SchoolId);
+            Maybe<School> schoolOrNone = await _schoolRepository.GetSchoolWithGroupsWithFormTutorsByIdAsync(request.SchoolId);
             if (schoolOrNone.HasNoValue)
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.SchoolId, nameof(School)));
 

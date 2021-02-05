@@ -34,7 +34,7 @@ namespace SchoolManagement.Data.Schools.ExpellMember
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.SchoolId, nameof(School)));
 
             //in order not to load full collection of members into memeory to delete one student
-            Maybe<Member> memberOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(request.SchoolId, request.MemberId);
+            Maybe<Member> memberOrNone = await _schoolRepository.GetSchoolMemberByIdAsync(request.SchoolId, request.MemberId, true);
             if (memberOrNone.HasNoValue)
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.MemberId, nameof(Member)));
 

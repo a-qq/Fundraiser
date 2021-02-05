@@ -38,6 +38,11 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             return number.Value.ToString();
         }
 
+        public static implicit operator int(Number number)
+        {
+            return number.Value;
+        }
+
         public override string ToString()
         {
             return this.Value.ToString();

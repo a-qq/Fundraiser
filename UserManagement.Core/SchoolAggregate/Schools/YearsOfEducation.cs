@@ -38,6 +38,16 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             return yearsOfEducation.Value.ToString();
         }
 
+        public static implicit operator int(YearsOfEducation yearsOfEducation)
+        {
+            return yearsOfEducation.Value;
+        }
+
+        public override string ToString()
+        {
+            return this.Value.ToString();
+        }
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;

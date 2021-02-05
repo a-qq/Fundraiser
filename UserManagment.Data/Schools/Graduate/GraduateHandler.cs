@@ -2,7 +2,6 @@
 using Fundraiser.SharedKernel.RequestErrors;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
-using SchoolManagement.Core.SchoolAggregate.Groups;
 using SchoolManagement.Core.SchoolAggregate.Members;
 using SchoolManagement.Core.SchoolAggregate.Schools;
 using SchoolManagement.Data.Database;
@@ -10,36 +9,33 @@ using SchoolManagement.Data.Services;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SchoolManagement.Data.Schools.DeleteGroup
+namespace SchoolManagement.Data.Schools.Graduate
 {
-    internal sealed class DeleteGroupHandler : IRequestHandler<DeleteGroupCommand, Result<bool, RequestError>>
+    internal sealed class GraduateHandler : IRequestHandler<GraduateCommand, Result<bool, RequestError>>
     {
         private readonly IAuthorizationService _authService;
         private readonly ISchoolRepository _schoolRepository;
         private readonly SchoolContext _schoolContext;
 
-        public DeleteGroupHandler(
+        public GraduateHandler(
             IAuthorizationService authorizationService,
             ISchoolRepository schoolRepository,
             SchoolContext schoolContext)
         {
-            this._authService = authorizationService;
-            this._schoolRepository = schoolRepository;
-            this._schoolContext = schoolContext;
+            _authService = authorizationService;
+            _schoolRepository = schoolRepository;
+            _schoolContext = schoolContext;
         }
 
-        public async Task<Result<bool, RequestError>> Handle(DeleteGroupCommand request, CancellationToken cancellationToken)
+        public async Task<Result<bool, RequestError>> Handle(GraduateCommand request, CancellationToken cancellationToken)
         {
             await _authService.VerifyAuthorizationAsync(request.SchoolId, request.AuthId, Role.Headmaster);
 
-            if (!await _schoolRepository.ExistByIdAsync(request.SchoolId))
+            Maybe<School> schoolOrNone = await _schoolRepository.GetSchoolWithGroupsWithStudentsAndFormTutorsByIdAsync(request.SchoolId);
+            if (schoolOrNone.HasNoValue)
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.SchoolId, nameof(School)));
 
-            Maybe<Group> groupOrNone = await _schoolRepository.GetGroupWithStudentsByIdAsync(request.SchoolId, request.GroupId, true);
-            if (groupOrNone.HasNoValue)
-                return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.GroupId, nameof(Group)));
-
-            groupOrNone.Value.School.DeleteGroup(groupOrNone.Value);
+            schoolOrNone.Value.Graduate();
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

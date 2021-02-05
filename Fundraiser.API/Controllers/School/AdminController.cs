@@ -15,6 +15,7 @@ using SchoolManagement.Data.Schools.EditSchoolLogo;
 using SchoolManagement.Data.Schools.EnrollMember;
 using SchoolManagement.Data.Schools.EnrollMembersFromCsv;
 using SchoolManagement.Data.Schools.ExpellMember;
+using SchoolManagement.Data.Schools.Graduate;
 using SchoolManagement.Data.Schools.MakeTeacherFormTutor;
 using SchoolManagement.Data.Schools.PromoteTreasurer;
 using SchoolManagement.Data.Schools.RegisterSchool;
@@ -138,6 +139,18 @@ namespace Fundraiser.API.Controllers.School
             var result = await Handle(command);
             IActionResult response = FromResultOk(result);
 
+            return response;
+        }
+
+        //must be post as effect is not idempotent 
+        [HttpPost("schools/{schoolId}/groups/graduate")]
+        public async Task<IActionResult> Graduate(Guid schoolId)
+        {
+            var command = new GraduateCommand(schoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
             return response;
         }
 

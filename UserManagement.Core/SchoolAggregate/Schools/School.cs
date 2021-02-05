@@ -75,6 +75,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             if (member.Role == Role.Headmaster)
                 return Result.Failure("Headmaster cannot be expelled!");
 
+            //events of divestion are not raised, because member is deleted by member expelled event
             if (member.Role == Role.Teacher)
             {
                 Maybe<Group> groupOrNone = this.Groups.TryFirst(g => g.FormTutor == member);
@@ -84,15 +85,13 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             else if (member.Role == Role.Student)
             {
                 Maybe<Group> groupOrNone = Maybe<Group>.From(member.Group);
-                //if (groupOrNone.HasValue)
-                //    groupOrNone.Value.DivestTreasurer();
+                if (groupOrNone.HasValue)
+                    groupOrNone.Value.DivestTreasurer();
             }
 
             if (!this._members.Remove(member))
                 throw new InvalidOperationException(nameof(ExpellMember));
 
-            //TODO: consider situation when formtutor or treasurer when adding fundraiser context
-            //^Include groups (?)
             AddDomainEvent(new MemberExpelledEvent(member.Id));
 
             return Result.Success();
@@ -105,6 +104,9 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
             if (sign == null)
                 throw new ArgumentNullException(nameof(sign));
+
+            if (number > this.YearsOfEducation)
+                return Result.Failure<Group>($"Number ('{number}') cannot be greater then years of education ('{YearsOfEducation}')!");
 
             if (Groups.Any(g => g.Code == number + sign))
                 return Result.Failure<Group>($"Group with code {number + sign} already exist!");
@@ -141,17 +143,25 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             if (member.School != this)
                 throw new InvalidOperationException(nameof(ReassignStudentToGroup));
 
+            Maybe<Member> treasurerOrNone = Maybe<Member>.None;
             var memberAsEnumerable = member.Yield();
+
             if (member.Group != null) //prevalidate only if needed
             {
                 Result validation = group.HaveSpaceFor(memberAsEnumerable);
                 if (validation.IsFailure)
                     return Result.Failure<bool, Error>(new Error(validation.Error));
 
+                treasurerOrNone = Maybe<Member>.From(member.Group.Treasurer);
+
                 member.Group.DisenrollStudent(member);
             }
 
             var result = group.AssignMembers(memberAsEnumerable);
+
+            if (result.IsSuccess && treasurerOrNone.HasValue && treasurerOrNone.Value == member)
+                AddDomainEvent(new TreasurerDivestedEvent(member.Id));
+
             return result;
         }
 
@@ -240,19 +250,48 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             if (group.School != this)
                 throw new InvalidOperationException(nameof(DisenrollStudentFromGroup));
 
+            if (group.Treasurer == student)
+                AddDomainEvent(new TreasurerDivestedEvent(student.Id));
+
             group.DisenrollStudent(student);
         }
 
         public void DeleteGroup(Group group)
         {
-            if (group.School != this)
-                throw new InvalidOperationException(nameof(DeleteGroup));
+            if (!group.IsArchived)
+            {
+                DivestFormTutor(group);
+                DivestTreasurer(group);
+            }
 
-            foreach (var student in group.Students)
-                student.DisenrollFromGroup();
+            group.DisenrollAllStudents();
 
             if (!_groups.Remove(group))
                 throw new InvalidOperationException(nameof(DeleteGroup));
+        }
+
+        public void Graduate()
+        {
+            List<Guid> membersToArchive = new List<Guid>();
+            List<Guid> formTutorsToDivest = new List<Guid>();
+            List<Guid> treasurersToDivest = new List<Guid>();
+
+            foreach (var group in this.Groups)
+            {
+                if (group.Number >= this.YearsOfEducation)
+                {
+                    membersToArchive.AddRange(group.Students.Select(m => m.Id));
+                    if (group.FormTutor != null)
+                        formTutorsToDivest.Add(group.FormTutor.Id);
+
+                    if (group.Treasurer != null)
+                        treasurersToDivest.Add(group.Treasurer.Id);
+                }
+                group.Graduate();
+            }
+
+            if (membersToArchive.Any() || formTutorsToDivest.Any() || treasurersToDivest.Any())
+                AddDomainEvent(new GraduationCompletedEvent(membersToArchive, formTutorsToDivest, treasurersToDivest));
         }
 
         public void Remove()

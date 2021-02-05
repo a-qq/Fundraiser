@@ -12,12 +12,13 @@ namespace SchoolManagement.Core.Interfaces
     {
         Task<Maybe<School>> GetByIdAsync(Guid id);
         Task<bool> ExistByIdAsync(Guid id);
-        Task<Maybe<Member>> GetSchoolMemberByIdAsync(Guid schoolId, Guid memberId);
-        Task<Maybe<Group>> GetGroupWithStudentsByIdAsync(Guid schoolId, long groupId);
+        Task<Maybe<Member>> GetSchoolMemberByIdAsync(Guid schoolId, Guid memberId, bool diseableFilter = false);
+        Task<Maybe<Group>> GetGroupWithStudentsByIdAsync(Guid schoolId, long groupId, bool diseableFilter = false);
         Task<Maybe<Group>> GetGroupWithFormTutorByIdAsync(Guid schoolId, long groupId);
         Task<Maybe<Group>> GetGroupWithTreasurerByIdAsync(Guid schoolId, long groupId);
         Task<List<Member>> GetSchoolMembersByIdAsync(Guid schoolId, IEnumerable<Guid> memberIds);
-        Task<Maybe<School>> GetSchoolWithGroupsAndFormTutors(Guid schoolId);
+        Task<Maybe<School>> GetSchoolWithGroupsWithFormTutorsByIdAsync(Guid schoolId);
+        Task<Maybe<School>> GetSchoolWithGroupsWithStudentsAndFormTutorsByIdAsync(Guid schoolId);
         void Add(School school);
         void Remove(School school);
     }

@@ -1,5 +1,4 @@
-﻿using SchoolManagement.Core.SchoolAggregate.Schools.Events;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Security.Cryptography;
@@ -56,17 +55,6 @@ namespace SchoolManagement.Data.ItegrationHandlers.IDP
                 output.Rows.Add(subject, "gender", user.Gender.ToString());
                 output.Rows.Add(subject, "school_id", user.SchoolId.ToString());
             }
-
-            return output;
-        }
-
-        public static DataTable GetMembersDeleteTable(MembersEnrolledEvent domainEvent)
-        {
-            var output = new DataTable();
-            output.Columns.Add("Id", typeof(Guid));
-
-            foreach (var userId in domainEvent.MemberIds)
-                output.Rows.Add(userId);
 
             return output;
         }
