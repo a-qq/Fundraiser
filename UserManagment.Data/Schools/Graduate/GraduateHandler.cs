@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Fundraiser.SharedKernel.RequestErrors;
+using Fundraiser.SharedKernel.Utils;
 using MediatR;
 using SchoolManagement.Core.Interfaces;
 using SchoolManagement.Core.SchoolAggregate.Members;
@@ -35,7 +36,9 @@ namespace SchoolManagement.Data.Schools.Graduate
             if (schoolOrNone.HasNoValue)
                 return Result.Failure<bool, RequestError>(SharedRequestError.General.NotFound(request.SchoolId, nameof(School)));
 
-            schoolOrNone.Value.Graduate();
+            Result<bool, Error> result = schoolOrNone.Value.Graduate();
+            if(result.IsFailure)
+                return Result.Failure<bool, RequestError>(SharedRequestError.General.BusinessRuleViolation(result.Error));
 
             await _schoolContext.SaveChangesAsync(cancellationToken);
 

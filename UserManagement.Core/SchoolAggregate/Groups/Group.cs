@@ -20,7 +20,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
         public virtual Member Treasurer { get; private set; }
         public virtual School School { get; private set; }
         public virtual IReadOnlyList<Member> Students => _students.AsReadOnly();
-        
+
         protected Group()
         {
         }
@@ -37,7 +37,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
         {
             Result initValidation = HaveSpaceFor(members);
             if (initValidation.IsFailure)
-                return Result.Failure<bool, Error>(new Error(initValidation.Error));        
+                return Result.Failure<bool, Error>(new Error(initValidation.Error));
 
             Result<bool, Error> validationResult = Result.Success<bool, Error>(true);
             foreach (var member in members)
@@ -100,7 +100,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
         internal void PromoteTreasurer(Member student)
         {
-            if (this.IsArchived | this.Treasurer != null || student.Group != this 
+            if (this.IsArchived | this.Treasurer != null || student.Group != this
                 || student.IsArchived || student.Role != Role.Student)
                 throw new InvalidOperationException(nameof(PromoteTreasurer));
 
@@ -141,7 +141,10 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
 
         internal void Graduate()
         {
-            if(this.Number == this.School.YearsOfEducation)
+            if (CanGraduate().IsFailure)
+                throw new InvalidOperationException(nameof(CanGraduate));
+
+            if (this.Number == this.School.YearsOfEducation)
             {
                 foreach (var student in this.Students)
                     student.Archive();
@@ -152,6 +155,20 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             {
                 this.Number = Number.Create(this.Number + 1).Value;
             }
+        }
+
+        internal Result<bool, Error> CanGraduate()
+        {
+            Result<bool, Error> validationResult = Result.Success<bool, Error>(true);
+            if (this.Number == this.School.YearsOfEducation)
+            {
+                var inactiveStudents = this.Students.Where(s => !s.IsActive).ToList();
+                foreach (var student in inactiveStudents)
+                    validationResult = Result.Combine(validationResult,
+                        Result.Failure<bool, Error>(new Error($"Cannot archive not active student {student.Email}'(Id: '{student.Id}')!")));
+            }
+
+            return validationResult;
         }
     }
 }

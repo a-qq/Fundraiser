@@ -270,11 +270,18 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
                 throw new InvalidOperationException(nameof(DeleteGroup));
         }
 
-        public void Graduate()
+        public Result<bool, Error> Graduate()
         {
+            Result<bool, Error> validationResult = Result.Success<bool, Error>(true);
+            foreach (var group in this.Groups)
+                validationResult = Result.Combine(validationResult, group.CanGraduate());
+
+            if (validationResult.IsFailure)
+                return validationResult;
+
             List<Guid> membersToArchive = new List<Guid>();
             List<Guid> formTutorsToDivest = new List<Guid>();
-            List<Guid> treasurersToDivest = new List<Guid>();
+            List<Guid> treasurersToDivest = new List<Guid>();           
 
             foreach (var group in this.Groups)
             {
@@ -292,6 +299,8 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
 
             if (membersToArchive.Any() || formTutorsToDivest.Any() || treasurersToDivest.Any())
                 AddDomainEvent(new GraduationCompletedEvent(membersToArchive, formTutorsToDivest, treasurersToDivest));
+
+            return Result.Success<bool, Error>(true);
         }
 
         public void Remove()
