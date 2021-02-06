@@ -36,7 +36,25 @@ namespace SchoolManagement.Core.SchoolAggregate.Members
             IsArchived = false;
         }
 
-        internal void Archive()
-            => IsArchived = true;
+        internal Result Archive()
+        {
+            if (CanBeArchived().IsFailure)
+                throw new InvalidOperationException(nameof(Archive));
+
+            this.IsArchived = true;
+
+            return Result.Success();
+        }
+
+        internal Result CanBeArchived()
+        {
+            if (this.Role == Role.Headmaster)
+                return Result.Failure("Headmaster cannot be archived!");
+
+            if (!this.IsActive)
+                return Result.Failure($"Cannot archive not active member {this.Email}'(Id: '{this.Id}')!");
+
+            return Result.Success();
+        }
     }
 }

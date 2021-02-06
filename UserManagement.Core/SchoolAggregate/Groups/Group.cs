@@ -164,8 +164,11 @@ namespace SchoolManagement.Core.SchoolAggregate.Groups
             {
                 var inactiveStudents = this.Students.Where(s => !s.IsActive).ToList();
                 foreach (var student in inactiveStudents)
+                {
+                    var result = student.CanBeArchived();
                     validationResult = Result.Combine(validationResult,
-                        Result.Failure<bool, Error>(new Error($"Cannot archive not active student {student.Email}'(Id: '{student.Id}')!")));
+                        Result.FailureIf<bool, Error>(result.IsFailure, true, new Error(result.Error)));
+                }
             }
 
             return validationResult;

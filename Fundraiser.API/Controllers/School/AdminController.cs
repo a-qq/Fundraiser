@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Data.Schools.AddStudentsToGroup;
+using SchoolManagement.Data.Schools.ArchiveMember;
 using SchoolManagement.Data.Schools.ChangeGroupAssignment;
 using SchoolManagement.Data.Schools.Commands.RegisterSchool;
 using SchoolManagement.Data.Schools.CreateGroup;
@@ -103,6 +104,19 @@ namespace Fundraiser.API.Controllers.School
             var result = await Handle(command);
 
             var response = FromResultOk(result);
+
+            return response;
+        }
+
+        [Authorize("MustBeHeadmaster")]
+        [HttpPut("schools/{schoolId}/members/{memberId}/archive")]
+        public async Task<IActionResult> ArchiveMember(Guid schoolId, Guid memberId)
+        {
+            var command = new ArchiveMemberCommand(memberId, schoolId, AuthId);
+
+            var result = await Handle(command);
+
+            var response = FromResultNoContent(result);
 
             return response;
         }

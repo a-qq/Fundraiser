@@ -97,6 +97,34 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools
             return Result.Success();
         }
 
+        public Result<bool, Error> ArchiveMember(Member member)
+        {
+            if (member.School != this)
+                throw new InvalidOperationException(nameof(ExpellMember));
+
+            var result = member.CanBeArchived();
+            Result<bool, Error> validationResult = Result.Combine(
+                Result.FailureIf(result.IsFailure, true, new Error(result.Error)),
+                Result.FailureIf(Maybe<Group>.From(member.Group).HasValue, true, new Error("Students in group can only be archived in graduation!")));
+
+            if (validationResult.IsFailure)
+                return validationResult;
+
+            if (member.Role == Role.Teacher)
+            {
+                Maybe<Group> groupOrNone = this.Groups.TryFirst(g => g.FormTutor == member);
+                if (groupOrNone.HasValue)
+                {
+                    groupOrNone.Value.DivestFormTutor();
+                    AddDomainEvent(new FormTutorDivestedEvent(member.Id));
+                }
+            }
+
+            AddDomainEvent(new MemberArchivedEvent(member.Id));
+
+            return Result.Success<bool, Error>(true);
+        }
+
         public Result<Group> CreateGroup(Number number, Sign sign)
         {
             if (number == null)
