@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
 {
@@ -12,8 +13,19 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
 
         public GraduationCompletedEvent(List<Guid> idsOfMembersToArchive, List<Guid> idsOfFormTutorsToDivest, List<Guid> idsOfDivestedTreasurers)
         {
+            if (idsOfMembersToArchive == null || idsOfMembersToArchive.Any(c => c == Guid.Empty))
+                throw new ArgumentException(nameof(idsOfMembersToArchive));
+
             IdsOfArchivedStudents = idsOfMembersToArchive.AsReadOnly();
+
+            if (idsOfFormTutorsToDivest == null || idsOfFormTutorsToDivest.Any(c => c == Guid.Empty))
+                throw new ArgumentException(nameof(idsOfFormTutorsToDivest));
+
             IdsOfDivestedFormTutors = idsOfFormTutorsToDivest.AsReadOnly();
+
+            if (idsOfDivestedTreasurers == null || idsOfDivestedTreasurers.Any(c => c == Guid.Empty))
+                throw new ArgumentException(nameof(idsOfFormTutorsToDivest));
+
             IdsOfDivestedTreasurers = idsOfDivestedTreasurers.AsReadOnly();
         }
     }

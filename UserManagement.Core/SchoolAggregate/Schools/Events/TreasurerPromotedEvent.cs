@@ -9,7 +9,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
 
         public TreasurerPromotedEvent(Guid treasurerId)
         {
-            TreasurerId = treasurerId;
+            TreasurerId = treasurerId == Guid.Empty ? throw new ArgumentNullException(nameof(treasurerId)) : treasurerId;
         }
     }
 }

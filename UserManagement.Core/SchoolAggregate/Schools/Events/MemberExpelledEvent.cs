@@ -9,7 +9,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
 
         public MemberExpelledEvent(Guid memberId)
         {
-            MemberId = memberId;
+            MemberId = memberId == Guid.Empty ? throw new ArgumentNullException(nameof(memberId)) : memberId;
         }
     }
 }

@@ -9,7 +9,7 @@ namespace SchoolManagement.Core.SchoolAggregate.Schools.Events
 
         public SchoolRemovedEvent(Guid schoolId)
         {
-            SchoolId = schoolId;
+            SchoolId = schoolId == Guid.Empty ? throw new ArgumentNullException(nameof(schoolId)) : schoolId;
         }
     }
 }
