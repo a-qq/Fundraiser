@@ -14,8 +14,9 @@
       "launchBrowser": true,
       "launchUrl": "api/swagger",
       "environmentVariables": {
-        "JWTSecret": "",
-        "ConnectionStrings__DefaultConnection": "",
+        "JWTSecret":
+          "J3FHDYZt4wUJno0DqMvX27-6PswhNUDoGxz6ol6QGBfG-v0JeXZwEI59Sk_NzC7vFPGUddOwOZl2OZsJ8hmrH48a6CaDlPnO1lO-v7IZNncWCxHXU4BlZs74MR0vaSLBtZCjEn_t2WaaaNoCs9j_dgV3k9K__G_nmIme0f9lR8OEePCswqeUHL7Sj1kzFzit5z96i7R2S9Aw5-9CiITAd8LokrbMlYo-MWdZQk7P9SV5be35MvvAk2NwDmCslPNDXyJhHQRXd9KA1W42rGyoJb7KWTOFEvvu1ib23z_qODEXXXy_QGN0ca-04NmV8wEmW98bK1IpUQaeSLZCqzD2tQ",
+        "ConnectionStrings__DefaultConnection": "Server=.\\SQLEXPRESS;Database=FundraiserDb;Trusted_Connection=True",
         "applicationUrl": "https://localhost:44307;http://localhost:5000",
         "ASPNETCORE_ENVIRONMENT": "Development",
         "ASPNETCORE_URLS": "http://localhost:5000;https://localhost:44307",
@@ -24,10 +25,10 @@
         "Urls__Client": "https://localhost:44308/",
         "SecurityCode__ExpirationTimeInMinutes": "120",
         "SecurityCode__AntispamInMinutes": "3",
-        "Administrators__Admins__0__Email": "",
-        "Administrators__Admins__0__Password": "",
-        "MailSettings__Email": "",
-        "MailSettings__Password": ""
+        "Administrators__Admins__0__Email": "robert_olech@o2.pl",
+        "Administrators__Admins__0__Password": "Fundraiser1!",
+        "MailSettings__Email": "ag464508.robert@gmail.com",
+        "MailSettings__Password": "flhqtxtnakdaaboz"
       }
     }
   }

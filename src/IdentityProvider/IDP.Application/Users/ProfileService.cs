@@ -1,13 +1,13 @@
-﻿using IdentityServer4.Extensions;
+﻿using System;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IDP.Application.Common.Interfaces;
 using Microsoft.Extensions.Caching.Memory;
-using SharedKernel.Domain.Utils;
-using System;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using SharedKernel.Infrastructure.Utils;
 
 namespace IDP.Application.Users
 {
@@ -46,10 +46,12 @@ namespace IDP.Application.Users
             if (userOrNull.HasNoValue)
                 return;
 
-            if (userOrNull.Value.IsActive && !_cache.TryGetValue(SchemaNames.Authentiaction + userOrNull.Value.Subject, out _))
-                _cache.Set(SchemaNames.Authentiaction + userOrNull.Value.Subject, userOrNull.Value, new MemoryCacheEntryOptions()
-                    .SetAbsoluteExpiration(new TimeSpan(0, 0, 3))
-                    .SetSlidingExpiration(new TimeSpan(0, 0, 2)));
+            if (userOrNull.Value.IsActive &&
+                !_cache.TryGetValue(SchemaNames.Authentiaction + userOrNull.Value.Subject, out _))
+                _cache.Set(SchemaNames.Authentiaction + userOrNull.Value.Subject, userOrNull.Value,
+                    new MemoryCacheEntryOptions()
+                        .SetAbsoluteExpiration(new TimeSpan(0, 0, 3))
+                        .SetSlidingExpiration(new TimeSpan(0, 0, 2)));
 
             context.IsActive = userOrNull.Value.IsActive;
         }

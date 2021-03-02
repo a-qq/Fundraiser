@@ -1,6 +1,6 @@
-﻿using MediatR;
+﻿using System;
+using MediatR;
 using SharedKernel.Domain.Common;
-using System;
 
 namespace SharedKernel.Infrastructure.Implementations
 {

@@ -3,7 +3,8 @@ using SharedKernel.Infrastructure.Extensions;
 
 namespace SchoolManagement.Application.Schools.Commands.DisenrollStudentFromGroup
 {
-    internal sealed class DisenrollStudentFromGroupCommandValidator : AbstractValidator<DisenrollStudentFromGroupCommand>
+    internal sealed class
+        DisenrollStudentFromGroupCommandValidator : AbstractValidator<DisenrollStudentFromGroupCommand>
     {
         public DisenrollStudentFromGroupCommandValidator()
         {

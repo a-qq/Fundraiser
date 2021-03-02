@@ -1,7 +1,7 @@
 ﻿using IDP.Domain.UserAggregate.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SharedKernel.Domain.Utils;
+using SharedKernel.Infrastructure.Utils;
 
 namespace IDP.Infrastructure.Persistance.Configuration
 {

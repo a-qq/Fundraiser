@@ -1,25 +1,17 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using CSharpFunctionalExtensions;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Domain.Errors;
 using SharedKernel.Domain.ValueObjects;
-using System;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Members
 {
     public class Member : Entity<MemberId>
     {
-        public FirstName FirstName { get; }
-        public LastName LastName { get; }
-        public Role Role { get; private set; }
-        public Email Email { get; }
-        public Gender Gender { get; }
-        public bool IsActive { get; }
-        public bool IsArchived { get; private set; }
-        public virtual School School { get; }
-        public virtual Group Group { get; private set; }
-
-        protected Member() { }
+        protected Member()
+        {
+        }
 
         internal Member(FirstName firstName, LastName lastName, Email email, Role role, Gender gender, School school)
             : base(MemberId.New())
@@ -34,9 +26,19 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
             IsArchived = false;
         }
 
+        public FirstName FirstName { get; }
+        public LastName LastName { get; }
+        public Role Role { get; private set; }
+        public Email Email { get; }
+        public Gender Gender { get; }
+        public bool IsActive { get; }
+        public bool IsArchived { get; private set; }
+        public virtual School School { get; }
+        public virtual Group Group { get; private set; }
+
         internal Result<bool, Error> Archive()
         {
-            if (this.IsArchived)
+            if (IsArchived)
                 throw new InvalidOperationException(nameof(Member) + ":" + nameof(Archive));
 
             var validation = CanBeArchived();
@@ -44,65 +46,65 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
             if (validation.IsFailure)
                 return validation;
 
-            var groupOrNone = this.School.GroupOfFormTutor(this);
+            var groupOrNone = School.GroupOfFormTutor(this);
 
             if (groupOrNone.HasValue)
-                this.School.DivestFormTutorFromGroup(groupOrNone.Value.Id);
+                School.DivestFormTutorFromGroup(groupOrNone.Value.Id);
 
-            this.IsArchived = true;
+            IsArchived = true;
 
             return Result.Success<bool, Error>(true);
         }
 
         internal Result<bool, Error> CanBeArchived()
         {
-            if (this.IsArchived)
+            if (IsArchived)
                 throw new InvalidOperationException(nameof(Member) + ":" + nameof(CanBeArchived));
 
             var result = Result.Combine(
-                 Result.FailureIf(this.Role == Role.Headmaster, true,
-                    new Error($"Headmaster '{this.Email}' (Id: '{this.Id}') cannot be archived!")),
-                 Result.FailureIf(!this.IsActive, true,
-                    new Error($"Cannot archive not active member '{this.Email}' (Id: '{this.Id}')!")));
+                Result.FailureIf(Role == Role.Headmaster, true,
+                    new Error($"Headmaster '{Email}' (Id: '{Id}') cannot be archived!")),
+                Result.FailureIf(!IsActive, true,
+                    new Error($"Cannot archive not active member '{Email}' (Id: '{Id}')!")));
 
             return result;
         }
 
         internal Result<bool, Error> Restore()
         {
-            if (!this.IsArchived)
-                return new Error($"Member '{this.Email}' (Id: '{this.Id}') is not archived!");
+            if (!IsArchived)
+                return new Error($"Member '{Email}' (Id: '{Id}') is not archived!");
 
-            if (this.Role == Role.Student)
+            if (Role == Role.Student)
             {
-                Maybe<Group> groupOrNone = this.Group;
+                Maybe<Group> groupOrNone = Group;
                 if (groupOrNone.HasValue)
-                    groupOrNone.Value.DisenrollStudent(this.Id);
+                    groupOrNone.Value.DisenrollStudent(Id);
             }
 
-            this.IsArchived = false;
+            IsArchived = false;
 
             return Result.Success<bool, Error>(true);
         }
 
         internal void DegradeToTeacher()
         {
-            if (this.Role != Role.Headmaster || this.IsArchived)
+            if (Role != Role.Headmaster || IsArchived)
                 throw new InvalidOperationException(nameof(Member) + ":" + nameof(DegradeToTeacher));
 
-            this.Role = Role.Teacher;
+            Role = Role.Teacher;
         }
 
         internal Result<bool, Error> PromoteToHeadmaster()
         {
-            if (this.Role != Role.Teacher || this.IsArchived)
+            if (Role != Role.Teacher || IsArchived)
                 throw new InvalidOperationException(nameof(Member) + ":" + nameof(PromoteToHeadmaster));
 
-            var validation = this.School.CanPromoteHeadmaster();
+            var validation = School.CanPromoteHeadmaster();
             if (validation.IsFailure)
                 return validation;
 
-            this.Role = Role.Headmaster;
+            Role = Role.Headmaster;
 
             return Result.Success<bool, Error>(true);
         }

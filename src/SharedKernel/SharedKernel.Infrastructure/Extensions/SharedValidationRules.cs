@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using SharedKernel.Domain.ValueObjects;
-using System;
 
 namespace SharedKernel.Infrastructure.Extensions
 {
@@ -22,7 +22,8 @@ namespace SharedKernel.Infrastructure.Extensions
             return ruleBuilder.Custom((id, context) =>
             {
                 if (id == Guid.Empty)
-                    context.AddFailure($"{context.PropertyName} is required and cannot be empty ('{context.PropertyValue}')");
+                    context.AddFailure(
+                        $"{context.PropertyName} is required and cannot be empty ('{context.PropertyValue}')");
             });
         }
     }

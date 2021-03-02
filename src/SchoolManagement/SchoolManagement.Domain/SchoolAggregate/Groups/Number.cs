@@ -1,25 +1,26 @@
-﻿using CSharpFunctionalExtensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Groups
 {
     public class Number : ValueObject
     {
-        private static int MinValue => 1;
-        private static int MaxValue => 4; 
-        public byte Value { get; }
-
         private Number(byte number)
         {
             Value = number;
         }
+
+        private static int MinValue => 1;
+        private static int MaxValue => 4;
+        public byte Value { get; }
+
         public static Result<Number> Create(int number)
         {
-            Result validation = Validate(number);
+            var validation = Validate(number);
             if (validation.IsFailure)
                 return validation.ConvertFailure<Number>();
 
-            return new Number((byte)number);
+            return new Number((byte) number);
         }
 
         public static Result Validate(int number, string propertyName = nameof(Number))
@@ -45,8 +46,9 @@ namespace SchoolManagement.Domain.SchoolAggregate.Groups
 
         public override string ToString()
         {
-            return this.Value.ToString();
+            return Value.ToString();
         }
+
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;

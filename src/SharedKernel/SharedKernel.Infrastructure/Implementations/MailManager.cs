@@ -1,17 +1,18 @@
-﻿using Microsoft.Extensions.Options;
-using SharedKernel.Infrastructure.Interfaces;
-using SharedKernel.Infrastructure.Options;
-using System.Net;
+﻿using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Options;
 
 namespace SharedKernel.Infrastructure.Implementations
 {
     internal sealed class MailManager : IMailManager
     {
-        private readonly MailOptions _mailSettings;
         private readonly SmtpClient _client;
+        private readonly MailOptions _mailSettings;
+
         public MailManager(IOptions<MailOptions> mailOptions)
         {
             _mailSettings = mailOptions.Value;
@@ -22,7 +23,7 @@ namespace SharedKernel.Infrastructure.Implementations
         {
             var mimeType = new ContentType("text/html");
             using (var emailMessage = new MailMessage())
-            using (AlternateView alternate = AlternateView.CreateAlternateViewFromString(message, mimeType))
+            using (var alternate = AlternateView.CreateAlternateViewFromString(message, mimeType))
             {
                 emailMessage.To.Add(new MailAddress(receiver));
                 emailMessage.From = new MailAddress(_mailSettings.Email);

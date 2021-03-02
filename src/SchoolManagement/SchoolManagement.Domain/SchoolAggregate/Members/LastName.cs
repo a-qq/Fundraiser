@@ -1,20 +1,20 @@
-﻿using CSharpFunctionalExtensions;
-using SharedKernel.Domain.Errors;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
+using SharedKernel.Domain.Errors;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Members
 {
     public class LastName : ValueObject
     {
-        private static int MinLength { get => 2; }
-        private static int MaxLength { get => 200; }
-        public string Value { get; }
-
         private LastName(string value)
         {
             Value = value;
         }
+
+        private static int MinLength => 2;
+        private static int MaxLength => 200;
+        public string Value { get; }
 
 
         public static Result<LastName> Create(string lastName)
@@ -36,9 +36,12 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
 
             lastName = lastName.Trim();
             return Result.Combine(
-                Result.FailureIf(!Regex.IsMatch(lastName, @"^[\p{L}]+-?[\p{L}]+$"), true, new Error($"{properyName} should consist of only letters optionally devided by one '-'!")),
-                 Result.FailureIf(lastName.Length < MinLength, true, new Error($"{properyName} should consist of min {MinLength} characters!")),
-                Result.FailureIf(lastName.Length > MaxLength, true, new Error($"{properyName} should contain max {MaxLength} characters!")));
+                Result.FailureIf(!Regex.IsMatch(lastName, @"^[\p{L}]+-?[\p{L}]+$"), true,
+                    new Error($"{properyName} should consist of only letters optionally devided by one '-'!")),
+                Result.FailureIf(lastName.Length < MinLength, true,
+                    new Error($"{properyName} should consist of min {MinLength} characters!")),
+                Result.FailureIf(lastName.Length > MaxLength, true,
+                    new Error($"{properyName} should contain max {MaxLength} characters!")));
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
@@ -48,7 +51,7 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
 
         public override string ToString()
         {
-            return this.Value;
+            return Value;
         }
 
         public static implicit operator string(LastName lastName)

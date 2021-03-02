@@ -1,13 +1,12 @@
-﻿using CSharpFunctionalExtensions;
-using IdentityModel;
+﻿using System;
+using System.Security.Claims;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using SharedKernel.Domain.Utils;
 using SharedKernel.Infrastructure.Errors;
-using System;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Backend.API.Controllers
 {
@@ -33,7 +32,8 @@ namespace Backend.API.Controllers
             return base.Ok(Envelope.Ok());
         }
 
-        protected IActionResult FromResultCreatedAt<T>(Result<T, RequestError> result, string routeName, object routeValues = null)
+        protected IActionResult FromResultCreatedAt<T>(Result<T, RequestError> result, string routeName,
+            object routeValues = null)
         {
             var errorResultOrNone = ErrorFromResult(result);
             if (errorResultOrNone.HasValue)
@@ -64,6 +64,5 @@ namespace Backend.API.Controllers
 
             return BadRequest(Envelope.Error(result.Error));
         }
-
     }
 }

@@ -8,10 +8,10 @@ namespace SchoolManagement.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "management");
+                "management");
 
             migrationBuilder.CreateTable(
-                name: "Schools",
+                "Schools",
                 schema: "management",
                 columns: table => new
                 {
@@ -22,13 +22,10 @@ namespace SchoolManagement.Infrastructure.Migrations
                     YearsOfEducation = table.Column<byte>(nullable: false),
                     LogoId = table.Column<string>(maxLength: 36, nullable: true)
                 },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Schools", x => x.Id);
-                });
+                constraints: table => { table.PrimaryKey("PK_Schools", x => x.Id); });
 
             migrationBuilder.CreateTable(
-                name: "Members",
+                "Members",
                 schema: "management",
                 columns: table => new
                 {
@@ -47,8 +44,8 @@ namespace SchoolManagement.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Members", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Members_Schools_SchoolId",
-                        column: x => x.SchoolId,
+                        "FK_Members_Schools_SchoolId",
+                        x => x.SchoolId,
                         principalSchema: "management",
                         principalTable: "Schools",
                         principalColumn: "Id",
@@ -56,7 +53,7 @@ namespace SchoolManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Groups",
+                "Groups",
                 schema: "management",
                 columns: table => new
                 {
@@ -72,22 +69,22 @@ namespace SchoolManagement.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Groups", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Groups_Members_FormTutorId",
-                        column: x => x.FormTutorId,
+                        "FK_Groups_Members_FormTutorId",
+                        x => x.FormTutorId,
                         principalSchema: "management",
                         principalTable: "Members",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_Groups_Schools_SchoolId",
-                        column: x => x.SchoolId,
+                        "FK_Groups_Schools_SchoolId",
+                        x => x.SchoolId,
                         principalSchema: "management",
                         principalTable: "Schools",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Groups_Members_TreasurerId",
-                        column: x => x.TreasurerId,
+                        "FK_Groups_Members_TreasurerId",
+                        x => x.TreasurerId,
                         principalSchema: "management",
                         principalTable: "Members",
                         principalColumn: "Id",
@@ -95,19 +92,19 @@ namespace SchoolManagement.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_FormTutorId",
+                "IX_Groups_FormTutorId",
                 schema: "management",
                 table: "Groups",
                 column: "FormTutorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_SchoolId",
+                "IX_Groups_SchoolId",
                 schema: "management",
                 table: "Groups",
                 column: "SchoolId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Groups_TreasurerId",
+                "IX_Groups_TreasurerId",
                 schema: "management",
                 table: "Groups",
                 column: "TreasurerId",
@@ -115,32 +112,32 @@ namespace SchoolManagement.Infrastructure.Migrations
                 filter: "[TreasurerId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "Index_Code",
+                "Index_Code",
                 schema: "management",
                 table: "Groups",
-                columns: new[] { "Number", "Sign" });
+                columns: new[] {"Number", "Sign"});
 
             migrationBuilder.CreateIndex(
-                name: "IX_Members_Email",
+                "IX_Members_Email",
                 schema: "management",
                 table: "Members",
                 column: "Email",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Members_GroupId",
+                "IX_Members_GroupId",
                 schema: "management",
                 table: "Members",
                 column: "GroupId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Members_SchoolId",
+                "IX_Members_SchoolId",
                 schema: "management",
                 table: "Members",
                 column: "SchoolId");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Members_Groups_GroupId",
+                "FK_Members_Groups_GroupId",
                 schema: "management",
                 table: "Members",
                 column: "GroupId",
@@ -153,26 +150,26 @@ namespace SchoolManagement.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_Groups_Members_FormTutorId",
+                "FK_Groups_Members_FormTutorId",
                 schema: "management",
                 table: "Groups");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Groups_Members_TreasurerId",
+                "FK_Groups_Members_TreasurerId",
                 schema: "management",
                 table: "Groups");
 
             migrationBuilder.DropTable(
-                name: "Members",
-                schema: "management");
+                "Members",
+                "management");
 
             migrationBuilder.DropTable(
-                name: "Groups",
-                schema: "management");
+                "Groups",
+                "management");
 
             migrationBuilder.DropTable(
-                name: "Schools",
-                schema: "management");
+                "Schools",
+                "management");
         }
     }
 }

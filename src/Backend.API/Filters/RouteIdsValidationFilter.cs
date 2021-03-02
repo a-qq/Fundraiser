@@ -1,10 +1,10 @@
-﻿using Backend.API.Controllers;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Backend.API.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using SharedKernel.Infrastructure.Errors;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Backend.API.Filters
 {
@@ -12,21 +12,20 @@ namespace Backend.API.Filters
     {
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-
             if (!(context.Controller is Controller))
-            {
-
-                if (context.HttpContext.Request.RouteValues.Keys.Any(k => k.Contains("id", StringComparison.OrdinalIgnoreCase)))
+                if (context.HttpContext.Request.RouteValues.Keys.Any(k =>
+                    k.Contains("id", StringComparison.OrdinalIgnoreCase)))
                 {
                     var idKeyValuePairs = context.HttpContext.Request.RouteValues
                         .Where(rv => rv.Key.Contains("id", StringComparison.OrdinalIgnoreCase)
-                            && ((Guid.TryParse(rv.Value as string, out Guid IdAsGuid) && (IdAsGuid == Guid.Empty))
-                             || (long.TryParse(rv.Value as string, out long IdAsLong) && (IdAsLong < 1))));
+                                     && (Guid.TryParse(rv.Value as string, out var IdAsGuid) && IdAsGuid == Guid.Empty
+                                         || long.TryParse(rv.Value as string, out var IdAsLong) && IdAsLong < 1));
 
                     if (idKeyValuePairs.Any())
                     {
                         var errors = idKeyValuePairs
-                            .Select(kvp => new RouteValueErrorModel(kvp.Key, $"'{kvp.Key}' value is invalid ('{kvp.Value}')!"))
+                            .Select(kvp =>
+                                new RouteValueErrorModel(kvp.Key, $"'{kvp.Key}' value is invalid ('{kvp.Value}')!"))
                             .ToArray();
 
                         var errorResponse = SharedRequestError.General.UnprocessableEntity(errors);
@@ -35,7 +34,6 @@ namespace Backend.API.Filters
                         return;
                     }
                 }
-            }
 
             await next();
             /* previous validation of request body kept for lookup purposes 

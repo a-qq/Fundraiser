@@ -1,29 +1,30 @@
-﻿using Backend.API.Authorization.Validators.Absrtact;
-using Microsoft.AspNetCore.Authorization;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Backend.API.Authorization.Validators.Absrtact;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.API.Authorization
 {
     /// <summary>
-    /// Check for valid role in given order. Throws if validator for given role is not implemented.
+    ///     Check for valid role in given order. Throws if validator for given role is not implemented.
     /// </summary>
     public class OneOfUserRolesMustBeValidRequirement : IAuthorizationRequirement
     {
-        public IReadOnlyList<string> Roles { get; }
-        public OneOfUserRolesMustBeValidRequirement(string role, params string[] roles) 
+        public OneOfUserRolesMustBeValidRequirement(string role, params string[] roles)
         {
             if (string.IsNullOrWhiteSpace(role))
                 throw new ArgumentNullException(nameof(role));
 
-            var list = new List<string>() { role };
+            var list = new List<string> {role};
             if (roles.Length > 0)
                 list.AddRange(roles.Distinct().Except(list));
 
             Roles = list;
         }
+
+        public IReadOnlyList<string> Roles { get; }
     }
 
     internal sealed class OneOfUserRolesMustBeValidHandler : AuthorizationHandler<OneOfUserRolesMustBeValidRequirement>
@@ -39,8 +40,8 @@ namespace Backend.API.Authorization
         protected override async Task HandleRequirementAsync(
             AuthorizationHandlerContext context, OneOfUserRolesMustBeValidRequirement requirement)
         {
-            bool isAuthorized = false;
-            for (int i = 0; i < requirement.Roles.Count; i++)
+            var isAuthorized = false;
+            for (var i = 0; i < requirement.Roles.Count; i++)
             {
                 var role = requirement.Roles[i];
                 if (string.IsNullOrWhiteSpace(role))
@@ -59,7 +60,6 @@ namespace Backend.API.Authorization
             }
 
             context.Succeed(requirement);
-            return;
         }
     }
 }

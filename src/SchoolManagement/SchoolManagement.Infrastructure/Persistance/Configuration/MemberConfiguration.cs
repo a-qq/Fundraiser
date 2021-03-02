@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SchoolManagement.Domain.SchoolAggregate.Members;
-using SharedKernel.Domain.Utils;
 using SharedKernel.Domain.ValueObjects;
+using SharedKernel.Infrastructure.Utils;
 
-namespace SchoolManagement.Infrastructure.Database
+namespace SchoolManagement.Infrastructure.Persistance.Configuration
 {
     internal sealed class MemberConfiguration : IEntityTypeConfiguration<Member>
     {

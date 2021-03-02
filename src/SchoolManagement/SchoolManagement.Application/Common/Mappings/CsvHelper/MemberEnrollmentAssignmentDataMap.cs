@@ -29,7 +29,7 @@ namespace SchoolManagement.Application.Common.Mappings.CsvHelper
 
             public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
             {
-                return (FirstName)value;
+                return (FirstName) value;
             }
         }
 
@@ -42,7 +42,7 @@ namespace SchoolManagement.Application.Common.Mappings.CsvHelper
 
             public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
             {
-                return (LastName)value;
+                return (LastName) value;
             }
         }
 
@@ -55,7 +55,7 @@ namespace SchoolManagement.Application.Common.Mappings.CsvHelper
 
             public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
             {
-                return (Email)value;
+                return (Email) value;
             }
         }
 
@@ -68,7 +68,7 @@ namespace SchoolManagement.Application.Common.Mappings.CsvHelper
 
             public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
             {
-                return (Role)value;
+                return (Role) value;
             }
         }
 
@@ -81,7 +81,7 @@ namespace SchoolManagement.Application.Common.Mappings.CsvHelper
 
             public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
             {
-                return (Gender)value;
+                return (Gender) value;
             }
         }
 
@@ -91,8 +91,8 @@ namespace SchoolManagement.Application.Common.Mappings.CsvHelper
             {
                 if (!string.IsNullOrWhiteSpace(text))
                 {
-                    Number number = Number.Create(int.Parse(text.Substring(0, 1))).Value;
-                    Sign sign = Sign.Create(text[1..]).Value;
+                    var number = Number.Create(int.Parse(text.Substring(0, 1))).Value;
+                    var sign = Sign.Create(text[1..]).Value;
                     return new Code(number, sign);
                 }
 

@@ -1,12 +1,12 @@
-﻿using IDP.Application.Common.Interfaces;
+﻿using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using IDP.Application.Common.Interfaces;
 using IDP.Domain.UserAggregate.Entities;
 using Microsoft.EntityFrameworkCore;
 using SharedKernel.Domain.Common;
 using SharedKernel.Infrastructure.Interfaces;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace IDP.Infrastructure.Persistance
 {
@@ -14,14 +14,14 @@ namespace IDP.Infrastructure.Persistance
     {
         private readonly IDomainEventService _domainEventService;
 
-        public DbSet<User> Users { get; set; }
-
         public IdentityDbContext(DbContextOptions options,
             IDomainEventService domainEventService)
             : base(options)
         {
             _domainEventService = domainEventService;
         }
+
+        public DbSet<User> Users { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
@@ -44,11 +44,11 @@ namespace IDP.Infrastructure.Persistance
             while (true)
             {
                 var domainEventEntity = ChangeTracker
-                  .Entries<AggregateRoot>()
-                  .Select(x => x.Entity.DomainEvents)
-                  .SelectMany(x => x)
-                  .Where(domainEvent => !domainEvent.IsPublished)
-                  .FirstOrDefault();
+                    .Entries<AggregateRoot>()
+                    .Select(x => x.Entity.DomainEvents)
+                    .SelectMany(x => x)
+                    .Where(domainEvent => !domainEvent.IsPublished)
+                    .FirstOrDefault();
 
                 if (domainEventEntity == null) break;
 

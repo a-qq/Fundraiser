@@ -1,4 +1,7 @@
-﻿using Dapper;
+﻿using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 using IdentityModel;
 using MediatR;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
@@ -6,13 +9,11 @@ using SchoolManagement.Domain.SchoolAggregate.Schools.Events;
 using SharedKernel.Domain.Utils;
 using SharedKernel.Infrastructure.Implementations;
 using SharedKernel.Infrastructure.Interfaces;
-using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
 {
-    internal sealed class FormTutorAssignedEventHandler : INotificationHandler<DomainEventNotification<FormTutorAssignedEvent>>
+    internal sealed class
+        FormTutorAssignedEventHandler : INotificationHandler<DomainEventNotification<FormTutorAssignedEvent>>
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
@@ -21,7 +22,8 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
             _sqlConnectionFactory = sqlConnectionFactory;
         }
 
-        public async Task Handle(DomainEventNotification<FormTutorAssignedEvent> notification, CancellationToken cancellationToken)
+        public async Task Handle(DomainEventNotification<FormTutorAssignedEvent> notification,
+            CancellationToken cancellationToken)
         {
             var domainEvent = notification.DomainEvent;
             var claims = DapperBulkOperationsHelper.CreateClaimsInsertTable();

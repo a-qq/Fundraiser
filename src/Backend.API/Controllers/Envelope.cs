@@ -1,20 +1,20 @@
-﻿using SharedKernel.Infrastructure.Errors;
-using System;
+﻿using System;
+using SharedKernel.Infrastructure.Errors;
 
 namespace Backend.API.Controllers
 {
     public class Envelope<T>
     {
-        public T Result { get; }
-        public RequestError Error { get; }
-        public DateTime TimeGenerated { get; }
-
         protected internal Envelope(T result, RequestError error)
         {
             Result = result;
             Error = error;
             TimeGenerated = DateTime.UtcNow;
         }
+
+        public T Result { get; }
+        public RequestError Error { get; }
+        public DateTime TimeGenerated { get; }
     }
 
     public class Envelope : Envelope<string>
@@ -34,7 +34,7 @@ namespace Backend.API.Controllers
             return new Envelope(null);
         }
 
-        public static new Envelope Error(RequestError error)
+        public static Envelope Error(RequestError error)
         {
             return new Envelope(error);
         }

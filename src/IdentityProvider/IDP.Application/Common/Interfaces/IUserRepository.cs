@@ -1,7 +1,7 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using IDP.Domain.UserAggregate.Entities;
 using SharedKernel.Domain.ValueObjects;
-using System.Threading.Tasks;
 
 namespace IDP.Application.Common.Interfaces
 {

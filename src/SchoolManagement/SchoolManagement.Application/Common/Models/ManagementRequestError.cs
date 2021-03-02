@@ -1,6 +1,6 @@
-﻿using SharedKernel.Domain.ValueObjects;
+﻿using System.Collections.Generic;
+using SharedKernel.Domain.ValueObjects;
 using SharedKernel.Infrastructure.Errors;
-using System.Collections.Generic;
 
 namespace SchoolManagement.Application.Common.Models
 {
@@ -14,12 +14,16 @@ namespace SchoolManagement.Application.Common.Models
 
         public static class Csv
         {
-            public static RequestError DuplicateEmails(IEnumerable<Email> emails) =>
-                new ManagementRequestError("invalid.csv.emails", $"Duplicate emails in input file: {string.Join(", ", emails)}");
+            public static RequestError DuplicateEmails(IEnumerable<Email> emails)
+            {
+                return new ManagementRequestError("invalid.csv.emails",
+                    $"Duplicate emails in input file: {string.Join(", ", emails)}");
+            }
 
-            public static RequestError InvalidHeader(string message) =>
-                 new ManagementRequestError("invalid.csv.header", message);
+            public static RequestError InvalidHeader(string message)
+            {
+                return new ManagementRequestError("invalid.csv.header", message);
+            }
         }
-
     }
 }

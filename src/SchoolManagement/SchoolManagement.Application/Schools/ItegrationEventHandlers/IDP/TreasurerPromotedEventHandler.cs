@@ -1,15 +1,16 @@
-﻿using Dapper;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 using MediatR;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Schools.Events;
 using SharedKernel.Infrastructure.Implementations;
 using SharedKernel.Infrastructure.Interfaces;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
 {
-    internal sealed class TreasurerPromotedEventHandler : INotificationHandler<DomainEventNotification<TreasurerPromotedEvent>>
+    internal sealed class
+        TreasurerPromotedEventHandler : INotificationHandler<DomainEventNotification<TreasurerPromotedEvent>>
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
@@ -18,7 +19,8 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
             _sqlConnectionFactory = sqlConnectionFactory;
         }
 
-        public async Task Handle(DomainEventNotification<TreasurerPromotedEvent> notification, CancellationToken cancellationToken)
+        public async Task Handle(DomainEventNotification<TreasurerPromotedEvent> notification,
+            CancellationToken cancellationToken)
         {
             var domainEvent = notification.DomainEvent;
             using (var connection = _sqlConnectionFactory.GetOpenConnection())
@@ -30,7 +32,8 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
                 {
                     UserId = domainEvent.TreasurerId.ToString(),
                     Value = GroupRoles.Treasurer
-                }); ;
+                });
+                ;
             }
         }
     }

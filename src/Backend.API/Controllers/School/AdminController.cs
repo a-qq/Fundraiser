@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Application.Schools.Commands.AddStudentsToGroup;
 using SchoolManagement.Application.Schools.Commands.ArchiveMember;
@@ -21,9 +23,6 @@ using SchoolManagement.Application.Schools.Commands.PromoteHeadmaster;
 using SchoolManagement.Application.Schools.Commands.PromoteTreasurer;
 using SchoolManagement.Application.Schools.Commands.RegisterSchool;
 using SchoolManagement.Application.Schools.Commands.RestoreMember;
-using SchoolManagement.Infrastructure.Schools.EnrollMember;
-using System;
-using System.Threading.Tasks;
 
 namespace Backend.API.Controllers.School
 {
@@ -32,9 +31,6 @@ namespace Backend.API.Controllers.School
     [ApiController]
     public class AdminController : MediatrController
     {
-        
-        public AdminController() : base() { }
-
         [HttpPost("schools")]
         public async Task<IActionResult> RegisterSchool(RegisterSchoolRequest request)
 
@@ -122,7 +118,8 @@ namespace Backend.API.Controllers.School
         }
 
         [HttpPost("schools/{schoolId}/members/csv")]
-        public async Task<IActionResult> EnrollMembersFromCsv(Guid schoolId, [FromForm] EnrollMembersFromCsvRequest request)
+        public async Task<IActionResult> EnrollMembersFromCsv(Guid schoolId,
+            [FromForm] EnrollMembersFromCsvRequest request)
         {
             var command = new EnrollMembersFromCsvCommand(request.File, request.Delimiter, schoolId);
 
@@ -206,7 +203,8 @@ namespace Backend.API.Controllers.School
         }
 
         [HttpPut("schools/{schoolId}/groups/{groupId}/students")]
-        public async Task<IActionResult> AddStudentsToGroup(Guid schoolId, Guid groupId, AddStudentsToGroupRequest request)
+        public async Task<IActionResult> AddStudentsToGroup(Guid schoolId, Guid groupId,
+            AddStudentsToGroupRequest request)
         {
             var command = new AddStudentsToGroupCommand(request.StudentIds, schoolId, groupId);
 
@@ -218,7 +216,8 @@ namespace Backend.API.Controllers.School
         }
 
         [HttpPut("schools/{schoolId}/groups/{groupId}/form-tutor")]
-        public async Task<IActionResult> MakeTeacherFormTutor(Guid schoolId, Guid groupId, PromoteTeacherToFormTutorRequest request)
+        public async Task<IActionResult> MakeTeacherFormTutor(Guid schoolId, Guid groupId,
+            PromoteTeacherToFormTutorRequest request)
         {
             var command = new PromoteFormTutorCommand(request.TeacherId, groupId, schoolId);
 
@@ -290,4 +289,3 @@ namespace Backend.API.Controllers.School
         }
     }
 }
-

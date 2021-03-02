@@ -10,7 +10,8 @@ namespace SharedKernel.Infrastructure
     {
         public static void AddSharedKernelInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<ISqlConnectionFactory>(x => new SqlConnectionFactory(configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<ISqlConnectionFactory>(x =>
+                new SqlConnectionFactory(configuration.GetConnectionString("DefaultConnection")));
             services.AddScoped<IDomainEventService, DomainEventService>();
             services.AddScoped<IMailManager, MailManager>();
             services.AddTransient<IIdentityService, IdentityService>();

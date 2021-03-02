@@ -25,7 +25,8 @@ namespace SchoolManagement.Application.Common.ValidationRules
             });
         }
 
-        public static IRuleBuilderInitial<T, int?> GroupMembersLimitMustBeValid<T>(this IRuleBuilder<T, int?> ruleBuilder)
+        public static IRuleBuilderInitial<T, int?> GroupMembersLimitMustBeValid<T>(
+            this IRuleBuilder<T, int?> ruleBuilder)
         {
             return ruleBuilder.Custom((property, context) =>
             {

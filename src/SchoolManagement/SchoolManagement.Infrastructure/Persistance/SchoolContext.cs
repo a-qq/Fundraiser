@@ -1,15 +1,12 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Domain.Common;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Infrastructure.Persistance
 {
@@ -18,8 +15,8 @@ namespace SchoolManagement.Infrastructure.Persistance
         private readonly IDomainEventService _domainEventService;
 
         public SchoolContext(DbContextOptions<SchoolContext> options,
-               IDomainEventService domainEventService)
-               : base(options)
+            IDomainEventService domainEventService)
+            : base(options)
         {
             _domainEventService = domainEventService;
         }
@@ -48,11 +45,11 @@ namespace SchoolManagement.Infrastructure.Persistance
             while (true)
             {
                 var domainEventEntity = ChangeTracker
-                  .Entries<AggregateRoot<SchoolId>>()
-                  .Select(x => x.Entity.DomainEvents)
-                  .SelectMany(x => x)
-                  .Where(domainEvent => !domainEvent.IsPublished)
-                  .FirstOrDefault();
+                    .Entries<AggregateRoot<SchoolId>>()
+                    .Select(x => x.Entity.DomainEvents)
+                    .SelectMany(x => x)
+                    .Where(domainEvent => !domainEvent.IsPublished)
+                    .FirstOrDefault();
 
                 if (domainEventEntity == null) break;
 

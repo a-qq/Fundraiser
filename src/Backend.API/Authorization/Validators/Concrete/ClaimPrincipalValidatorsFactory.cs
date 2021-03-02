@@ -1,16 +1,17 @@
-﻿using Backend.API.Authorization.Validators.Absrtact;
-using MediatR;
-using SharedKernel.Infrastructure.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using Backend.API.Authorization.Validators.Absrtact;
+using MediatR;
+using SharedKernel.Infrastructure.Interfaces;
 
 namespace Backend.API.Authorization.Validators.Concrete
 {
     internal sealed class ClaimPrincipalValidatorsFactory : IClaimPrincipalValidatorsFactory
     {
         private readonly IReadOnlyDictionary<string, IClaimsPrincipalValidator> _claimsPrinicpalValidators;
+
         public ClaimPrincipalValidatorsFactory(ISender mediator, IAdministratorsProvider administratorProvider)
         {
             var claimsPrincipalValidatorType = typeof(IClaimsPrincipalValidator);

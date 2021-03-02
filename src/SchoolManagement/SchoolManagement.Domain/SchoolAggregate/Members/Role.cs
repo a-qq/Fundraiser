@@ -1,6 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Members
 {
@@ -10,15 +10,16 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
         public static readonly Role Teacher = Create(RoleEnum.Teacher.ToString()).Value;
         public static readonly Role Student = Create(RoleEnum.Student.ToString()).Value;
 
-        public RoleEnum Value { get; }
         private Role(RoleEnum value)
         {
             Value = value;
         }
 
+        public RoleEnum Value { get; }
+
         public static Result<Role> Create(string role)
         {
-            Result<RoleEnum> validationResult = ValidateAndConvert(role);
+            var validationResult = ValidateAndConvert(role);
 
             if (validationResult.IsFailure)
                 return validationResult.ConvertFailure<Role>();
@@ -82,4 +83,3 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
         Headmaster = 3
     }
 }
-

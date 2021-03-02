@@ -1,5 +1,5 @@
-﻿using SharedKernel.Infrastructure.Interfaces;
-using System;
+﻿using System;
+using SharedKernel.Infrastructure.Interfaces;
 
 namespace SharedKernel.Infrastructure.Implementations
 {

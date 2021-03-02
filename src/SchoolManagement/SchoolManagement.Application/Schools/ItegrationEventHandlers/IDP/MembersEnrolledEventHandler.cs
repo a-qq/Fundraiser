@@ -1,23 +1,24 @@
-﻿using Dapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Models;
 using SchoolManagement.Domain.SchoolAggregate.Schools.Events;
 using SharedKernel.Infrastructure.Implementations;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
 {
-    internal sealed class MembersEnrolledEventHandler : INotificationHandler<DomainEventNotification<MembersEnrolledEvent>>
+    internal sealed class
+        MembersEnrolledEventHandler : INotificationHandler<DomainEventNotification<MembersEnrolledEvent>>
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
         private readonly IManagementMailManager _mailManager;
+        private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
         public MembersEnrolledEventHandler(
             ISqlConnectionFactory sqlConnectionFactory,
@@ -27,7 +28,8 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
             _mailManager = mailManager;
         }
 
-        public async Task Handle(DomainEventNotification<MembersEnrolledEvent> notification, CancellationToken cancellationToken)
+        public async Task Handle(DomainEventNotification<MembersEnrolledEvent> notification,
+            CancellationToken cancellationToken)
         {
             var domainEvent = notification.DomainEvent;
 
@@ -35,9 +37,9 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
             using (var connection = _sqlConnectionFactory.GetOpenConnection())
             {
                 const string sqlQuery = "SELECT [m].Id, [m].FirstName, [m].LastName, " +
-                             "[m].Email, [m].SchoolId, [m].Role, [m].Gender, [m].GroupId " +
-                             "FROM [management].[Members] AS [m]" +
-                             "WHERE [m].Id IN @memberIds";
+                                        "[m].Email, [m].SchoolId, [m].Role, [m].Gender, [m].GroupId " +
+                                        "FROM [management].[Members] AS [m]" +
+                                        "WHERE [m].Id IN @memberIds";
 
                 membersDTO = await connection.QueryAsync<MemberAuthInsertModel>(sqlQuery, new
                 {
@@ -75,11 +77,11 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
                     {
                         trans.Rollback();
                         const string sqlUpdate = "UPDATE [management].[Users] " +
-                                            "SET [GroupId] = NULL " +
-                                            "WHERE [Id] IN @MembersId";
+                                                 "SET [GroupId] = NULL " +
+                                                 "WHERE [Id] IN @MembersId";
 
                         const string sqlDelete = "DELETE FROM [management].[Users] " +
-                                            "WHERE [Id] IN @MembersId";
+                                                 "WHERE [Id] IN @MembersId";
 
                         await connection.ExecuteAsync(sqlUpdate, new
                         {
@@ -97,9 +99,9 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
             }
 
             //TODO: test if this fire-forget emails
-            var tasks = membersDTO.Select(member => _mailManager.SendRegistrationEmailAsync(member.FirstName, member.Email, member.SecurityCode));
+            var tasks = membersDTO.Select(member =>
+                _mailManager.SendRegistrationEmailAsync(member.FirstName, member.Email, member.SecurityCode));
             await Task.WhenAll(tasks);
         }
     }
 }
-

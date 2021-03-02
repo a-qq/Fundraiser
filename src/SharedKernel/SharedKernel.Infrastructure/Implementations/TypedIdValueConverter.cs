@@ -1,6 +1,6 @@
-﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SharedKernel.Domain.Common;
-using System;
 
 namespace SharedKernel.Infrastructure.Implementations
 {
@@ -12,6 +12,9 @@ namespace SharedKernel.Infrastructure.Implementations
         {
         }
 
-        private static TTypedIdValue Create(Guid id) => (TTypedIdValue)Activator.CreateInstance(typeof(TTypedIdValue), id);
+        private static TTypedIdValue Create(Guid id)
+        {
+            return (TTypedIdValue) Activator.CreateInstance(typeof(TTypedIdValue), id);
+        }
     }
 }

@@ -1,5 +1,5 @@
-﻿using CSharpFunctionalExtensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace SharedKernel.Domain.Common
 {
@@ -22,6 +22,16 @@ namespace SharedKernel.Domain.Common
     public abstract class AggregateRoot<TId> : Entity<TId>
     {
         private readonly List<DomainEvent> _domainEvents = new List<DomainEvent>();
+
+        protected AggregateRoot(TId id)
+            : base(id)
+        {
+        }
+
+        protected AggregateRoot()
+        {
+        }
+
         public virtual IReadOnlyList<DomainEvent> DomainEvents => _domainEvents;
 
         protected virtual void AddDomainEvent(DomainEvent newEvent)
@@ -33,10 +43,5 @@ namespace SharedKernel.Domain.Common
         {
             _domainEvents.Clear();
         }
-        protected AggregateRoot(TId id)
-            : base(id) { }
-
-        protected AggregateRoot()
-            : base() { }
     }
 }

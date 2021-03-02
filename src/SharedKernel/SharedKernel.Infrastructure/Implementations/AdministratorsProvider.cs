@@ -1,12 +1,12 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using System.Linq;
+using CSharpFunctionalExtensions;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Options;
 using SharedKernel.Domain.EnumeratedEntities;
 using SharedKernel.Domain.ValueObjects;
 using SharedKernel.Infrastructure.Interfaces;
 using SharedKernel.Infrastructure.Options;
-using System;
-using System.Linq;
 
 namespace SharedKernel.Infrastructure.Implementations
 {
@@ -35,10 +35,10 @@ namespace SharedKernel.Infrastructure.Implementations
                 var adminData = _adminSettings.Admins.SingleOrDefault(x => Guid.Parse(x.Id) == adminId);
                 if (adminData != null)
                 {
-                    Email email = Email.Create(adminData.Email).Value;
+                    var email = Email.Create(adminData.Email).Value;
                     admin = new Administrator(Guid.Parse(adminData.Id), email);
                     _cache.Set(admin.Id, admin);
-                }     
+                }
             }
 
             return admin ?? Maybe<Administrator>.None;

@@ -1,4 +1,4 @@
-@model LoginViewModel
+@model Backend.API.IdentityServer.Account.LoginViewModel
 
 <div class="login-page">
     <div class="lead">
@@ -6,7 +6,7 @@
         <p>Choose how to login</p>
     </div>
 
-   @if (ViewData["Error"] != null)
+    @if (ViewData["Error"] != null)
     {
         <div class="alert alert-danger">
             <strong>Error</strong>
@@ -26,7 +26,7 @@
 
                     <div class="card-body">
                         <form asp-route="Login">
-                            <input type="hidden" asp-for="ReturnUrl" />
+                            <input type="hidden" asp-for="ReturnUrl"/>
 
                             <div class="form-group">
                                 <label asp-for="Email"></label>
@@ -50,12 +50,12 @@
                                 </div>
                             }
 
-                             <div class="form-group">
-                                    <a asp-action="RequestPasswordReset"
-                                       asp-controller="PasswordReset">
-                                        Forgot your password?  Click here.
-                                    </a>
-                             </div>
+                            <div class="form-group">
+                                <a asp-action="RequestPasswordReset"
+                                   asp-controller="PasswordReset">
+                                    Forgot your password? Click here.
+                                </a>
+                            </div>
 
                             <button class="btn btn-primary" name="button" value="login">Login</button>
                             <button class="btn btn-secondary" name="button" value="cancel">Cancel</button>

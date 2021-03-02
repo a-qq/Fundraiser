@@ -1,11 +1,9 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
 using FluentValidation;
 using SchoolManagement.Application.Common.ValidationRules;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Members;
-using SharedKernel.Domain.Errors;
 using SharedKernel.Infrastructure.Extensions;
-using System;
 
 namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
 {
@@ -18,29 +16,33 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
             RuleFor(p => p.Email).EmailMustBeValid();
             RuleFor(p => p.Role).RoleMustBeValid();
             RuleFor(p => p.Gender).GenderMustBeValid();
-            When(p => !string.IsNullOrWhiteSpace(p.Role) && p.Role.Trim().Equals(Role.Student.ToString(), StringComparison.OrdinalIgnoreCase), () =>
-            {
-                RuleFor(p => p.Group).Custom((property, context) =>
+            When(
+                p => !string.IsNullOrWhiteSpace(p.Role) &&
+                     p.Role.Trim().Equals(Role.Student.ToString(), StringComparison.OrdinalIgnoreCase), () =>
                 {
-                    if (!string.IsNullOrWhiteSpace(property))
+                    RuleFor(p => p.Group).Custom((property, context) =>
                     {
-                        Result numberValidation = Number.Validate(
-                            int.TryParse(property.Substring(0, 1), out int number) ? number : 0, "Group's number");
+                        if (!string.IsNullOrWhiteSpace(property))
+                        {
+                            var numberValidation = Number.Validate(
+                                int.TryParse(property.Substring(0, 1), out var number) ? number : 0, "Group's number");
 
-                        if (numberValidation.IsFailure)
-                            context.AddFailure(numberValidation.Error);
+                            if (numberValidation.IsFailure)
+                                context.AddFailure(numberValidation.Error);
 
-                        Result<bool, Error> signValidation = Sign.Validate(property.Length > 0
-                            ? property.Substring(1) : string.Empty, "Group's sign");
+                            var signValidation = Sign.Validate(property.Length > 0
+                                ? property.Substring(1)
+                                : string.Empty, "Group's sign");
 
-                        if (signValidation.IsFailure)
-                            foreach (var error in signValidation.Error.Errors)
-                                context.AddFailure(error);
-                    }
-                });
-            }).Otherwise(() =>
+                            if (signValidation.IsFailure)
+                                foreach (var error in signValidation.Error.Errors)
+                                    context.AddFailure(error);
+                        }
+                    });
+                }).Otherwise(() =>
             {
-                RuleFor(p => p.Group).Empty().WithMessage("Field '{PropertyName}' must be empty, if role is other then student!");
+                RuleFor(p => p.Group).Empty()
+                    .WithMessage("Field '{PropertyName}' must be empty, if role is other then student!");
             });
         }
     }

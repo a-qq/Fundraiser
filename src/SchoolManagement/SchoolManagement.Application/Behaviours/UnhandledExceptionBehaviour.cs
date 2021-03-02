@@ -1,15 +1,15 @@
-﻿using MediatR;
-using SchoolManagement.Application.Common.Security;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 
 namespace SchoolManagement.Application.Behaviours
 {
     internal sealed class UnhandledExceptionBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
         where TRequest : IRequest<TResponse>
     {
-        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)
+        public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken,
+            RequestHandlerDelegate<TResponse> next)
         {
             try
             {
@@ -19,7 +19,7 @@ namespace SchoolManagement.Application.Behaviours
             {
                 var requestName = typeof(TRequest).Name;
                 ex.Source = requestName;
-              
+
                 throw;
             }
         }

@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Models;
 using SharedKernel.Infrastructure.Utils;
-using System;
-using System.Collections.Generic;
 
 namespace Backend.API.Extensions
 {
@@ -33,11 +33,10 @@ namespace Backend.API.Extensions
                             }
                         }
                     }
-                }); 
+                });
 
                 options.OperationFilter<AuthorizeCheckOperationFilter>();
             });
         }
     }
 }
-

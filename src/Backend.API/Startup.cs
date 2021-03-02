@@ -1,16 +1,16 @@
+using System.Text.Json.Serialization;
 using Backend.API.Authorization;
 using Backend.API.Extensions;
 using Backend.API.Filters;
+using Backend.API.IdentityServer;
 using Backend.API.Middleware;
 using Backend.API.Services;
 using Backend.API.Validators;
 using FluentValidation.AspNetCore;
-using Fundraiser.IDP;
 using IdentityServer4.AccessTokenValidation;
 using IDP.Application;
 using IDP.Application.Users;
-using IDP.Infrastructure.Configuration;
-using IDP.Infrastructure.Services.Concrete;
+using IDP.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,8 +20,6 @@ using SchoolManagement.Infrastructure;
 using SharedKernel.Infrastructure;
 using SharedKernel.Infrastructure.Interfaces;
 using SharedKernel.Infrastructure.Utils;
-using System;
-using System.Text.Json.Serialization;
 
 namespace Backend.API
 {
@@ -39,22 +37,14 @@ namespace Backend.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews(options =>
-            {
-                options.Filters.Add<RouteIdsValidationFilter>();
-
-            }).ConfigureApiBehaviorOptions(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-
-            }).AddFluentValidation(fv =>
-            {
-                fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false;
-            }).AddJsonOptions(options =>
-            {
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                //options.JsonSerializerOptions.IgnoreNullValues = true;
-            });
+            services.AddControllersWithViews(options => { options.Filters.Add<RouteIdsValidationFilter>(); })
+                .ConfigureApiBehaviorOptions(options => { options.SuppressModelStateInvalidFilter = true; })
+                .AddFluentValidation(fv => { fv.RunDefaultMvcValidationAfterFluentValidationExecutes = false; })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    //options.JsonSerializerOptions.IgnoreNullValues = true;
+                });
             services.AddOptions();
             services.AddSchoolManagementApplication();
             services.AddSchoolManagementInfrastructure(Configuration, Env);
@@ -75,15 +65,15 @@ namespace Backend.API
                 });
 
             var builder = services.AddIdentityServer(options =>
-            {
-                // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
-                options.EmitStaticAudienceClaim = true;
-                //options.Discovery.CustomEntries.Add("local_api", "~/localapi");
-            })
-                 .AddInMemoryIdentityResources(Config.IdentityResources)
-                 .AddInMemoryApiScopes(Config.ApiScopes)
-                 .AddInMemoryApiResources(Config.ApiResources)
-                 .AddInMemoryClients(Config.Clients);
+                {
+                    // see https://identityserver4.readthedocs.io/en/latest/topics/resources.html
+                    options.EmitStaticAudienceClaim = true;
+                    //options.Discovery.CustomEntries.Add("local_api", "~/localapi");
+                })
+                .AddInMemoryIdentityResources(Config.IdentityResources)
+                .AddInMemoryApiScopes(Config.ApiScopes)
+                .AddInMemoryApiResources(Config.ApiResources)
+                .AddInMemoryClients(Config.Clients);
 
             builder.AddProfileService<ProfileService>();
             // not recommended for production - you need to store your key material somewhere secure
@@ -116,7 +106,6 @@ namespace Backend.API
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
-
             //if (Env.IsDevelopment())
             //{
             //    app.UseDeveloperExceptionPage();
@@ -164,10 +153,7 @@ namespace Backend.API
 #pragma warning disable ASP0001 // Authorization middleware is incorrectly configured.
                 id.UseAuthorization();
 #pragma warning restore ASP0001 // Authorization middleware is incorrectly configured.
-                id.UseEndpoints(endpoints =>
-                {
-                    endpoints.MapDefaultControllerRoute();
-                });
+                id.UseEndpoints(endpoints => { endpoints.MapDefaultControllerRoute(); });
             });
         }
     }

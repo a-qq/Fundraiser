@@ -1,19 +1,19 @@
-﻿using CSharpFunctionalExtensions;
-using SharedKernel.Domain.Errors;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using CSharpFunctionalExtensions;
+using SharedKernel.Domain.Errors;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Groups
 {
     public class Sign : ValueObject
     {
-        private static int MaxLength { get => 4; }
-        public string Value { get; }
-
         private Sign(string sign)
         {
             Value = sign;
         }
+
+        private static int MaxLength => 4;
+        public string Value { get; }
 
         public static Result<Sign, Error> Create(string sign)
         {
@@ -34,18 +34,20 @@ namespace SchoolManagement.Domain.SchoolAggregate.Groups
             sign = sign.Trim();
 
             return Result.Combine(
-                Result.FailureIf(sign.Length > 4, true, new Error($"{propertyName} should consist of max {MaxLength} characters!")),
-                Result.FailureIf(!sign.All(c => char.IsLetter(c)), true, new Error($"{propertyName} should consist of only letters!")));
+                Result.FailureIf(sign.Length > 4, true,
+                    new Error($"{propertyName} should consist of max {MaxLength} characters!")),
+                Result.FailureIf(!sign.All(c => char.IsLetter(c)), true,
+                    new Error($"{propertyName} should consist of only letters!")));
         }
 
         public static implicit operator string(Sign sign)
         {
-            return sign.Value.ToString();
+            return sign.Value;
         }
 
         public override string ToString()
         {
-            return this.Value;
+            return Value;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

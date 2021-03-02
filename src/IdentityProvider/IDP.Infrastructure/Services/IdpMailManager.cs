@@ -1,4 +1,7 @@
-﻿using IDP.Application.Common.Interfaces;
+﻿using System;
+using System.IO;
+using System.Threading.Tasks;
+using IDP.Application.Common.Interfaces;
 using IDP.Domain.UserAggregate.ValueObjects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
@@ -6,17 +9,15 @@ using Microsoft.Extensions.Options;
 using SharedKernel.Domain.ValueObjects;
 using SharedKernel.Infrastructure.Interfaces;
 using SharedKernel.Infrastructure.Options;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 
-namespace IDP.Infrastructure.Services.Concrete
+namespace IDP.Infrastructure.Services
 {
     internal sealed class IdpMailManager : IIdpMailManager
     {
-        private readonly UrlsOptions _urls;
         private readonly IMailManager _mailManager;
         private readonly string _resetPasswordTemplate;
+        private readonly UrlsOptions _urls;
+
         public IdpMailManager(
             IOptions<UrlsOptions> urls,
             IWebHostEnvironment environment,
@@ -43,20 +44,22 @@ namespace IDP.Infrastructure.Services.Concrete
             if (securityCode is null)
                 throw new ArgumentNullException(nameof(securityCode));
 
-            var subject = $"Password reset for your account has been requested!";
+            var subject = "Password reset for your account has been requested!";
             var url = $"{_urls.Idp}PasswordReset/ResetPassword/?securityCode={securityCode.Value.Replace("+", "%2B")}";
-            string body = PopulateResetPasswordTemplate(subject, email, url, securityCode.ExpirationDate.Date.Value);
+            var body = PopulateResetPasswordTemplate(subject, email, url, securityCode.ExpirationDate.Date.Value);
 
             await _mailManager.SendMailAsHtmlAsync(email, subject, body);
         }
 
         private string PopulateResetPasswordTemplate(string subject, string email, string url, DateTime? expirationDate)
         {
-            string body = _resetPasswordTemplate.Replace("{Url}", url);
+            var body = _resetPasswordTemplate.Replace("{Url}", url);
             body = body.Replace("{Email}", email);
             body = body.Replace("{Subject}", subject);
-            body = body.Replace("{base}", Environment.GetEnvironmentVariable("ASPNETCORE_URLS").Split(';')[1] + "/templates/");
-            body = body.Replace("{expirationDate}", expirationDate.HasValue ? expirationDate?.ToString("MM/dd/yyyy HH:mm") : "consumed");
+            body = body.Replace("{base}",
+                Environment.GetEnvironmentVariable("ASPNETCORE_URLS").Split(';')[1] + "/templates/");
+            body = body.Replace("{expirationDate}",
+                expirationDate.HasValue ? expirationDate?.ToString("MM/dd/yyyy HH:mm") : "consumed");
 
             return body;
         }
@@ -66,7 +69,7 @@ namespace IDP.Infrastructure.Services.Concrete
             if (!cache.TryGetValue("ResetPasswordTemplate", out string resetPasswordTemplate))
             {
                 var templatePath = Path.Combine(environment.WebRootPath, @"templates\ResetPasswordTemplate.html");
-                using (StreamReader reader = new StreamReader(templatePath))
+                using (var reader = new StreamReader(templatePath))
                 {
                     resetPasswordTemplate = reader.ReadToEnd();
                 }

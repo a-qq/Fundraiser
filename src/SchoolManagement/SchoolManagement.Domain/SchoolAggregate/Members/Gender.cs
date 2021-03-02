@@ -1,6 +1,6 @@
-﻿using CSharpFunctionalExtensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Members
 {
@@ -9,15 +9,16 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
         internal static Gender Male = Create(GenderEnum.Male.ToString()).Value;
         internal static Gender Female = Create(GenderEnum.Female.ToString()).Value;
 
-        public GenderEnum Value { get; }
         private Gender(GenderEnum value)
         {
             Value = value;
         }
 
+        public GenderEnum Value { get; }
+
         public static Result<Gender> Create(string gender)
         {
-            Result<GenderEnum> validationResult = ValidateAndConvert(gender);
+            var validationResult = ValidateAndConvert(gender);
 
             if (validationResult.IsFailure)
                 return validationResult.ConvertFailure<Gender>();
@@ -60,4 +61,3 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
         Female = 2
     }
 }
-

@@ -1,19 +1,19 @@
-﻿using Backend.API.Controllers;
+﻿using System;
+using System.Net;
+using System.Threading.Tasks;
+using Backend.API.Controllers;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
 using SharedKernel.Infrastructure.Errors;
-using System;
-using System.Net;
-using System.Threading.Tasks;
 
 namespace Backend.API.Middleware
 {
     public sealed class ExceptionHandler
     {
-        private readonly RequestDelegate _next;
         private readonly IWebHostEnvironment _env;
+        private readonly RequestDelegate _next;
 
         public ExceptionHandler(RequestDelegate next, IWebHostEnvironment env)
         {
@@ -36,11 +36,12 @@ namespace Backend.API.Middleware
         private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             //TODO: Log exception here
-            string result = _env.IsProduction() 
+            var result = _env.IsProduction()
                 ? JsonConvert.SerializeObject(Envelope.Error(SharedRequestError.General.InternalServerError()))
-                : JsonConvert.SerializeObject(Envelope.Error(SharedRequestError.General.InternalServerError(exception.Message)));
+                : JsonConvert.SerializeObject(
+                    Envelope.Error(SharedRequestError.General.InternalServerError(exception.Message)));
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
             return context.Response.WriteAsync(result);
         }
     }

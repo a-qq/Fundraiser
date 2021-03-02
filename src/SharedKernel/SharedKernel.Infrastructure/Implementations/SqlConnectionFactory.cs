@@ -1,7 +1,7 @@
-﻿using SharedKernel.Infrastructure.Interfaces;
-using System;
+﻿using System;
 using System.Data;
 using System.Data.SqlClient;
+using SharedKernel.Infrastructure.Interfaces;
 
 namespace SharedKernel.Infrastructure.Implementations
 {
@@ -15,6 +15,11 @@ namespace SharedKernel.Infrastructure.Implementations
             _connectionString = connectionString;
         }
 
+        public void Dispose()
+        {
+            if (_connection != null && _connection.State == ConnectionState.Open) _connection.Dispose();
+        }
+
         public IDbConnection GetOpenConnection()
         {
             if (_connection == null || _connection.State != ConnectionState.Open)
@@ -24,14 +29,6 @@ namespace SharedKernel.Infrastructure.Implementations
             }
 
             return _connection;
-        }
-
-        public void Dispose()
-        {
-            if (_connection != null && _connection.State == ConnectionState.Open)
-            {
-                _connection.Dispose();
-            }
         }
     }
 }

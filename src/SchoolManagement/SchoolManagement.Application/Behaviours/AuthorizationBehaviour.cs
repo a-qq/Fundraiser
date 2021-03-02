@@ -1,16 +1,17 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Linq;
+using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Security;
 using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Behaviours
 {
-    internal sealed class AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, Result<TResponse, RequestError>>
+    internal sealed class
+        AuthorizationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, Result<TResponse, RequestError>>
         where TRequest : CommandRequest<TResponse>
     {
         private readonly ICurrentUserService _currentUserService;
@@ -24,22 +25,21 @@ namespace SchoolManagement.Application.Behaviours
             _identityService = identityService;
         }
 
-        public async Task<Result<TResponse, RequestError>> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<Result<TResponse, RequestError>> next)
+        public async Task<Result<TResponse, RequestError>> Handle(TRequest request, CancellationToken cancellationToken,
+            RequestHandlerDelegate<Result<TResponse, RequestError>> next)
         {
             var authorizeAttributes = request.GetType().GetCustomAttributes<AuthorizeAttribute>();
-            
+
             if (authorizeAttributes.Any())
             {
                 // Must be authenticated user
-                if (_currentUserService.UserId == null)
-                {
-                    return SharedRequestError.General.UnauthorizedAccess();
-                }
+                if (_currentUserService.UserId == null) return SharedRequestError.General.UnauthorizedAccess();
 
-                bool authorized = false;
+                var authorized = false;
 
                 // Policy-based authorization
-                var authorizeAttributesWithPolicies = authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Policy));
+                var authorizeAttributesWithPolicies =
+                    authorizeAttributes.Where(a => !string.IsNullOrWhiteSpace(a.Policy));
                 if (authorizeAttributesWithPolicies.Any())
                 {
                     //admin is authorized to perform any command with required authorization

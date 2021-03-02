@@ -1,4 +1,7 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using SchoolManagement.Application.Common.Interfaces;
@@ -8,30 +11,27 @@ using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.EditSchoolLogo
 {
     [Authorize(Policy = "MustBeAtLeastHeadmaster")]
     public sealed class EditSchoolLogoCommand : CommandRequest
     {
-        public IFormFile Logo { get; }
-        public Guid SchoolId { get; }
-
         public EditSchoolLogoCommand(IFormFile logo, Guid schoolId)
         {
             Logo = logo;
             SchoolId = schoolId;
         }
+
+        public IFormFile Logo { get; }
+        public Guid SchoolId { get; }
     }
 
     internal sealed class EditSchoolLogoHandler : IRequestHandler<EditSchoolLogoCommand, Result<Unit, RequestError>>
     {
+        private readonly ISchoolContext _context;
         private readonly ISchoolRepository _schoolRepository;
         private readonly ILogoStorageService _storageService;
-        private readonly ISchoolContext _context;
 
         public EditSchoolLogoHandler(
             ISchoolRepository schoolRepository,
@@ -43,7 +43,8 @@ namespace SchoolManagement.Application.Schools.Commands.EditSchoolLogo
             _context = schoolContext;
         }
 
-        public async Task<Result<Unit, RequestError>> Handle(EditSchoolLogoCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, RequestError>> Handle(EditSchoolLogoCommand request,
+            CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
 
@@ -55,17 +56,17 @@ namespace SchoolManagement.Application.Schools.Commands.EditSchoolLogo
             Image logo = null;
             using (logo = Image.Load(request.Logo.OpenReadStream()))
             {
-                logo.Mutate(x => x.Resize(new ResizeOptions()
-                {
-                    Mode = ResizeMode.Min,
-                    Size = new Size(250, 250)
-                }
-                ).Resize(new ResizeOptions()
-                {
-                    Mode = ResizeMode.BoxPad,
-                    Size = new Size(250, 250)
-                })
-                .BackgroundColor(Color.Transparent));
+                logo.Mutate(x => x.Resize(new ResizeOptions
+                        {
+                            Mode = ResizeMode.Min,
+                            Size = new Size(250, 250)
+                        }
+                    ).Resize(new ResizeOptions
+                    {
+                        Mode = ResizeMode.BoxPad,
+                        Size = new Size(250, 250)
+                    })
+                    .BackgroundColor(Color.Transparent));
             }
 
             await _storageService.UpsertLogoAsync(logo, schoolOrNone.Value, cancellationToken);

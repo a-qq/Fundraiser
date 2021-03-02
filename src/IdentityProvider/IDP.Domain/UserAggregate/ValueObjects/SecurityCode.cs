@@ -1,7 +1,7 @@
-﻿using CSharpFunctionalExtensions;
-using SharedKernel.Domain.Errors;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
+using SharedKernel.Domain.Errors;
 
 namespace IDP.Domain.UserAggregate.ValueObjects
 {
@@ -10,9 +10,6 @@ namespace IDP.Domain.UserAggregate.ValueObjects
         public static readonly SecurityCode None = new SecurityCode(null, ExpirationDate.Infinite, null);
 
         private readonly DateTime? _expirationDate;
-        public string Value { get; }
-        public ExpirationDate ExpirationDate => (ExpirationDate)_expirationDate;
-        public DateTime? IssuedAt { get; }
 
         protected SecurityCode()
         {
@@ -26,8 +23,13 @@ namespace IDP.Domain.UserAggregate.ValueObjects
             IssuedAt = issuedAt;
         }
 
+        public string Value { get; }
+        public ExpirationDate ExpirationDate => (ExpirationDate) _expirationDate;
+        public DateTime? IssuedAt { get; }
 
-        public static Result<SecurityCode, Error> Create(string securityCode, ExpirationDate expirationDate, DateTime? issuedAt = null)
+
+        public static Result<SecurityCode, Error> Create(string securityCode, ExpirationDate expirationDate,
+            DateTime? issuedAt = null)
         {
             var validationResult = Validate(securityCode, expirationDate, issuedAt);
             if (validationResult.IsFailure)
@@ -36,18 +38,23 @@ namespace IDP.Domain.UserAggregate.ValueObjects
             return Result.Success<SecurityCode, Error>(new SecurityCode(securityCode, expirationDate, issuedAt));
         }
 
-        private static Result<bool, Error> Validate(string securityCode, ExpirationDate expirationDate, DateTime? issuedAt)
+        private static Result<bool, Error> Validate(string securityCode, ExpirationDate expirationDate,
+            DateTime? issuedAt)
         {
             return Result.Combine(
                 Result.FailureIf(!IsCodeValid(securityCode), true, new Error("Security code is invalid")),
-                Result.FailureIf((expirationDate != ExpirationDate.Infinite && issuedAt == null) || (issuedAt != null && issuedAt > DateTime.UtcNow),
+                Result.FailureIf(
+                    expirationDate != ExpirationDate.Infinite && issuedAt == null ||
+                    issuedAt != null && issuedAt > DateTime.UtcNow,
                     true, new Error("Security code's issue date is invalid")),
-                Result.FailureIf(expirationDate < issuedAt, true, new Error("Security code's expiration date is invalid")));
+                Result.FailureIf(expirationDate < issuedAt, true,
+                    new Error("Security code's expiration date is invalid")));
         }
 
         public static bool IsCodeValid(string securityCode)
         {
-            return !string.IsNullOrEmpty(securityCode) && Convert.TryFromBase64String(securityCode, _ = new byte[securityCode.Length * 3 / 4], out _);
+            return !string.IsNullOrEmpty(securityCode) &&
+                   Convert.TryFromBase64String(securityCode, _ = new byte[securityCode.Length * 3 / 4], out _);
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

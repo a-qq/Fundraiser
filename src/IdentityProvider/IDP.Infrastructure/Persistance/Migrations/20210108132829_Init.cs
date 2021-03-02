@@ -1,17 +1,17 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace IDP.Infrastructure.Migrations
+namespace IDP.Infrastructure.Persistance.Migrations
 {
     public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
-                name: "auth");
+                "auth");
 
             migrationBuilder.CreateTable(
-                name: "Users",
+                "Users",
                 schema: "auth",
                 columns: table => new
                 {
@@ -32,7 +32,7 @@ namespace IDP.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Claims",
+                "Claims",
                 schema: "auth",
                 columns: table => new
                 {
@@ -46,8 +46,8 @@ namespace IDP.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Claims", x => x.ClaimId);
                     table.ForeignKey(
-                        name: "FK_Claims_Users_UserSubject",
-                        column: x => x.UserSubject,
+                        "FK_Claims_Users_UserSubject",
+                        x => x.UserSubject,
                         principalSchema: "auth",
                         principalTable: "Users",
                         principalColumn: "Subject",
@@ -55,13 +55,13 @@ namespace IDP.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Claims_UserSubject",
+                "IX_Claims_UserSubject",
                 schema: "auth",
                 table: "Claims",
                 column: "UserSubject");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_Email",
+                "IX_Users_Email",
                 schema: "auth",
                 table: "Users",
                 column: "Email",
@@ -71,12 +71,12 @@ namespace IDP.Infrastructure.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Claims",
-                schema: "auth");
+                "Claims",
+                "auth");
 
             migrationBuilder.DropTable(
-                name: "Users",
-                schema: "auth");
+                "Users",
+                "auth");
         }
     }
 }

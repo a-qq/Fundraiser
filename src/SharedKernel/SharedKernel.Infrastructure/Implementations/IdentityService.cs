@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using SharedKernel.Infrastructure.Interfaces;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using SharedKernel.Infrastructure.Interfaces;
 
 namespace SharedKernel.Infrastructure.Implementations
 {

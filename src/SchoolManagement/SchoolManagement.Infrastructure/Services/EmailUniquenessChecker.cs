@@ -1,12 +1,12 @@
-﻿using Dapper;
-using SchoolManagement.Application.Common.Interfaces;
-using SharedKernel.Domain.ValueObjects;
-using SharedKernel.Infrastructure.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Dapper;
+using SchoolManagement.Application.Common.Interfaces;
+using SharedKernel.Domain.ValueObjects;
+using SharedKernel.Infrastructure.Interfaces;
 
 namespace SchoolManagement.Infrastructure.Services
 {
@@ -32,10 +32,10 @@ namespace SchoolManagement.Infrastructure.Services
                                "WHERE [Member].[Email] = @Email";
 
             var usersNumber = await connection.QuerySingleOrDefaultAsync<int?>(sql,
-                            new
-                            {
-                                Email = email.Value
-                            });
+                new
+                {
+                    Email = email.Value
+                });
 
             return !usersNumber.HasValue;
         }
@@ -47,8 +47,8 @@ namespace SchoolManagement.Infrastructure.Services
 
             var connection = _sqlConnectionFactory.GetOpenConnection();
             const string sql = "SELECT [Member].[Email] " +
-                   "FROM [management].[Members] AS [Member] " +
-                   "WHERE [Member].[Email] IN @Emails";
+                               "FROM [management].[Members] AS [Member] " +
+                               "WHERE [Member].[Email] IN @Emails";
 
             var emailsAstrings = emails.Select(e => e.Value);
 

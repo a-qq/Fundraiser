@@ -1,4 +1,8 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using SchoolManagement.Application.Common.Interfaces;
@@ -6,31 +10,28 @@ using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.PromoteHeadmaster
 {
     [Authorize(Policy = "MustBeAdmin")]
     public sealed class PromoteHeadmasterCommand : CommandRequest
     {
-        public Guid SchoolId { get; }
-        public Guid TeacherId { get; }
-
         public PromoteHeadmasterCommand(Guid schoolId, Guid teacherId)
         {
             SchoolId = schoolId;
             TeacherId = teacherId;
         }
+
+        public Guid SchoolId { get; }
+        public Guid TeacherId { get; }
     }
 
-    internal sealed class PromoteHeadmasterHandler : IRequestHandler<PromoteHeadmasterCommand, Result<Unit, RequestError>>
+    internal sealed class
+        PromoteHeadmasterHandler : IRequestHandler<PromoteHeadmasterCommand, Result<Unit, RequestError>>
     {
+        private readonly ISchoolContext _context;
 
         private readonly ISchoolRepository _schoolRepository;
-        private readonly ISchoolContext _context;
 
         public PromoteHeadmasterHandler(
             ISchoolRepository schoolRepository,
@@ -40,7 +41,8 @@ namespace SchoolManagement.Application.Schools.Commands.PromoteHeadmaster
             _context = schoolContext;
         }
 
-        public async Task<Result<Unit, RequestError>> Handle(PromoteHeadmasterCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, RequestError>> Handle(PromoteHeadmasterCommand request,
+            CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
             var teacherId = new MemberId(request.TeacherId);

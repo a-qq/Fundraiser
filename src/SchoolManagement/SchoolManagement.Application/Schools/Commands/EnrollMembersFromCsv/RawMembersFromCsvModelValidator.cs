@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using FluentValidation;
 
 namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
 {
@@ -9,7 +9,7 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
         {
             RuleForEach(x => x).OverrideIndexer((x, collection, element, index) =>
             {
-                return "[" + element.RowNumber.ToString() + "]";
+                return "[" + element.RowNumber + "]";
             }).SetValidator(new RawMemberFromCsvModelValidator()).WithName("Records");
         }
     }

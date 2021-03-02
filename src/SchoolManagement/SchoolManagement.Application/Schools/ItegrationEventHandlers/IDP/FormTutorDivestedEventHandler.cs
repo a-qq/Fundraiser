@@ -1,23 +1,26 @@
-﻿using Dapper;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 using MediatR;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Schools.Events;
 using SharedKernel.Infrastructure.Implementations;
 using SharedKernel.Infrastructure.Interfaces;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
 {
-    internal sealed class FormTutorDivestedEventHandler : INotificationHandler<DomainEventNotification<FormTutorDivestedEvent>>
+    internal sealed class
+        FormTutorDivestedEventHandler : INotificationHandler<DomainEventNotification<FormTutorDivestedEvent>>
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
+
         public FormTutorDivestedEventHandler(ISqlConnectionFactory sqlConnectionFactory)
         {
             _sqlConnectionFactory = sqlConnectionFactory;
         }
 
-        public async Task Handle(DomainEventNotification<FormTutorDivestedEvent> notification, CancellationToken cancellationToken)
+        public async Task Handle(DomainEventNotification<FormTutorDivestedEvent> notification,
+            CancellationToken cancellationToken)
         {
             var domainEvent = notification.DomainEvent;
             using (var connection = _sqlConnectionFactory.GetOpenConnection())

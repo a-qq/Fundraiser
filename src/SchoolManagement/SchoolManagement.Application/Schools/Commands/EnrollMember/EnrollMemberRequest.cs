@@ -1,4 +1,4 @@
-﻿namespace SchoolManagement.Infrastructure.Schools.EnrollMember
+﻿namespace SchoolManagement.Application.Schools.Commands.EnrollMember
 {
     public sealed class EnrollMemberRequest
     {

@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
 using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
@@ -7,32 +10,29 @@ using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.CreateGroup
 {
     [Authorize(Policy = "MustBeAtLeastHeadmaster")]
     public sealed class CreateGroupCommand : CommandRequest<GroupDTO>
     {
-        public int Number { get; }
-        public string Sign { get; }
-        public Guid SchoolId { get; }
-
         public CreateGroupCommand(int number, string sign, Guid schoolId)
         {
             Number = number;
             Sign = sign;
             SchoolId = schoolId;
         }
+
+        public int Number { get; }
+        public string Sign { get; }
+        public Guid SchoolId { get; }
     }
 
     internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, Result<GroupDTO, RequestError>>
     {
         private readonly ISchoolContext _context;
-        private readonly ISchoolRepository _schoolRepository;
         private readonly IMapper _mapper;
+        private readonly ISchoolRepository _schoolRepository;
 
         public CreateGroupHandler(
             ISchoolContext schoolContext,
@@ -44,11 +44,12 @@ namespace SchoolManagement.Application.Schools.Commands.CreateGroup
             _mapper = mapper;
         }
 
-        public async Task<Result<GroupDTO, RequestError>> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
+        public async Task<Result<GroupDTO, RequestError>> Handle(CreateGroupCommand request,
+            CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
-            Number number = Number.Create(request.Number).Value;
-            Sign sign = Sign.Create(request.Sign).Value;
+            var number = Number.Create(request.Number).Value;
+            var sign = Sign.Create(request.Sign).Value;
 
             var schoolOrNone = await _schoolRepository.GetByIdAsync(schoolId, cancellationToken);
 

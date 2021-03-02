@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Application.Schools.Commands.DivestTreasurer;
 using SchoolManagement.Application.Schools.Commands.PromoteTreasurer;
-using System;
-using System.Threading.Tasks;
 
 namespace Backend.API.Controllers.School
 {
@@ -12,8 +12,6 @@ namespace Backend.API.Controllers.School
     [ApiController]
     public class FormTutorController : MediatrController
     {
-        public FormTutorController() : base() { }
-
         [HttpPut("treasurer")]
         public async Task<IActionResult> PromoteTreasurer(Guid groupId, PromoteTreasurerRequest request)
         {

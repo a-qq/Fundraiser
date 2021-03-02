@@ -1,28 +1,29 @@
-﻿using CSharpFunctionalExtensions;
-using IdentityModel;
-using MediatR;
-using SchoolManagement.Application.Schools.Queries.GetAuthorizationData;
-using SchoolManagement.Application.Schools.Queries.GetMember;
-using SchoolManagement.Domain.SchoolAggregate.Members;
-using SharedKernel.Domain.Utils;
-using System;
+﻿using System;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
+using MediatR;
+using SchoolManagement.Application.Schools.Queries.GetAuthorizationData;
+using SchoolManagement.Domain.SchoolAggregate.Members;
+using SharedKernel.Domain.Utils;
 
 namespace Backend.API.Authorization.Validators.Absrtact
 {
-    internal abstract class ClaimPrincipalValidatorForSchoolRolesBase : ClaimPrincipalValidatorBase, IClaimsPrincipalValidator
+    internal abstract class ClaimPrincipalValidatorForSchoolRolesBase : ClaimPrincipalValidatorBase,
+        IClaimsPrincipalValidator
     {
         private readonly ISender _mediator;
 
-        public abstract string RoleRequirement { get; }
-        protected Maybe<AuthorizationDto> AuthorizationData { get; private set; } = Maybe<AuthorizationDto>.None;
         public ClaimPrincipalValidatorForSchoolRolesBase(ISender mediator)
         {
             _mediator = mediator;
         }
 
-        public async virtual Task<bool> IsValidAsync(ClaimsPrincipal principal)
+        protected Maybe<AuthorizationDto> AuthorizationData { get; private set; } = Maybe<AuthorizationDto>.None;
+
+        public abstract string RoleRequirement { get; }
+
+        public virtual async Task<bool> IsValidAsync(ClaimsPrincipal principal)
         {
             if (!await HasValidData(principal))
                 return false;
@@ -31,7 +32,10 @@ namespace Backend.API.Authorization.Validators.Absrtact
         }
 
         private bool HasNotEmptySchoolId(ClaimsPrincipal principal, out Guid schoolId)
-           => Guid.TryParse(principal.FindFirstValue(CustomClaimTypes.SchoolId), out schoolId) && schoolId != Guid.Empty;
+        {
+            return Guid.TryParse(principal.FindFirstValue(CustomClaimTypes.SchoolId), out schoolId) &&
+                   schoolId != Guid.Empty;
+        }
 
         //private bool HasDefinedGender(ClaimsPrincipal principal, out GenderEnum gender)
         //{
@@ -49,7 +53,7 @@ namespace Backend.API.Authorization.Validators.Absrtact
             if (grouptokenValue is null)
                 return true;
 
-            if (long.TryParse(grouptokenValue, out long convertedGroupId) && convertedGroupId > 0)
+            if (long.TryParse(grouptokenValue, out var convertedGroupId) && convertedGroupId > 0)
             {
                 groupId = convertedGroupId;
                 return true;
@@ -63,16 +67,16 @@ namespace Backend.API.Authorization.Validators.Absrtact
             if (!principal.IsInRole(RoleRequirement))
                 return false;
 
-            if (!HasValidUserId(principal, out Guid userId))
+            if (!HasValidUserId(principal, out var userId))
                 return false;
 
-            if (!HasNotEmptySchoolId(principal, out Guid schoolId))
+            if (!HasNotEmptySchoolId(principal, out var schoolId))
                 return false;
 
             //if (!HasDefinedGender(principal, out GenderEnum gender))
             //    return false;
 
-            if (!HasInRangeGroupId(principal, out long? groupId))
+            if (!HasInRangeGroupId(principal, out var groupId))
                 return false;
 
             var authorizationData = await _mediator.Send(new GetAuthorizationData(schoolId, userId));

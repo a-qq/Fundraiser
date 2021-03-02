@@ -1,4 +1,4 @@
-﻿namespace SharedKernel.Domain.Utils
+﻿namespace SharedKernel.Infrastructure.Utils
 {
     public static class SchemaNames
     {

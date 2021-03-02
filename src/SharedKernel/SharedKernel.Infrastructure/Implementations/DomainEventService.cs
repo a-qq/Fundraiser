@@ -1,8 +1,8 @@
-﻿using MediatR;
+﻿using System;
+using System.Threading.Tasks;
+using MediatR;
 using SharedKernel.Domain.Common;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Threading.Tasks;
 
 namespace SharedKernel.Infrastructure.Implementations
 {
@@ -11,9 +11,9 @@ namespace SharedKernel.Infrastructure.Implementations
         //private readonly ILogger<DomainEventService> _logger;
         private readonly IPublisher _mediator;
 
-        public DomainEventService(/*ILogger<DomainEventService> logger,*/ IPublisher mediator)
+        public DomainEventService( /*ILogger<DomainEventService> logger,*/ IPublisher mediator)
         {
-           // _logger = logger;
+            // _logger = logger;
             _mediator = mediator;
         }
 
@@ -25,7 +25,7 @@ namespace SharedKernel.Infrastructure.Implementations
 
         private INotification GetNotificationCorrespondingToDomainEvent(DomainEvent domainEvent)
         {
-            return (INotification)Activator.CreateInstance(
+            return (INotification) Activator.CreateInstance(
                 typeof(DomainEventNotification<>).MakeGenericType(domainEvent.GetType()), domainEvent);
         }
     }

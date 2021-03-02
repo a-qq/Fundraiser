@@ -1,10 +1,10 @@
-﻿using IdentityModel;
-using SchoolManagement.Application.Common.Models;
-using SharedKernel.Domain.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Security.Cryptography;
+using IdentityModel;
+using SchoolManagement.Application.Common.Models;
+using SharedKernel.Domain.Utils;
 
 namespace SchoolManagement.Application.Schools.ItegrationEventHandlers
 {

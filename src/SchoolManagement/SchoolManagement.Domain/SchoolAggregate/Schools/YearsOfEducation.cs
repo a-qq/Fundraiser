@@ -1,25 +1,26 @@
-﻿using CSharpFunctionalExtensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Schools
 {
     public class YearsOfEducation : ValueObject
     {
-        private static int MinValue => 2;
-        private static int MaxValue => 4;
-        public byte Value { get; }
-
         private YearsOfEducation(byte yearsOfEducation)
         {
             Value = yearsOfEducation;
         }
+
+        private static int MinValue => 2;
+        private static int MaxValue => 4;
+        public byte Value { get; }
+
         public static Result<YearsOfEducation> Create(int yearsOfEducation)
         {
-            Result validation = Validate(yearsOfEducation);
+            var validation = Validate(yearsOfEducation);
             if (validation.IsFailure)
                 return validation.ConvertFailure<YearsOfEducation>();
 
-            return new YearsOfEducation((byte)yearsOfEducation);
+            return new YearsOfEducation((byte) yearsOfEducation);
         }
 
         public static Result Validate(int yearsOfEducation, string propertyName = nameof(YearsOfEducation))
@@ -50,7 +51,7 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
 
         public override string ToString()
         {
-            return this.Value.ToString();
+            return Value.ToString();
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

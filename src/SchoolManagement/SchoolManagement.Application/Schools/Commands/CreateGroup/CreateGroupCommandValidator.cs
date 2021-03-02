@@ -1,9 +1,8 @@
 ﻿using FluentValidation;
 using SchoolManagement.Application.Common.ValidationRules;
-using SchoolManagement.Application.Schools.Commands.CreateGroup;
 using SharedKernel.Infrastructure.Extensions;
 
-namespace Backend.API.Validators.Management
+namespace SchoolManagement.Application.Schools.Commands.CreateGroup
 {
     internal class CreateGroupCommandValidator : AbstractValidator<CreateGroupCommand>
     {

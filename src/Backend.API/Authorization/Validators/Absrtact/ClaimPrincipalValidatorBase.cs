@@ -1,6 +1,6 @@
-﻿using IdentityModel;
-using System;
+﻿using System;
 using System.Security.Claims;
+using IdentityModel;
 
 namespace Backend.API.Authorization.Validators.Absrtact
 {

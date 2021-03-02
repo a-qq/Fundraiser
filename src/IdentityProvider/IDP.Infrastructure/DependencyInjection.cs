@@ -1,7 +1,7 @@
 ﻿using IDP.Application.Common.Interfaces;
 using IDP.Infrastructure.Persistance;
 using IDP.Infrastructure.Persistance.Repositories;
-using IDP.Infrastructure.Services.Concrete;
+using IDP.Infrastructure.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace IDP.Infrastructure.Configuration
+namespace IDP.Infrastructure
 {
     public static class DependencyInjection
     {
@@ -24,7 +24,7 @@ namespace IDP.Infrastructure.Configuration
                 options.UseLazyLoadingProxies();
                 if (env.IsDevelopment())
                 {
-                    ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+                    var loggerFactory = LoggerFactory.Create(builder =>
                     {
                         builder
                             .AddFilter((category, level) =>
@@ -32,7 +32,7 @@ namespace IDP.Infrastructure.Configuration
                             .AddConsole();
                     });
                     options.UseLoggerFactory(loggerFactory)
-                          .EnableSensitiveDataLogging();
+                        .EnableSensitiveDataLogging();
                 }
             });
 

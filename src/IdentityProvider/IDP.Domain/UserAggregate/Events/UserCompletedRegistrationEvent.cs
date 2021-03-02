@@ -1,20 +1,13 @@
-﻿using Ardalis.GuardClauses;
+﻿using System;
+using Ardalis.GuardClauses;
 using SharedKernel.Domain.Common;
-using System;
 
 namespace IDP.Domain.UserAggregate.Events
 {
     public sealed class UserCompletedRegistrationEvent : DomainEvent
     {
-        public Guid UserId { get; }
-        public string FirstName { get; }
-        public string LastName { get; }
-        public string Role { get; }
-        public string Gender { get; }
-        public Guid SchoolId { get; }
-        public Guid? GroupId { get; }
-
-        public UserCompletedRegistrationEvent(string subject, string firstName, string lastName, string role, string gender, string schoolId, string groupId)
+        public UserCompletedRegistrationEvent(string subject, string firstName, string lastName, string role,
+            string gender, string schoolId, string groupId)
         {
             UserId = Guid.Parse(subject);
             FirstName = Guard.Against.NullOrWhiteSpace(firstName, nameof(firstName));
@@ -26,5 +19,13 @@ namespace IDP.Domain.UserAggregate.Events
                 GroupId = null;
             else GroupId = Guid.Parse(groupId);
         }
+
+        public Guid UserId { get; }
+        public string FirstName { get; }
+        public string LastName { get; }
+        public string Role { get; }
+        public string Gender { get; }
+        public Guid SchoolId { get; }
+        public Guid? GroupId { get; }
     }
 }

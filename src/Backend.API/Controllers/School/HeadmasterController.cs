@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SchoolManagement.Application.Schools.Commands.AddStudentsToGroup;
 using SchoolManagement.Application.Schools.Commands.ArchiveMember;
@@ -19,9 +21,6 @@ using SchoolManagement.Application.Schools.Commands.PassOnHeadmaster;
 using SchoolManagement.Application.Schools.Commands.PromoteFormTutor;
 using SchoolManagement.Application.Schools.Commands.PromoteTreasurer;
 using SchoolManagement.Application.Schools.Commands.RestoreMember;
-using SchoolManagement.Infrastructure.Schools.EnrollMember;
-using System;
-using System.Threading.Tasks;
 
 namespace Backend.API.Controllers.School
 {
@@ -30,8 +29,6 @@ namespace Backend.API.Controllers.School
     [ApiController]
     public class HeadmasterController : MediatrController
     {
-        public HeadmasterController() : base() { }
-
         [HttpPut("edit-info")]
         public async Task<IActionResult> EditSchoolInfo(EditSchoolInfoRequest request)
         {

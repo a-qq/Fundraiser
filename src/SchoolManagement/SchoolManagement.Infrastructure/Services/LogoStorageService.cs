@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using SchoolManagement.Application.Common.Interfaces;
-using SchoolManagement.Domain.SchoolAggregate.Schools;
-using SixLabors.ImageSharp;
-using System;
+﻿using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Hosting;
+using SchoolManagement.Application.Common.Interfaces;
+using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SixLabors.ImageSharp;
 
 namespace SchoolManagement.Infrastructure.Services
 {
@@ -26,7 +26,7 @@ namespace SchoolManagement.Infrastructure.Services
             if (!string.IsNullOrWhiteSpace(school.LogoId))
             {
                 var path = Path.Combine(Directory.GetCurrentDirectory(), _env.WebRootPath, "logos");
-                string[] files = Directory.GetFiles(path, school.LogoId + ".*");
+                var files = Directory.GetFiles(path, school.LogoId + ".*");
                 foreach (var file in files)
                     File.Delete(file);
             }

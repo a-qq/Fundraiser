@@ -1,4 +1,9 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
@@ -7,33 +12,29 @@ using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.AddStudentsToGroup
 {
     [Authorize(Policy = "MustBeAtLeastHeadmaster")]
     public sealed class AddStudentsToGroupCommand : CommandRequest
     {
-        public IEnumerable<Guid> StudentIds { get; }
-        public Guid SchoolId { get; }
-        public Guid GroupId { get; }
-
         public AddStudentsToGroupCommand(IEnumerable<Guid> studentIds, Guid schoolId, Guid groupId)
         {
             StudentIds = studentIds.Distinct();
             SchoolId = schoolId;
             GroupId = groupId;
         }
+
+        public IEnumerable<Guid> StudentIds { get; }
+        public Guid SchoolId { get; }
+        public Guid GroupId { get; }
     }
 
-    internal sealed class AddStudentsToGroupHandler : IRequestHandler<AddStudentsToGroupCommand, Result<Unit, RequestError>>
+    internal sealed class
+        AddStudentsToGroupHandler : IRequestHandler<AddStudentsToGroupCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolRepository _schoolRepository;
         private readonly ISchoolContext _context;
+        private readonly ISchoolRepository _schoolRepository;
 
         public AddStudentsToGroupHandler(
             ISchoolRepository schoolRepository,
@@ -43,7 +44,8 @@ namespace SchoolManagement.Application.Schools.Commands.AddStudentsToGroup
             _context = schoolContext;
         }
 
-        public async Task<Result<Unit, RequestError>> Handle(AddStudentsToGroupCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, RequestError>> Handle(AddStudentsToGroupCommand request,
+            CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
             var groupId = new GroupId(request.GroupId);
@@ -58,8 +60,8 @@ namespace SchoolManagement.Application.Schools.Commands.AddStudentsToGroup
             if (!schoolOrNone.Value.Groups.Any(g => g.Id == groupId))
                 return SharedRequestError.General.NotFound(groupId, nameof(Group));
 
-            IEnumerable<Member> membersToAdd =
-                 schoolOrNone.Value.Members.TakeWhile(m => studentIds.Contains(m.Id) && m.Role == Role.Student);
+            var membersToAdd =
+                schoolOrNone.Value.Members.TakeWhile(m => studentIds.Contains(m.Id) && m.Role == Role.Student);
 
             if (studentIds.Count() != membersToAdd.Count())
             {

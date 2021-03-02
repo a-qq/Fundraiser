@@ -1,6 +1,6 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using CSharpFunctionalExtensions;
 using SharedKernel.Domain.EnumeratedEntities;
-using System;
 
 namespace SharedKernel.Infrastructure.Interfaces
 {
@@ -8,6 +8,5 @@ namespace SharedKernel.Infrastructure.Interfaces
     {
         public Maybe<Administrator> GetById(Guid adminId);
         public bool ExistById(Guid adminId);
-            
     }
 }

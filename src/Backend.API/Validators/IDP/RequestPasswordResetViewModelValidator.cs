@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using IdentityServerHost.Quickstart.UI;
+﻿using Backend.API.IdentityServer.PasswordReset;
+using FluentValidation;
 using SharedKernel.Infrastructure.Extensions;
 
 namespace Backend.API.Validators.IDP

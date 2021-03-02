@@ -1,4 +1,7 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
@@ -7,29 +10,26 @@ using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.DivestTreasurer
 {
     [Authorize(Policy = "MustBeAtLeastFormTutor")]
     public sealed class DivestTreasurerCommand : CommandRequest
     {
-        public Guid GroupId { get; }
-        public Guid SchoolId { get; }
-
         public DivestTreasurerCommand(Guid groupId, Guid schoolId)
         {
             GroupId = groupId;
             SchoolId = schoolId;
         }
+
+        public Guid GroupId { get; }
+        public Guid SchoolId { get; }
     }
 
     internal sealed class DivestTreasurerHandler : IRequestHandler<DivestTreasurerCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolRepository _schoolRepository;
         private readonly ISchoolContext _schoolContext;
+        private readonly ISchoolRepository _schoolRepository;
 
         public DivestTreasurerHandler(
             ISchoolRepository schoolRepository,
@@ -39,7 +39,8 @@ namespace SchoolManagement.Application.Schools.Commands.DivestTreasurer
             _schoolContext = schoolContext;
         }
 
-        public async Task<Result<Unit, RequestError>> Handle(DivestTreasurerCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, RequestError>> Handle(DivestTreasurerCommand request,
+            CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
             var groupId = new GroupId(request.SchoolId);

@@ -1,20 +1,20 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using IDP.Application.Common.Interfaces;
 using IDP.Domain.UserAggregate.Entities;
 using IDP.Domain.UserAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using SharedKernel.Domain.Utils;
 using SharedKernel.Domain.ValueObjects;
-using System;
-using System.Threading.Tasks;
+using SharedKernel.Infrastructure.Utils;
 
 namespace IDP.Infrastructure.Persistance.Repositories
 {
     internal sealed class UserRepository : IUserRepository
     {
-        private readonly DbSet<User> _dbSet;
         private readonly IMemoryCache _cache;
+        private readonly DbSet<User> _dbSet;
 
         public UserRepository(
             IdentityDbContext dbContext,
@@ -43,11 +43,9 @@ namespace IDP.Infrastructure.Persistance.Repositories
             var memberOrNone = Maybe<User>.From(_cache.Get<User>(SchemaNames.Authentiaction + subject));
 
             if (memberOrNone.HasNoValue)
-            {
                 memberOrNone = Maybe<User>.From(await _dbSet
                     .Include(u => u.Claims)
                     .FirstOrDefaultAsync(u => u.Subject == subject));
-            }
 
             return memberOrNone;
         }

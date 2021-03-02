@@ -1,4 +1,8 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
@@ -6,31 +10,27 @@ using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.PassOnHeadmaster
 {
     [Authorize(Policy = "MustBeHeadmaster")]
     public sealed class PassOnHeadmasterCommand : CommandRequest
     {
-        public Guid SchoolId { get; }
-        public Guid TeacherId { get; }
-
         public PassOnHeadmasterCommand(Guid schoolId, Guid teacherId)
         {
             SchoolId = schoolId;
             TeacherId = teacherId;
         }
+
+        public Guid SchoolId { get; }
+        public Guid TeacherId { get; }
     }
 
     internal sealed class PassOnHeadmasterHandler : IRequestHandler<PassOnHeadmasterCommand, Result<Unit, RequestError>>
     {
+        private readonly ISchoolContext _context;
 
         private readonly ISchoolRepository _schoolRepository;
-        private readonly ISchoolContext _context;
 
         public PassOnHeadmasterHandler(
             ISchoolRepository schoolRepository,
@@ -40,7 +40,8 @@ namespace SchoolManagement.Application.Schools.Commands.PassOnHeadmaster
             _context = schoolContext;
         }
 
-        public async Task<Result<Unit, RequestError>> Handle(PassOnHeadmasterCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, RequestError>> Handle(PassOnHeadmasterCommand request,
+            CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
             var teacherId = new MemberId(request.TeacherId);

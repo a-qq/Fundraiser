@@ -12,7 +12,7 @@ namespace Backend.API.Validators.Rules
                 var result = HashedPassword.Validate(password, context.PropertyName);
                 if (result.IsFailure)
                     foreach (var error in result.Error.Errors)
-                       context.AddFailure(error);
+                        context.AddFailure(error);
             });
         }
     }

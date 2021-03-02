@@ -1,7 +1,7 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using IDP.Application.DTOs;
 using SharedKernel.Domain.Errors;
-using System.Threading.Tasks;
 
 namespace IDP.Application.Common.Interfaces
 {

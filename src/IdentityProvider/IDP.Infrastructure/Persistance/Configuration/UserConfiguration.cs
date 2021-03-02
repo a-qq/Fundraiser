@@ -1,10 +1,10 @@
-﻿using IDP.Domain.UserAggregate.Entities;
+﻿using System;
+using IDP.Domain.UserAggregate.Entities;
 using IDP.Domain.UserAggregate.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SharedKernel.Domain.Utils;
 using SharedKernel.Domain.ValueObjects;
-using System;
+using SharedKernel.Infrastructure.Utils;
 
 namespace IDP.Infrastructure.Persistance.Configuration
 {
@@ -16,7 +16,8 @@ namespace IDP.Infrastructure.Persistance.Configuration
 
             b.Property(p => p.Subject).IsRequired();
             b.HasAlternateKey(p => p.Subject);
-            b.Property(p => p.HashedPassword) //null value isn't passed to concerted, getting assigned straightforward to property (defualut ef.core 3 behaviour)
+            b.Property(p =>
+                    p.HashedPassword) //null value isn't passed to concerted, getting assigned straightforward to property (defualut ef.core 3 behaviour)
                 .HasConversion(p => p.Value, p => HashedPassword.CheckHashAndConvert(p))
                 .HasColumnName("HashedPassword");
             b.Property(p => p.IsActive);
@@ -26,7 +27,6 @@ namespace IDP.Infrastructure.Persistance.Configuration
                 p.Property(pp => pp.IssuedAt).HasColumnName("SecurityCodeIssuedAt");
                 p.Property<DateTime?>("_expirationDate").HasColumnName("SecurityCodeExpirationDate");
                 p.Ignore(pp => pp.ExpirationDate);
-
             });
             b.Property(p => p.Email)
                 .HasConversion(p => p.Value, p => Email.Create(p).Value)

@@ -1,4 +1,5 @@
-﻿using Backend.API.Authorization.Validators.Absrtact;
+﻿using System.Reflection;
+using Backend.API.Authorization.Validators.Absrtact;
 using Backend.API.Authorization.Validators.Concrete;
 using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authorization;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SharedKernel.Domain.EnumeratedEntities;
-using System.Reflection;
 
 namespace Backend.API.Authorization
 {
@@ -58,7 +58,8 @@ namespace Backend.API.Authorization
                     //builder.RequireClaim(JwtClaimTypes.Subject);
                     builder.AddAuthenticationSchemes(IdentityServerAuthenticationDefaults.AuthenticationScheme);
                     builder.RequireAuthenticatedUser();
-                    builder.AddRequirements(new OneOfUserRolesMustBeValidRequirement(Administrator.RoleName, Role.Headmaster));
+                    builder.AddRequirements(
+                        new OneOfUserRolesMustBeValidRequirement(Administrator.RoleName, Role.Headmaster));
                 });
 
                 options.AddPolicy("MustBeAtLeastFormTutor", builder =>
@@ -67,7 +68,8 @@ namespace Backend.API.Authorization
                     //builder.RequireClaim(JwtClaimTypes.Subject);
                     builder.AddAuthenticationSchemes(IdentityServerAuthenticationDefaults.AuthenticationScheme);
                     builder.RequireAuthenticatedUser();
-                    builder.AddRequirements(new OneOfUserRolesMustBeValidRequirement(Administrator.RoleName, Role.Headmaster, GroupRoles.FormTutor));
+                    builder.AddRequirements(new OneOfUserRolesMustBeValidRequirement(Administrator.RoleName,
+                        Role.Headmaster, GroupRoles.FormTutor));
                 });
             });
 

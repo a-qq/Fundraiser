@@ -1,18 +1,19 @@
-﻿using CSharpFunctionalExtensions;
-using SharedKernel.Domain.Errors;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using CSharpFunctionalExtensions;
+using SharedKernel.Domain.Errors;
 
 namespace SharedKernel.Domain.ValueObjects
 {
     public class Email : ValueObject
     {
-        private static int MaxLength { get => 200; }
-        public string Value { get; }
         private Email(string value)
         {
             Value = value;
         }
+
+        private static int MaxLength => 200;
+        public string Value { get; }
 
         public static Result<Email> Create(string email)
         {
@@ -25,6 +26,7 @@ namespace SharedKernel.Domain.ValueObjects
 
             return Result.Success(new Email(email));
         }
+
         public static Result<bool, Error> Validate(string email, string propertyName = nameof(Email))
         {
             if (string.IsNullOrWhiteSpace(email))
@@ -34,7 +36,8 @@ namespace SharedKernel.Domain.ValueObjects
 
             return Result.Combine(
                 Result.FailureIf(!Regex.IsMatch(email, @"^(.+)@(.+)$"), true, new Error($"{propertyName} is invalid!")),
-                Result.FailureIf(email.Length > MaxLength, true, new Error($"{propertyName} should contain max {MaxLength} characters!")));
+                Result.FailureIf(email.Length > MaxLength, true,
+                    new Error($"{propertyName} should contain max {MaxLength} characters!")));
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

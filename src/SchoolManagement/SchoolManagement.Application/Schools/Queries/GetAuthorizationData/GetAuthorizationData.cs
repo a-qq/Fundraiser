@@ -1,34 +1,35 @@
-﻿using Ardalis.GuardClauses;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using Dapper;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
-using SchoolManagement.Application.Schools.Queries.GetMember;
-using SharedKernel.Domain.Utils;
 using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using SharedKernel.Infrastructure.Utils;
 
 namespace SchoolManagement.Application.Schools.Queries.GetAuthorizationData
 {
-    public sealed class GetAuthorizationData : CommandRequest<AuthorizationDto>//IQuery<Result<AuthorizationDto, RequestError>>
+    public sealed class
+        GetAuthorizationData : CommandRequest<AuthorizationDto> //IQuery<Result<AuthorizationDto, RequestError>>
     {
-        public Guid SchoolId { get; }
-        public Guid MemberId { get; }
-
         public GetAuthorizationData(Guid schoolId, Guid memberId)
         {
             SchoolId = Guard.Against.Default(schoolId, nameof(schoolId));
             MemberId = Guard.Against.Default(memberId, nameof(memberId));
         }
+
+        public Guid SchoolId { get; }
+        public Guid MemberId { get; }
     }
 
-    internal sealed class GetFormTutorIdHandler : IRequestHandler<GetAuthorizationData, Result<AuthorizationDto, RequestError>>
+    internal sealed class
+        GetFormTutorIdHandler : IRequestHandler<GetAuthorizationData, Result<AuthorizationDto, RequestError>>
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
         private readonly IMemoryCache _cache;
+        private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
         public GetFormTutorIdHandler(
             ISqlConnectionFactory sqlConnectionFactory,
@@ -38,9 +39,11 @@ namespace SchoolManagement.Application.Schools.Queries.GetAuthorizationData
             _cache = cache;
         }
 
-        public async Task<Result<AuthorizationDto, RequestError>> Handle(GetAuthorizationData request, CancellationToken cancellationToken)
+        public async Task<Result<AuthorizationDto, RequestError>> Handle(GetAuthorizationData request,
+            CancellationToken cancellationToken)
         {
-            if (!_cache.TryGetValue(nameof(GetAuthorizationData) + request.MemberId, out AuthorizationDto autorizationData))
+            if (!_cache.TryGetValue(nameof(GetAuthorizationData) + request.MemberId,
+                out AuthorizationDto autorizationData))
             {
                 var connection = _sqlConnectionFactory.GetOpenConnection();
 
@@ -57,18 +60,16 @@ namespace SchoolManagement.Application.Schools.Queries.GetAuthorizationData
 
                 autorizationData = await connection.QuerySingleOrDefaultAsync<AuthorizationDto>(sql, new
                 {
-                    MemberId = request.MemberId,
-                    SchoolId = request.SchoolId
+                    request.MemberId, request.SchoolId
                 });
 
                 if (!(autorizationData is null))
-                {
                     _cache.Set(SchemaNames.Management + request.MemberId, autorizationData,
                         new MemoryCacheEntryOptions()
                             .SetAbsoluteExpiration(new TimeSpan(0, 0, 2))
                             .SetSlidingExpiration(new TimeSpan(0, 0, 1)));
-                }
             }
+
             if (autorizationData is null)
                 return SharedRequestError.General.NotFound();
 

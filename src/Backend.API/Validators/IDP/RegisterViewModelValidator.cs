@@ -1,6 +1,6 @@
-﻿using FluentValidation;
+﻿using Backend.API.IdentityServer.Registration;
 using Backend.API.Validators.Rules;
-using IdentityServerHost.Quickstart.UI;
+using FluentValidation;
 
 namespace Backend.API.Validators.IDP
 {

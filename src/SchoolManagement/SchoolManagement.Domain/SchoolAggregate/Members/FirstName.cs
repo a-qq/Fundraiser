@@ -1,20 +1,20 @@
-﻿using CSharpFunctionalExtensions;
-using SharedKernel.Domain.Errors;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using CSharpFunctionalExtensions;
+using SharedKernel.Domain.Errors;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Members
 {
     public class FirstName : ValueObject
     {
-        private static int MinLength { get => 2; }
-        private static int MaxLength { get => 200; }
-        public string Value { get; }
-
         private FirstName(string value)
         {
             Value = value;
         }
+
+        private static int MinLength => 2;
+        private static int MaxLength => 200;
+        public string Value { get; }
 
 
         public static Result<FirstName> Create(string firstName)
@@ -35,9 +35,12 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
 
             firstName = firstName.Trim();
             return Result.Combine(
-                Result.FailureIf(!firstName.All(char.IsLetter), true, new Error($"{propertyName} should consist of only letters!")),
-                Result.FailureIf(firstName.Length < MinLength, true, new Error($"{propertyName} should consist of min {MinLength} characters!")),
-                Result.FailureIf(firstName.Length > MaxLength, true, new Error($"{propertyName} should contain max {MaxLength} characters!")));
+                Result.FailureIf(!firstName.All(char.IsLetter), true,
+                    new Error($"{propertyName} should consist of only letters!")),
+                Result.FailureIf(firstName.Length < MinLength, true,
+                    new Error($"{propertyName} should consist of min {MinLength} characters!")),
+                Result.FailureIf(firstName.Length > MaxLength, true,
+                    new Error($"{propertyName} should contain max {MaxLength} characters!")));
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
@@ -47,7 +50,7 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
 
         public override string ToString()
         {
-            return this.Value;
+            return Value;
         }
 
         public static implicit operator string(FirstName firstName)

@@ -1,11 +1,11 @@
-﻿using Ardalis.GuardClauses;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using Microsoft.EntityFrameworkCore;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Extensions;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Infrastructure.Persistance.Repositories
 {
@@ -35,9 +35,9 @@ namespace SchoolManagement.Infrastructure.Persistance.Repositories
             if (disableFilters)
             {
                 schoolOrNone = await _context.Schools
-                        .IgnoreQueryFilters()
-                        .Include(c => c.Members)
-                        .SingleOrDefaultAsync(s => s.Id == schoolId);
+                    .IgnoreQueryFilters()
+                    .Include(c => c.Members)
+                    .SingleOrDefaultAsync(s => s.Id == schoolId);
             }
             else
             {
@@ -45,8 +45,8 @@ namespace SchoolManagement.Infrastructure.Persistance.Repositories
 
                 if (schoolOrNone.HasValue)
                     await _context.Entry(schoolOrNone.Value).Collection(s => s.Members).LoadAsync(cancellationToken);
-
             }
+
             return schoolOrNone;
         }
 
@@ -59,9 +59,9 @@ namespace SchoolManagement.Infrastructure.Persistance.Repositories
             if (disableFilters)
             {
                 schoolOrNone = await _context.Schools
-                        .IgnoreQueryFilters()
-                        .Include(c => c.Groups)
-                        .SingleOrDefaultAsync(s => s.Id == schoolId);
+                    .IgnoreQueryFilters()
+                    .Include(c => c.Groups)
+                    .SingleOrDefaultAsync(s => s.Id == schoolId);
             }
             else
             {
@@ -69,8 +69,8 @@ namespace SchoolManagement.Infrastructure.Persistance.Repositories
 
                 if (schoolOrNone.HasValue)
                     await _context.Entry(schoolOrNone.Value).Collection(s => s.Groups).LoadAsync(cancellationToken);
-
             }
+
             return schoolOrNone;
         }
 
@@ -84,7 +84,7 @@ namespace SchoolManagement.Infrastructure.Persistance.Repositories
 
         public void Remove(School school)
         {
-            Guard.Against.Null(school, nameof(school)); 
+            Guard.Against.Null(school, nameof(school));
 
             _context.Schools.Remove(school);
         }

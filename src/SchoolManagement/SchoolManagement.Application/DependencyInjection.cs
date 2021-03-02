@@ -1,11 +1,9 @@
-﻿using AutoMapper;
+﻿using System.Reflection;
+using AutoMapper;
 using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using SchoolManagement.Application.Behaviours;
-using SchoolManagement.Application.Common.Security;
-using System.Linq;
-using System.Reflection;
 
 namespace SchoolManagement.Application
 {

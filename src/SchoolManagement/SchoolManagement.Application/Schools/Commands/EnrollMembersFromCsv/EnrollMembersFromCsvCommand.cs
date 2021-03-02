@@ -1,4 +1,11 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using AutoMapper;
 using CSharpFunctionalExtensions;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -13,37 +20,31 @@ using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
 {
     [Authorize(Policy = "MustBeAtLeastHeadmaster")]
     public sealed class EnrollMembersFromCsvCommand : CommandRequest<IEnumerable<MemberDTO>>
     {
-        public IFormFile File { get; }
-        public DelimiterEnum Delimiter { get; }
-        public Guid SchoolId { get; }
-
         public EnrollMembersFromCsvCommand(IFormFile csvFile, DelimiterEnum delimiter, Guid schoolId)
         {
             File = csvFile;
             Delimiter = delimiter;
             SchoolId = schoolId;
         }
+
+        public IFormFile File { get; }
+        public DelimiterEnum Delimiter { get; }
+        public Guid SchoolId { get; }
     }
 
-    internal sealed class EnrollMembersFromCsvHandler : IRequestHandler<EnrollMembersFromCsvCommand, Result<IEnumerable<MemberDTO>, RequestError>>
+    internal sealed class EnrollMembersFromCsvHandler : IRequestHandler<EnrollMembersFromCsvCommand,
+        Result<IEnumerable<MemberDTO>, RequestError>>
     {
         private readonly ISchoolContext _context;
-        private readonly ISchoolRepository _schoolRepository;
         private readonly IEmailUniquenessChecker _emailUniquenessChecker;
         private readonly IMapper _mapper;
+        private readonly ISchoolRepository _schoolRepository;
 
         public EnrollMembersFromCsvHandler(
             ISchoolContext schoolContext,
@@ -57,14 +58,15 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
             _mapper = mapper;
         }
 
-        public async Task<Result<IEnumerable<MemberDTO>, RequestError>> Handle(EnrollMembersFromCsvCommand request, CancellationToken cancellationToken)
+        public async Task<Result<IEnumerable<MemberDTO>, RequestError>> Handle(EnrollMembersFromCsvCommand request,
+            CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
 
             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
             {
-                Delimiter = ((char)request.Delimiter).ToString(),
-                PrepareHeaderForMatch = (string header, int index) => header.ToLower()
+                Delimiter = ((char) request.Delimiter).ToString(),
+                PrepareHeaderForMatch = (header, index) => header.ToLower()
             };
 
             IEnumerable<MemberEnrollmentAssignmentData> candidates = null;
@@ -86,7 +88,7 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
                 return SharedRequestError.General.NotFound(schoolId, nameof(School));
 
             //since duplicate check have passed, there are no duplicates in input file
-            var (areUnique, duplicateEmails) = await _emailUniquenessChecker.AreUnique(emails/*.AsEnumerable()*/);
+            var (areUnique, duplicateEmails) = await _emailUniquenessChecker.AreUnique(emails /*.AsEnumerable()*/);
 
             if (!areUnique) //if not unique, return invalid emails
                 return SharedRequestError.User.EmailsAreTaken(duplicateEmails);
@@ -100,9 +102,10 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
                     .Except(schoolOrNone.Value.Groups.Select(g => g.Code));
 
                 if (notFoundGroupCodes.Count() > 0)
-                    return SharedRequestError.General.NotFound(notFoundGroupCodes.Select(x => x.Value), nameof(Group), nameof(Group.Code));
+                    return SharedRequestError.General.NotFound(notFoundGroupCodes.Select(x => x.Value), nameof(Group),
+                        nameof(Group.Code));
             }
-  
+
             var membersOrError = schoolOrNone.Value.EnrollCandidates(candidates);
 
             if (membersOrError.IsFailure)

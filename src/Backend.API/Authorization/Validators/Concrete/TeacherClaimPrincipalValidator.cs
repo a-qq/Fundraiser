@@ -4,12 +4,14 @@ using SchoolManagement.Domain.SchoolAggregate.Members;
 
 namespace Backend.API.Authorization.Validators.Concrete
 {
-    internal sealed class TeacherClaimPrincipalValidator : ClaimPrincipalValidatorForSchoolRolesBase, IClaimsPrincipalValidator
+    internal sealed class TeacherClaimPrincipalValidator : ClaimPrincipalValidatorForSchoolRolesBase,
+        IClaimsPrincipalValidator
     {
-        public override string RoleRequirement { get; } = RoleEnum.Teacher.ToString();
-
         public TeacherClaimPrincipalValidator(ISender mediator)
-            : base(mediator) { }
+            : base(mediator)
+        {
+        }
 
+        public override string RoleRequirement { get; } = RoleEnum.Teacher.ToString();
     }
 }

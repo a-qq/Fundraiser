@@ -1,5 +1,5 @@
-﻿using SharedKernel.Domain.Common;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using SharedKernel.Domain.Common;
 
 namespace SharedKernel.Infrastructure.Interfaces
 {

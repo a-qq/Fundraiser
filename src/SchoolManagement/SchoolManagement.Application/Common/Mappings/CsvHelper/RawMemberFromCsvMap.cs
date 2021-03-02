@@ -1,6 +1,6 @@
-﻿using CsvHelper.Configuration;
+﻿using System.Globalization;
+using CsvHelper.Configuration;
 using SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv;
-using System.Globalization;
 
 namespace SchoolManagement.Application.Common.Mappings.CsvHelper
 {

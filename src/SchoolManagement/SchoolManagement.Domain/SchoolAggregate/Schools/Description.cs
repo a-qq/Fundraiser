@@ -1,20 +1,21 @@
-﻿using CSharpFunctionalExtensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Schools
 {
     public class Description : ValueObject
     {
-        private static int MaxLength { get => 3000; }
-        public string Value { get; }
         private Description(string value)
         {
             Value = value;
         }
 
+        private static int MaxLength => 3000;
+        public string Value { get; }
+
         public static Result<Description> Create(string description)
         {
-            Result validationResult = Validate(description);
+            var validationResult = Validate(description);
 
             if (validationResult.IsFailure)
                 return validationResult.ConvertFailure<Description>();
@@ -25,7 +26,7 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
         public static Result Validate(string description, string propertyName = nameof(Description))
         {
             return Result.FailureIf(!string.IsNullOrEmpty(description) && description.Length > MaxLength,
-                    $"{propertyName} should contain max {MaxLength} characters!");
+                $"{propertyName} should contain max {MaxLength} characters!");
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
@@ -37,6 +38,5 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
         {
             return description.Value;
         }
-
     }
 }

@@ -1,7 +1,7 @@
-﻿using SchoolManagement.Domain.SchoolAggregate.Schools;
-using SixLabors.ImageSharp;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SixLabors.ImageSharp;
 
 namespace SchoolManagement.Application.Common.Interfaces
 {

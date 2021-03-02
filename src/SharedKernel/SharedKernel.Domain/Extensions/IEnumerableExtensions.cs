@@ -1,16 +1,16 @@
-﻿using Ardalis.GuardClauses;
-using SharedKernel.Domain.Common;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ardalis.GuardClauses;
+using SharedKernel.Domain.Common;
 
 namespace SharedKernel.Domain.Extensions
 {
     public static class IEnumerableExtensions
     {
         /// <summary>
-        /// Wraps this object instance into an IEnumerable&lt;T&gt;
-        /// consisting of a single item.
+        ///     Wraps this object instance into an IEnumerable&lt;T&gt;
+        ///     consisting of a single item.
         /// </summary>
         /// <typeparam name="T"> Type of the object. </typeparam>
         /// <param name="item"> The instance that will be wrapped. </param>

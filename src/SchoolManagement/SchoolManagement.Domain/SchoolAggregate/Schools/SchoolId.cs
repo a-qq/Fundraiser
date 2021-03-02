@@ -1,5 +1,5 @@
-﻿using SharedKernel.Domain.Common;
-using System;
+﻿using System;
+using SharedKernel.Domain.Common;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Schools
 {
@@ -7,6 +7,8 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
     public partial struct SchoolId : ITypedId
     {
         public static implicit operator Guid(SchoolId schoolId)
-            => schoolId.Value;
+        {
+            return schoolId.Value;
+        }
     }
 }

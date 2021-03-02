@@ -1,21 +1,22 @@
-﻿using Dapper;
+﻿using System;
+using System.Data;
+using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Models;
 using SchoolManagement.Domain.SchoolAggregate.Schools.Events;
 using SharedKernel.Infrastructure.Implementations;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Data;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
 {
-    internal sealed class MemberEnrolledEventHandler : INotificationHandler<DomainEventNotification<MemberEnrolledEvent>>
+    internal sealed class
+        MemberEnrolledEventHandler : INotificationHandler<DomainEventNotification<MemberEnrolledEvent>>
     {
-        private readonly ISqlConnectionFactory _sqlConnectionFactory;
         private readonly IManagementMailManager _mailManager;
+        private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
         public MemberEnrolledEventHandler(
             ISqlConnectionFactory sqlConnectionFactory,
@@ -25,15 +26,16 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
             _mailManager = mailManager;
         }
 
-        public async Task Handle(DomainEventNotification<MemberEnrolledEvent> notification, CancellationToken cancellationToken)
+        public async Task Handle(DomainEventNotification<MemberEnrolledEvent> notification,
+            CancellationToken cancellationToken)
         {
             var domainEvent = notification.DomainEvent;
             using (var connection = _sqlConnectionFactory.GetOpenConnection())
             {
                 const string sqlQuery = "SELECT [m].Id, [m].FirstName, [m].LastName, " +
-                             "[m].Email, [m].SchoolId, [m].Role, [m].Gender " +
-                             "FROM [management].[Members] AS [m]" +
-                             "WHERE [m].Id = @MemberId";
+                                        "[m].Email, [m].SchoolId, [m].Role, [m].Gender " +
+                                        "FROM [management].[Members] AS [m]" +
+                                        "WHERE [m].Id = @MemberId";
 
                 var member = await connection.QueryFirstOrDefaultAsync<MemberAuthInsertModel>(sqlQuery, new
                 {
@@ -47,8 +49,9 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
 
                 member.GenereteSecurityCode();
 
-                const string sqlInsert = "INSERT INTO [auth].[Users]([Subject], [Email], [SecurityCode], [SecurityCodeIssuedAt], [IsActive]) " +
-                                    "VALUES (@Subject, @Email, @Code, @Issued, @IsActive)";
+                const string sqlInsert =
+                    "INSERT INTO [auth].[Users]([Subject], [Email], [SecurityCode], [SecurityCodeIssuedAt], [IsActive]) " +
+                    "VALUES (@Subject, @Email, @Code, @Issued, @IsActive)";
 
                 var claims = DapperBulkOperationsHelper.GetClaimsInsertTable(member);
 
@@ -60,7 +63,7 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
                         await connection.ExecuteAsync(sqlInsert, new
                         {
                             Subject = member.Id.ToString(),
-                            Email = member.Email,
+                            member.Email,
                             Code = member.SecurityCode,
                             Issued = DateTime.UtcNow,
                             IsActive = false
@@ -77,7 +80,7 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
                     {
                         trans.Rollback();
                         const string sqlDelete = "DELETE FROM [management].[Members] " +
-                                     "WHERE [Id] = @MemberId";
+                                                 "WHERE [Id] = @MemberId";
                         await connection.ExecuteAsync(sqlDelete, new
                         {
                             MemberId = member.Id
@@ -86,8 +89,8 @@ namespace SchoolManagement.Application.Schools.ItegrationEventHandlers.IDP
                         throw ex;
                     }
                 }
-                
-                    await _mailManager.SendRegistrationEmailAsync(member.FirstName, member.Email, member.SecurityCode);
+
+                await _mailManager.SendRegistrationEmailAsync(member.FirstName, member.Email, member.SecurityCode);
             }
         }
     }

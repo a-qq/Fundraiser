@@ -5,8 +5,7 @@ namespace Backend.API.Authorization.Validators.Absrtact
 {
     public interface IClaimsPrincipalValidator
     {
-        Task<bool> IsValidAsync(ClaimsPrincipal principal);
-
         public string RoleRequirement { get; }
+        Task<bool> IsValidAsync(ClaimsPrincipal principal);
     }
 }

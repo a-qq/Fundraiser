@@ -1,5 +1,4 @@
 ﻿@using IdentityServer4.Extensions
-
 @{
     string name = null;
     if (!true.Equals(ViewData["signed-out"]))
@@ -18,18 +17,20 @@
 
         @if (!string.IsNullOrWhiteSpace(name))
         {
-    <ul class="navbar-nav mr-auto">
-        <li class="nav-item dropdown">
-            <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">@name <b class="caret"></b></a>
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item dropdown">
+                    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">
+                        @name <b class="caret"></b>
+                    </a>
 
-            <div class="dropdown-menu">
-                <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" asp-action="ChangePassword" asp-controller="ChangePassword">Change password</a>
-            </div>
-        </li>
-    </ul>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" asp-action="Logout" asp-controller="Account">Logout</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" asp-action="ChangePassword" asp-controller="ChangePassword">Change password</a>
+                    </div>
+                </li>
+            </ul>
         }
-    
+
     </nav>
 </div>

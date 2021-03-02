@@ -1,4 +1,8 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
@@ -7,32 +11,28 @@ using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Errors;
 using SharedKernel.Infrastructure.Interfaces;
-using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.PromoteTreasurer
 {
     [Authorize(Policy = "MustBeFormTutorOrHeadmasterOrAdmin")]
     public sealed class PromoteTreasurerCommand : CommandRequest
     {
-        public Guid GroupId { get; }
-        public Guid StudentId { get; }
-        public Guid SchoolId { get; }
-
         public PromoteTreasurerCommand(Guid groupId, Guid studentId, Guid schoolId)
         {
             GroupId = groupId;
             StudentId = studentId;
             SchoolId = schoolId;
         }
+
+        public Guid GroupId { get; }
+        public Guid StudentId { get; }
+        public Guid SchoolId { get; }
     }
 
     internal sealed class PromoteTreasurerHandler : IRequestHandler<PromoteTreasurerCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolRepository _schoolRepository;
         private readonly ISchoolContext _schoolContext;
+        private readonly ISchoolRepository _schoolRepository;
 
         public PromoteTreasurerHandler(
             ISchoolRepository schoolRepository,
@@ -42,7 +42,8 @@ namespace SchoolManagement.Application.Schools.Commands.PromoteTreasurer
             _schoolContext = schoolContext;
         }
 
-        public async Task<Result<Unit, RequestError>> Handle(PromoteTreasurerCommand request, CancellationToken cancellationToken)
+        public async Task<Result<Unit, RequestError>> Handle(PromoteTreasurerCommand request,
+            CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
             var groupId = new GroupId(request.SchoolId);

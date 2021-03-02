@@ -15,7 +15,8 @@ namespace SchoolManagement.Infrastructure
 {
     public static class DependencyInjection
     {
-        public static IServiceCollection AddSchoolManagementInfrastructure(this IServiceCollection services, IConfiguration configuration, IWebHostEnvironment env)
+        public static IServiceCollection AddSchoolManagementInfrastructure(this IServiceCollection services,
+            IConfiguration configuration, IWebHostEnvironment env)
         {
             services.AddDbContext<SchoolContext>(options =>
             {
@@ -25,7 +26,7 @@ namespace SchoolManagement.Infrastructure
                 options.UseLazyLoadingProxies();
                 if (env.IsDevelopment())
                 {
-                    ILoggerFactory loggerFactory = LoggerFactory.Create(builder =>
+                    var loggerFactory = LoggerFactory.Create(builder =>
                     {
                         builder
                             .AddFilter((category, level) =>
@@ -33,8 +34,9 @@ namespace SchoolManagement.Infrastructure
                             .AddConsole();
                     });
                     options.UseLoggerFactory(loggerFactory)
-                          .EnableSensitiveDataLogging();
+                        .EnableSensitiveDataLogging();
                 }
+
                 options.ReplaceService<IValueConverterSelector, StronglyTypedIdValueConverterSelector>();
             });
 

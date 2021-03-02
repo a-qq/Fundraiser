@@ -1,4 +1,4 @@
-﻿@model RegisterViewModel
+﻿@model Backend.API.IdentityServer.Registration.RegisterViewModel
 <div>
     <div class="page-header">
         <h1>Complete registration</h1>
@@ -18,8 +18,8 @@
                 <div class="panel-body">
                     <form asp-route="Register">
                         <fieldset>
-                            <input type="hidden" asp-for="SecurityCode" />
-                            <input type="hidden" asp-for="RedirectUrl" />
+                            <input type="hidden" asp-for="SecurityCode"/>
+                            <input type="hidden" asp-for="RedirectUrl"/>
                             <p>Choose a password, and confirm it.</p>
                             <div class="form-group">
                                 <label asp-for="Password"></label>

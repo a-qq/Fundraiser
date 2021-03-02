@@ -1,26 +1,26 @@
-﻿using CSharpFunctionalExtensions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Schools
 {
     public class GroupMembersLimit : ValueObject
     {
-        private static int MinValue => 1;
-        private static int MaxValue => 500;
-        public ushort? Value { get; }
-
         private GroupMembersLimit(ushort? number)
         {
             Value = number;
         }
 
+        private static int MinValue => 1;
+        private static int MaxValue => 500;
+        public ushort? Value { get; }
+
         public static Result<GroupMembersLimit> Create(int? limit)
         {
-            Result validation = Validate(limit);
+            var validation = Validate(limit);
             if (validation.IsFailure)
                 return validation.ConvertFailure<GroupMembersLimit>();
 
-            return new GroupMembersLimit((ushort?)limit);
+            return new GroupMembersLimit((ushort?) limit);
         }
 
         public static Result Validate(int? number, string propertyName = nameof(GroupMembersLimit))

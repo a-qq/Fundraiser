@@ -1,5 +1,5 @@
-﻿using SchoolManagement.Domain.SchoolAggregate.Members;
-using System;
+﻿using System;
+using SchoolManagement.Domain.SchoolAggregate.Members;
 
 namespace SchoolManagement.Application.Common.Models
 {

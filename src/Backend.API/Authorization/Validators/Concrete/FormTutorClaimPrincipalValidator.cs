@@ -1,18 +1,21 @@
-﻿using Backend.API.Authorization.Validators.Absrtact;
+﻿using System.Security.Claims;
+using System.Threading.Tasks;
+using Backend.API.Authorization.Validators.Absrtact;
 using MediatR;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Members;
-using System.Security.Claims;
-using System.Threading.Tasks;
 
 namespace Backend.API.Authorization.Validators.Concrete
 {
-    internal sealed class FormTutorClaimPrincipalValidator : ClaimPrincipalValidatorForSchoolRolesBase, IClaimsPrincipalValidator
+    internal sealed class FormTutorClaimPrincipalValidator : ClaimPrincipalValidatorForSchoolRolesBase,
+        IClaimsPrincipalValidator
     {
-        public override string RoleRequirement { get; } = GroupRoles.FormTutor;
-
         public FormTutorClaimPrincipalValidator(ISender mediator)
-            : base(mediator) { }
+            : base(mediator)
+        {
+        }
+
+        public override string RoleRequirement { get; } = GroupRoles.FormTutor;
 
         public override async Task<bool> IsValidAsync(ClaimsPrincipal principal)
         {

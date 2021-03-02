@@ -1,17 +1,18 @@
-﻿using CSharpFunctionalExtensions;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using CSharpFunctionalExtensions;
 
 namespace SharedKernel.Domain.Errors
 {
     /// <summary>
-    /// Combineable error.
+    ///     Combineable error.
     /// </summary>
     public sealed class Error : ICombine
     {
         private readonly List<string> _errors;
+
         public Error(string error)
-            : this(new List<string> { error })
+            : this(new List<string> {error})
         {
         }
 
