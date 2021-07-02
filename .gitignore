@@ -341,4 +341,6 @@ healthchecksdb
 
 **/Properties/launchSettings.json
 **/launchSettings.json
-**/appSettings.json
+**/appsettings.json
+**/appsettings.Development.json
+""/logs
