@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools.Events;
 using SharedKernel.Domain.Common;
 using SharedKernel.Domain.Errors;
-using SharedKernel.Domain.Extensions;
 using SharedKernel.Domain.ValueObjects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Schools
 {
@@ -25,11 +25,11 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
             Gender gender)
             : base(SchoolId.New())
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            YearsOfEducation = yearsOfEducation ?? throw new ArgumentNullException(nameof(yearsOfEducation));
+            Name = Guard.Against.Null(name, nameof(name));
+            YearsOfEducation = Guard.Against.Null(yearsOfEducation, nameof(yearsOfEducation));
 
-            var headmaster = EnrollCandidate(firstName, lastName, email, Role.Headmaster, gender).Value;
-            _members.Add(headmaster);
+            EnrollCandidate(firstName, lastName, email, Role.Headmaster, gender);
+            AddDomainEvent(new SchoolCreatedDomainEvent(Id));
         }
 
         public Name Name { get; private set; }
@@ -40,16 +40,35 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
         public virtual IReadOnlyList<Member> Members => _members.AsReadOnly();
         public virtual IReadOnlyList<Group> Groups => _groups.AsReadOnly();
 
-        public void Edit(Name name, Description description, GroupMembersLimit limit)
+        public Result<bool, Error> Edit(Name name, Description description, GroupMembersLimit limit)
         {
-            Name = name ?? throw new ArgumentNullException(nameof(name));
-            EditInfo(description, limit);
+            Name = Guard.Against.Null(name, nameof(name));
+            return EditInfo(description, limit);
         }
 
-        public void EditInfo(Description description, GroupMembersLimit groupMembersLimit)
+        public Result<bool, Error> EditInfo(Description description, GroupMembersLimit limit)
         {
-            Description = description ?? throw new ArgumentNullException(nameof(description));
-            GroupMembersLimit = groupMembersLimit ?? throw new ArgumentNullException(nameof(groupMembersLimit));
+            Description = Guard.Against.Null(description, nameof(description));
+            Guard.Against.Null(limit, nameof(limit));
+
+            var result = Result.Success<bool, Error>(true);
+            if (limit != null)
+            {
+                _ = this.Members; //load members
+                var groupsOverLimit = this.Groups.Where(g => g.Students.Count > limit);
+
+                foreach (var group in groupsOverLimit)
+                {
+                    result = Result.Combine(result, Result.Failure<bool, Error>(new Error(
+                        $"Group '{group.Code}' (Id: '{group.Id}') has more then " +
+                        $"'{limit}' student(s)! (Currently: '{group.Students.Count}')")));
+                }
+            }
+
+            if (result.IsSuccess)
+                GroupMembersLimit = limit;
+
+            return result;
         }
 
         public void EditLogo()
@@ -71,75 +90,9 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
 
             _members.Add(candidate);
 
-            AddDomainEvent(new MemberEnrolledEvent(candidate.Id));
+            AddDomainEvent(new MemberEnrolledDomainEvent(this.Id, candidate.Id));
 
             return candidate;
-        }
-
-        public Result<IEnumerable<Member>, Error> EnrollCandidates(
-            IEnumerable<MemberEnrollmentAssignmentData> membersData)
-        {
-            if (membersData is null || !membersData.Any())
-                throw new ArgumentException(nameof(membersData));
-
-            var addedMembers = new List<Member>();
-            var validation = Result.Success<bool, Error>(true);
-
-            if (membersData.Any(m => m.Role == Role.Headmaster))
-                validation = CanPromoteHeadmaster();
-
-            var membersGroups = membersData.ToLookup(x => x.GroupCode.HasValue);
-            if (membersGroups.Contains(true))
-            {
-                var studentGroups = membersGroups[true].GroupBy(s => s.GroupCode.Value).ToArray();
-                var groups = new List<Group>();
-                foreach (var studentGroup in studentGroups)
-                {
-                    var group = Groups.Single(g => g.Code == studentGroup.Key && !g.IsArchived);
-                    validation = Result.Combine(validation, group.HaveSpaceFor(studentGroup.Count()));
-
-                    foreach (var student in studentGroup)
-                        Result.Combine(validation, Result.FailureIf(student.Role != Role.Student, true,
-                            new Error($"Candidate '{student.Email}' is not a '{Role.Student}'!")));
-
-                    groups.Add(group);
-                }
-
-                if (validation.IsFailure)
-                    return validation.Error;
-
-                for (var i = 0; i < groups.Count; i++)
-                {
-                    var addedStudents = new List<Member>();
-                    foreach (var candidate in studentGroups[i])
-                    {
-                        var student = new Member(candidate.FirstName, candidate.LastName,
-                            candidate.Email, candidate.Role, candidate.Gender, this);
-
-                        _members.Add(student);
-                        addedStudents.Add(student);
-                    }
-
-                    if (groups[i].AssignStudents(addedStudents.Select(s => s.Id)).IsFailure)
-                        throw new InvalidOperationException(nameof(School) + ":" + nameof(EnrollCandidates));
-
-                    addedMembers.AddRange(addedStudents);
-                }
-            }
-
-            if (membersGroups.Contains(false))
-                foreach (var candidate in membersGroups[false])
-                {
-                    var student = new Member(candidate.FirstName, candidate.LastName,
-                        candidate.Email, candidate.Role, candidate.Gender, this);
-
-                    _members.Add(student);
-                    addedMembers.Add(student);
-                }
-
-            AddDomainEvent(new MembersEnrolledEvent(addedMembers.Select(m => m.Id)));
-
-            return addedMembers;
         }
 
         internal Result<bool, Error> CanPromoteHeadmaster()
@@ -147,28 +100,23 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
             var headmaster = Members.TryFirst(m => m.Role == Role.Headmaster);
             if (headmaster.HasValue)
                 return new Error(
-                    $"School already have a headmaster: '{headmaster.Value.Email}'(Id: '{headmaster.Value.Id}')");
+                    $"School already have a headmaster: '{headmaster.Value.Email}' (Id: '{headmaster.Value.Id}')");
 
             return Result.Success<bool, Error>(true);
         }
 
-        public Result<bool, Error> ExpellMember(MemberId memberId)
+        public Result<bool, Error> ExpelMember(MemberId memberId)
         {
             var member = _members.Single(m => m.Id == memberId);
 
             if (member.Role == Role.Headmaster)
-                return new Error($"Headmaster '{member.Email}'(Id: '{member.Id} cannot be expelled!");
+                return new Error($"Headmaster '{member.Email}' (Id: '{member.Id}' cannot be expelled!");
 
-            //events of divestion are not raised, because member is deleted in other context by member expelled event
             if (member.Role == Role.Teacher)
             {
-                var groupsOrNone = AllGroupsOfFormTutor(member);
-                if (groupsOrNone.HasValue)
-                    foreach (var group in groupsOrNone.Value)
-                        if (@group.IsArchived)
-                            @group.DivestFormTutor();
-
-                        else DivestFormTutorFromGroup(@group.Id);
+                var groups = AllGroupsOfFormTutor(member);
+                foreach (var group in groups)
+                    group.DivestFormTutor();
             }
             else //student
             {
@@ -179,49 +127,48 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
 
             _members.Remove(member);
 
-            AddDomainEvent(new MemberExpelledEvent(member.Id));
+            AddDomainEvent(new MemberExpelledDomainEvent(member.Id, member.IsActive));
 
             return Result.Success<bool, Error>(true);
         }
 
         public Result<bool, Error> ArchiveMember(MemberId memberId)
         {
-            var member = Members.Single(m => m.Id == memberId && !m.IsArchived);
+            var member = _members.Single(m => m.Id == memberId);
 
             var result = member.Archive();
 
-            if (result.IsSuccess)
-                AddDomainEvent(new MemberArchivedEvent(memberId));
+            if (result.IsFailure)
+                return result.ConvertFailure<bool>();
 
-            return result;
+            AddDomainEvent(new MemberArchivedDomainEvent(memberId, result.Value));
+
+            return Result.Success<bool, Error>(true);
         }
 
         public Result<bool, Error> RestoreMember(MemberId memberId)
         {
-            var member = Members.Single(m => m.Id == memberId);
+            var member = _members.Single(m => m.Id == memberId);
 
             var result = member.Restore();
 
             if (result.IsSuccess)
-                AddDomainEvent(new MemberRestoredEvent(memberId));
+                AddDomainEvent(new MemberRestoredDomainEvent(memberId));
 
             return result;
         }
 
         public Result<Group, Error> CreateGroup(Number number, Sign sign)
         {
-            if (number == null)
-                throw new ArgumentNullException(nameof(number));
-
-            if (sign == null)
-                throw new ArgumentNullException(nameof(sign));
+            Guard.Against.Null(number, nameof(number));
+            Guard.Against.Null(sign, nameof(sign));
 
             if (number > YearsOfEducation)
                 return new Error($"Number ('{number}') cannot be greater then" +
                                  $" school's years of education ('{YearsOfEducation}')!");
 
-            //lazy load intentional
-            if (Groups.Any(g => string.Equals(number + sign, g.Code, StringComparison.OrdinalIgnoreCase)))
+            //lazy loading intentional
+            if (Groups.Any(g => string.Equals(number + sign, g.Code, StringComparison.OrdinalIgnoreCase) && !g.IsArchived))
                 return new Error($"Group with code {number + sign} already exist!");
 
             var group = new Group(number, sign, this);
@@ -231,39 +178,15 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
             return group;
         }
 
-        public Result<bool, Error> AssignStudentsToGroup(GroupId groupId, IEnumerable<MemberId> memberIds)
+        public Result<Member, Error> AssignStudentToGroup(MemberId memberId, Code code)
         {
-            var group = Groups.Single(g => g.Id == groupId && !g.IsArchived);
+            var group = _groups.Single(g => g.Code == code && !g.IsArchived);
 
-            var result = group.AssignStudents(memberIds);
+            var result = group.AssignStudent(memberId);
             if (result.IsSuccess)
-                AddDomainEvent(new StudentsAssignedEvent(groupId, memberIds.Distinct()));
+                AddDomainEvent(new StudentAssignedDomainEvent(memberId, group.Id, result.Value.IsActive));
+
             return result;
-        }
-
-        public Result<bool, Error> ReassignStudentToGroup(GroupId groupId, MemberId memberId)
-        {
-            var group = _groups.Single(g => g.Id == groupId && !g.IsArchived);
-
-            var member = Members.Single(
-                m => m.Id == memberId && !m.IsArchived && m.Role == Role.Student);
-
-            Maybe<Group> previousGroupOrNone = member.Group;
-
-            if (previousGroupOrNone.HasValue) //prevalidate only if needed
-            {
-                var validation = group.HaveSpaceFor(member.Yield());
-
-                if (validation.IsFailure)
-                    return validation;
-
-                DisenrollStudentFromGroup(previousGroupOrNone.Value.Id, member.Id);
-            }
-
-            if (group.AssignStudents(memberId.Yield()).IsFailure)
-                throw new InvalidOperationException(nameof(School) + ":" + nameof(ReassignStudentToGroup));
-
-            return Result.Success<bool, Error>(true);
         }
 
         public Result<bool, Error> PromoteFormTutor(GroupId groupId, MemberId memberId)
@@ -273,7 +196,7 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
             var result = group.AssignFormTutor(memberId);
 
             if (result.IsSuccess)
-                AddDomainEvent(new FormTutorAssignedEvent(group.FormTutor.Id, group.Id));
+                AddDomainEvent(new FormTutorAssignedDomainEvent(group.FormTutor.Id, group.Id, group.FormTutor.IsActive));
 
             return result;
         }
@@ -282,9 +205,9 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
         {
             var group = Groups.Single(g => g.Id == groupId && !g.IsArchived);
 
-            var formTutorId = group.DivestFormTutor();
+            var formTutor = group.DivestFormTutor();
 
-            AddDomainEvent(new FormTutorDivestedEvent(formTutorId));
+            AddDomainEvent(new FormTutorDivestedDomainEvent(formTutor.Id, formTutor.IsActive));
         }
 
         public Result<bool, Error> PromoteTreasurer(GroupId groupId, MemberId studentId)
@@ -294,7 +217,7 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
             var result = group.PromoteTreasurer(studentId);
 
             if (result.IsSuccess)
-                AddDomainEvent(new TreasurerPromotedEvent(group.Treasurer.Id));
+                AddDomainEvent(new TreasurerPromotedDomainEvent(group.Treasurer.Id, group.Treasurer.IsActive));
 
             return result;
         }
@@ -303,18 +226,18 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
         {
             var group = Groups.Single(g => g.Id == groupId && !g.IsArchived);
 
-            var treasurerId = group.DivestTreasurer();
+            var treasurer = group.DivestTreasurer();
 
-            AddDomainEvent(new TreasurerDivestedEvent(treasurerId));
+            AddDomainEvent(new TreasurerDivestedDomainEvent(treasurer.Id, treasurer.IsActive));
         }
 
         public void DisenrollStudentFromGroup(GroupId groupId, MemberId studentId)
         {
             var group = _groups.Single(g => g.Id == groupId && !g.IsArchived);
 
-            group.DisenrollStudent(studentId);
+            var (student, removedRole) = group.DisenrollStudent(studentId);
 
-            AddDomainEvent(new StudentDisenrolledFromGroupEvent(studentId));
+            AddDomainEvent(new StudentDisenrolledDomainEvent(student.Id, removedRole, student.IsActive));
         }
 
         public void DivestHeadmaster()
@@ -324,7 +247,7 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
 
             headmaster.DegradeToTeacher();
 
-            AddDomainEvent(new HeadmasterDivestedEvent(headmaster.Id));
+            AddDomainEvent(new HeadmasterDivestedDomainEvent(headmaster.Id, headmaster.IsActive));
         }
 
         public Result<bool, Error> PromoteHeadmaster(MemberId memberId)
@@ -334,7 +257,7 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
 
             var result = teacher.PromoteToHeadmaster();
             if (result.IsSuccess)
-                AddDomainEvent(new HeadmasterPromotedEvent(teacher.Id));
+                AddDomainEvent(new HeadmasterPromotedDomainEvent(teacher.Id, teacher.IsActive));
 
             return result;
         }
@@ -352,8 +275,8 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
             if (teacher.PromoteToHeadmaster().IsFailure)
                 throw new InvalidOperationException(nameof(School) + ":" + nameof(PassOnHeadmaster));
 
-            AddDomainEvent(new HeadmasterDivestedEvent(headmaster.Id));
-            AddDomainEvent(new HeadmasterPromotedEvent(teacher.Id));
+            AddDomainEvent(new HeadmasterDivestedDomainEvent(headmaster.Id, headmaster.IsActive));
+            AddDomainEvent(new HeadmasterPromotedDomainEvent(teacher.Id, teacher.IsActive));
         }
 
         public void DeleteGroup(GroupId groupId)
@@ -361,78 +284,56 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
             var group = _groups.Single(g => g.Id == groupId);
 
             group.Delete();
-
+            //TODO: Add Group deleted event
             _groups.Remove(group);
         }
 
         public Result<bool, Error> Graduate()
         {
-            var validation = Result.Success<bool, Error>(true);
-            var groupsToGraduate = _groups.TakeWhile(g => !g.IsArchived);
-
+            var groupsToGraduate = Groups.Where(g => !g.IsArchived);
+            var result = Result.Success<bool, Error>(true);
             foreach (var group in groupsToGraduate)
-                validation = Result.Combine(validation, group.CanGraduate());
+            {
+                result = Result.Combine(result, group.Graduate());
 
-            if (validation.IsFailure)
-                return validation;
+                if (!group.IsArchived)
+                    continue;
 
-            var studentIds = new List<MemberId>();
-            var treasurerIds = new List<MemberId>();
-            var formTutorIds = new List<MemberId>();
+                if (!(group.FormTutor is null))
+                    AddDomainEvent(new FormTutorDivestedDomainEvent(group.FormTutor.Id, group.FormTutor.IsActive));
+            }
 
-            foreach (var group in groupsToGraduate)
-                if (@group.Number >= YearsOfEducation)
-                {
-                    @group.Graduate();
-
-                    studentIds.AddRange(@group.Students.Select(m => m.Id));
-                    Maybe<Member> treasurer = @group.Treasurer;
-                    if (treasurer.HasValue)
-                        treasurerIds.Add(@group.Treasurer.Id);
-
-                    Maybe<Member> formTutor = @group.FormTutor;
-                    if (formTutor.HasValue)
-                        treasurerIds.Add(@group.FormTutor.Id);
-                }
-
-            if (studentIds.Any() || treasurerIds.Any() || formTutorIds.Any())
-                AddDomainEvent(new GraduationCompletedEvent(studentIds, treasurerIds, formTutorIds));
-
-            return Result.Success<bool, Error>(true);
+            return result;
         }
 
-        internal Maybe<Group> GroupOfFormTutor(Member member)
+        public Result MarkMemberAsActive(MemberId memberId)
         {
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
+            var member = _members.Single(m => m.Id == memberId);
 
-            if (member.Role != Role.Teacher)
-                return Maybe<Group>.None;
+            var result = member.MarkAsActive();
 
-            return Groups.TryFirst(g => g.FormTutor == member && !g.IsArchived);
+            if (result.IsSuccess)
+                AddDomainEvent(new MemberActivatedDomainEvent(member.School.Id, member.Id));
+            
+            return result;
         }
 
-        /// <summary>
-        ///     Looks for all <see cref="Group" />s (including archived) with given <paramref name="member" /> as
-        ///     <see cref="Group.FormTutor" />.
-        /// </summary>
-        /// <param name="member">
-        ///     Member against which the search is conducted.
-        /// </param>
-        /// <returns>
-        ///     A Maybe&lt;IEnumerable&lt;<see cref="Group" />&gt;&gt with all found groups or <see cref="Maybe.None" />, if
-        ///     <paramref name="member" /> is not a teacher.
-        /// </returns>
-        public Maybe<IEnumerable<Group>> AllGroupsOfFormTutor(Member member)
+        public Maybe<Group> CurrentGroupOfFormTutor(Member member)
         {
-            if (member == null)
-                throw new ArgumentNullException(nameof(member));
+            Guard.Against.Null(member, nameof(member));
 
-            if (member.Role != Role.Teacher)
-                return Maybe<IEnumerable<Group>>.None;
+            return member.Role == Role.Student
+                ? Maybe<Group>.None
+                : Groups.SingleOrDefault(g => !g.IsArchived && g.FormTutor == member);
+        }
 
-            return Maybe<IEnumerable<Group>>.From(
-                Groups.TakeWhile(g => g.FormTutor == member));
+        internal IEnumerable<Group> AllGroupsOfFormTutor(Member member)
+        {
+            Guard.Against.Null(member, nameof(member));
+
+            return member.Role != Role.Teacher
+                ? Enumerable.Empty<Group>()
+                : Groups.Where(g => g.FormTutor == member);
         }
     }
 }

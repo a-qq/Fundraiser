@@ -14,7 +14,7 @@ namespace SchoolManagement.Application.Common.Models
 
         public static class Csv
         {
-            public static RequestError DuplicateEmails(IEnumerable<Email> emails)
+            public static RequestError DuplicateEmails(IReadOnlyCollection<Email> emails)
             {
                 return new ManagementRequestError("invalid.csv.emails",
                     $"Duplicate emails in input file: {string.Join(", ", emails)}");

@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
-using IdentityModel;
 using IDP.Domain.UserAggregate.Events;
 using IDP.Domain.UserAggregate.ValueObjects;
 using Microsoft.AspNetCore.Identity;
 using SharedKernel.Domain.Common;
-using SharedKernel.Domain.Errors;
-using SharedKernel.Domain.Utils;
 using SharedKernel.Domain.ValueObjects;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using IDP.Domain.Common.Errors;
 
 namespace IDP.Domain.UserAggregate.Entities
 {
@@ -21,117 +20,180 @@ namespace IDP.Domain.UserAggregate.Entities
         {
         }
 
-        public string Subject { get; }
+        public User(Email email, Subject subject, SecurityCode securityCode)
+        {
+            Subject = Guard.Against.Null(subject, nameof(subject));
+            Email = Guard.Against.Null(email, nameof(email));
+            SecurityCode = Guard.Against.Null(securityCode, nameof(securityCode));
+            IsActive = true; //TODO: change to false
+
+            AddDomainEvent(new UserRegistrationRequestedDomainEvent(Subject));
+        }
+
+        public Subject Subject { get; }
         public HashedPassword HashedPassword { get; private set; }
         public bool IsActive { get; private set; }
         public Email Email { get; }
         public virtual SecurityCode SecurityCode { get; private set; }
         public virtual IReadOnlyList<Claim> Claims => _claims.AsReadOnly();
 
-        public Result<bool, Error> CompleteRegisteration(HashedPassword password, DateTime now)
+        public Result CompleteRegistration(HashedPassword password, DateTime now)
         {
-            if (password is null)
-                throw new ArgumentNullException(nameof(password));
+            Guard.Against.Null(password, nameof(password));
 
-            if (!(HashedPassword is null))
-                return new Error("Registration already completed!");
+            if (HasCompletedRegistration())
+                return Result.Failure("Registration already completed!");
 
-            if (SecurityCode.ExpirationDate.IsExpired(now))
-                return IDPError.User.InvalidSecurityCode();
+            if (SecurityCode.IsExpired(now))
+                return IdentityProviderDomainError.User.ExpiredSecurityCode();
 
             HashedPassword = password;
             IsActive = true;
-            SecurityCode = SecurityCode.None;
+            SecurityCode = null;
 
-            AddDomainEvent(new UserCompletedRegistrationEvent(Subject,
-                Claims.Single(c => c.Type == JwtClaimTypes.GivenName).Value,
-                Claims.Single(c => c.Type == JwtClaimTypes.FamilyName).Value,
-                Claims.Single(c => c.Type == JwtClaimTypes.Gender).Value,
-                Claims.Single(c => c.Type == JwtClaimTypes.Role).Value,
-                Claims.Single(c => c.Type == CustomClaimTypes.SchoolId).Value,
-                Claims.SingleOrDefault(c => c.Type == CustomClaimTypes.GroupId)?.Value));
+            AddDomainEvent(new UserRegisteredDomainEvent(Subject));
 
-            return Result.Success<bool, Error>(true);
+            return Result.Success();
         }
 
-        public Result<bool, Error> ChangePassword(string oldPassword, HashedPassword newPassword,
+        public Result RequestRegistrationResend(SecurityCode securityCode, int antiSpamInMinutes, DateTime now)
+        {
+            Guard.Against.NegativeOrZero(antiSpamInMinutes, nameof(antiSpamInMinutes));
+            Guard.Against.Null(securityCode, nameof(securityCode));
+            if (HasCompletedRegistration())
+                return Result.Failure("Registration already completed!");
+
+            if (!HaveAntiSpamIntervalPassed(now, antiSpamInMinutes))
+                return IdentityProviderDomainError.User.AntiSpamIntervalNotPassed(antiSpamInMinutes);
+
+            SecurityCode = securityCode;
+
+            AddDomainEvent(new UserRegistrationRequestedDomainEvent(Subject));
+
+            return Result.Success();
+        }
+
+        public Result ChangePassword(string oldPassword, HashedPassword newPassword,
             IPasswordHasher<User> passwordHasher)
         {
-            if (string.IsNullOrWhiteSpace(oldPassword))
-                throw new ArgumentNullException(nameof(oldPassword));
+            Guard.Against.Null(passwordHasher, nameof(passwordHasher));
+            Guard.Against.NullOrWhiteSpace(oldPassword, nameof(oldPassword));
+            Guard.Against.Null(newPassword, nameof(newPassword));
 
-            if (newPassword is null)
-                throw new ArgumentNullException(nameof(newPassword));
+            if (!HasCompletedRegistration())
+                return IdentityProviderDomainError.User.RegistrationNotCompleted();
 
-            if (passwordHasher is null)
-                throw new ArgumentNullException(nameof(passwordHasher));
-
-            var isRegistered = HasCompletedRegistration();
-            if (isRegistered.IsFailure)
-                return isRegistered;
-
-            var result = passwordHasher.VerifyHashedPassword(this, HashedPassword.Value, oldPassword);
+            var result = passwordHasher.VerifyHashedPassword(
+                this, this.HashedPassword, oldPassword);
 
             if (result == PasswordVerificationResult.Failed)
-                return new Error("Old password incorrect!");
+                return Result.Failure("Old password incorrect!");
 
             HashedPassword = newPassword;
 
-            return Result.Success<bool, Error>(true);
+            return Result.Success();
         }
 
-        public Result<bool, Error> ResetPassword(HashedPassword newPassword, DateTime now)
+        public Result ResetPassword(HashedPassword newPassword, DateTime now)
         {
-            if (newPassword is null)
-                throw new ArgumentNullException(nameof(newPassword));
+            Guard.Against.Null(newPassword, nameof(newPassword));
 
-            if (SecurityCode.ExpirationDate.IsExpired(now))
-                return IDPError.User.InvalidSecurityCode();
+            if (SecurityCode.IsExpired(now))
+                return IdentityProviderDomainError.User.ExpiredSecurityCode();
 
-            var isRegistered = HasCompletedRegistration();
-
-            if (isRegistered.IsFailure)
-                return isRegistered;
-
+            if (!HasCompletedRegistration())
+                return IdentityProviderDomainError.User.RegistrationNotCompleted();
 
             HashedPassword = newPassword;
-            SecurityCode = SecurityCode.None;
+            SecurityCode = null;
 
-            return Result.Success<bool, Error>(true);
+            return Result.Success();
         }
 
-        public bool RenewSecurityCode(DateTime now, string code, int securityCodeExpTimeInMinutes)
+        public Result RequestPasswordReset(SecurityCode securityCode, DateTime now, int antiSpamInMinutes)
         {
-            if (!CanRenewSecurityCode(now, securityCodeExpTimeInMinutes))
-                return false;
+            Guard.Against.NegativeOrZero(antiSpamInMinutes, nameof(antiSpamInMinutes));
+            Guard.Against.Null(securityCode, nameof(securityCode));
 
-            var expDate = ExpirationDate.Create(now.AddMinutes(securityCodeExpTimeInMinutes)).Value;
+            if (!HasCompletedRegistration())
+                return IdentityProviderDomainError.User.RegistrationNotCompleted();
 
-            SecurityCode = SecurityCode.Create(code, expDate, now).Value;
+            if (!HaveAntiSpamIntervalPassed(now, antiSpamInMinutes))
+                return IdentityProviderDomainError.User.AntiSpamIntervalNotPassed(antiSpamInMinutes);
 
-            AddDomainEvent(new SecurityCodeRenewed(Email, SecurityCode));
+            this.SecurityCode = securityCode;
 
-            return true;
+            AddDomainEvent(new PasswordResetRequestedDomainEvent(Subject));
+
+            return Result.Success();
         }
 
-        public Result<bool, Error> HasCompletedRegistration()
+        public Result AddClaim(string type, string value)
         {
-            if (HashedPassword is null)
-                return IDPError.User.RegistrationNotCompelted();
+            Guard.Against.NullOrWhiteSpace(type, nameof(type));
+            Guard.Against.NullOrWhiteSpace(value, nameof(value));
 
-            return Result.Success<bool, Error>(true);
+            if (_claims.Any(c => c.Type == type && c.Value == value))
+                return Result.Failure($"User already have claim (Type: '{type}', Value: '{value}')");
+
+            _claims.Add(new Claim(type, value));
+
+            return Result.Success();
         }
 
-        private bool CanRenewSecurityCode(DateTime now, int antiSpamInMinutes)
+        public void UpdateClaims(string type, string newValue)
         {
-            if (HasCompletedRegistration().IsFailure)
-                return false;
+            Guard.Against.NullOrWhiteSpace(type, nameof(type));
 
-            if (!(SecurityCode is null) && SecurityCode.IssuedAt.HasValue &&
-                SecurityCode.IssuedAt.Value.AddMinutes(antiSpamInMinutes) > now)
-                return false;
-
-            return true;
+            var claims = _claims.Where(c => c.Type == type);
+            foreach (var claim in claims)
+                claim.Update(newValue);
         }
+
+        public void UpdateClaim(string type, string newValue, string oldValue)
+        {
+            Guard.Against.NullOrWhiteSpace(type, nameof(type));
+            Guard.Against.NullOrWhiteSpace(oldValue, nameof(oldValue));
+
+            var claim = _claims.Single(c => c.Type == type && c.Value == oldValue);
+            claim.Update(newValue);
+        }
+
+        public void RemoveClaim(Claim claim)
+        {
+            Guard.Against.Null(claim, nameof(claim));
+
+            _claims.Remove(claim);
+        }
+
+        public Result Deactivate()
+        {
+            if (!HasCompletedRegistration())
+                return IdentityProviderDomainError.User.RegistrationNotCompleted(this.Subject);
+
+            if (IsActive)
+                IsActive = false;
+
+            return Result.Success();
+        }
+
+        public Result Reactivate()
+        {
+            if (!HasCompletedRegistration())
+                return IdentityProviderDomainError.User.RegistrationNotCompleted(this.Subject);
+
+            if (!IsActive)
+                IsActive = true;
+
+            return Result.Success();
+        }
+
+        public bool HasCompletedRegistration()
+            => !(this.HashedPassword is null);
+
+        private bool HaveAntiSpamIntervalPassed(DateTime now, int antiSpamInMinutes)
+            => SecurityCode?.IssuedAt != null && SecurityCode.IssuedAt.AddMinutes(
+                Guard.Against.NegativeOrZero(antiSpamInMinutes, nameof(antiSpamInMinutes))) < now;
+
     }
 }

@@ -12,20 +12,20 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
             Value = value;
         }
 
-        private static int MinLength => 2;
-        private static int MaxLength => 200;
+        public static int MinLength => 2;
+        public static int MaxLength => 200;
         public string Value { get; }
 
 
-        public static Result<FirstName> Create(string firstName)
+        public static Result<FirstName, Error> Create(string firstName, string propertyName = nameof(FirstName))
         {
-            var validationResult = Validate(firstName);
+            var validationResult = Validate(firstName, propertyName);
             if (validationResult.IsFailure)
-                return Result.Failure<FirstName>(string.Join(" ", validationResult.Error));
+                return validationResult.ConvertFailure<FirstName>();
 
             firstName = firstName.Trim();
-            firstName = char.ToUpper(firstName[0]) + firstName.Substring(1);
-            return Result.Success(new FirstName(firstName));
+            firstName = char.ToUpper(firstName[0]) + firstName.Substring(1).ToLower();
+            return new FirstName(firstName);
         }
 
         public static Result<bool, Error> Validate(string firstName, string propertyName = nameof(FirstName))

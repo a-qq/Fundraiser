@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Caching.Memory;
+using SchoolManagement.Application.Common.Interfaces;
+using SharedKernel.Infrastructure.Abstractions.Common;
+using SharedKernel.Infrastructure.Options;
+using System;
 using System.IO;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
-using SchoolManagement.Application.Common.Interfaces;
-using SharedKernel.Infrastructure.Interfaces;
-using SharedKernel.Infrastructure.Options;
 
 namespace SchoolManagement.Infrastructure.Services
 {
@@ -17,13 +16,13 @@ namespace SchoolManagement.Infrastructure.Services
         private readonly string _welcomeTemplate;
 
         public ManagementMailManager(
-            IOptions<UrlsOptions> urls,
+            UrlsOptions urls,
             IWebHostEnvironment environment,
             IMailManager mailManager,
             IMemoryCache cache)
         {
             _welcomeTemplate = GetWelcomeEmailTemplate(environment, cache);
-            _urls = urls.Value;
+            _urls = urls;
             _mailManager = mailManager;
         }
 

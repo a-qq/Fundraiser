@@ -3,7 +3,7 @@ using SharedKernel.Domain.Common;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Members
 {
-    [StronglyTypedId(jsonConverter: StronglyTypedIdJsonConverter.SystemTextJson)]
+    [StronglyTypedId]
     public partial struct MemberId : ITypedId
     {
         public static implicit operator Guid(MemberId memberId)

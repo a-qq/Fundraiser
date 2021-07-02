@@ -1,6 +1,4 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
@@ -9,12 +7,14 @@ using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Domain.ValueObjects;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.RegisterSchool
 {
-    [Authorize(Policy = "MustBeAdmin")]
-    public sealed class RegisterSchoolCommand : CommandRequest<SchoolCreatedDTO>
+    [Authorize(Policy = PolicyNames.MustBeAdmin)]
+    public sealed class RegisterSchoolCommand : IUserCommand<SchoolCreatedDTO>
     {
         public RegisterSchoolCommand(string name, int yearsOfEducation, string firstName, string lastName, string email,
             string gender)
@@ -35,21 +35,17 @@ namespace SchoolManagement.Application.Schools.Commands.RegisterSchool
         public string HeadmasterGender { get; }
     }
 
-    internal sealed class
-        RegisterSchoolHandler : IRequestHandler<RegisterSchoolCommand, Result<SchoolCreatedDTO, RequestError>>
+    internal sealed class RegisterSchoolCommandHandler : IRequestHandler<RegisterSchoolCommand, Result<SchoolCreatedDTO, RequestError>>
     {
         private readonly IEmailUniquenessChecker _checker;
-        private readonly ISchoolContext _context;
         private readonly IMapper _mapper;
         private readonly ISchoolRepository _schoolRepository;
 
-        public RegisterSchoolHandler(
-            ISchoolContext schoolContext,
+        public RegisterSchoolCommandHandler(
             IEmailUniquenessChecker checker,
             ISchoolRepository schoolRepository,
             IMapper mapper)
         {
-            _context = schoolContext;
             _checker = checker;
             _schoolRepository = schoolRepository;
             _mapper = mapper;
@@ -58,7 +54,6 @@ namespace SchoolManagement.Application.Schools.Commands.RegisterSchool
         public async Task<Result<SchoolCreatedDTO, RequestError>> Handle(RegisterSchoolCommand command,
             CancellationToken cancellationToken)
         {
-            //fail fast
             var schoolName = Name.Create(command.Name).Value;
             var years = YearsOfEducation.Create(command.YearsOfEducation).Value;
             var firstName = FirstName.Create(command.HeadmasterFirstName).Value;
@@ -72,8 +67,6 @@ namespace SchoolManagement.Application.Schools.Commands.RegisterSchool
             var school = new School(schoolName, years, firstName, lastName, email, gender);
 
             _schoolRepository.Add(school);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             var schoolDto = _mapper.Map<SchoolCreatedDTO>(school);
             return Result.Success<SchoolCreatedDTO, RequestError>(schoolDto);

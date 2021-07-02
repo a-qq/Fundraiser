@@ -1,6 +1,6 @@
-﻿using System;
+﻿using CSharpFunctionalExtensions;
+using System;
 using System.Collections.Generic;
-using CSharpFunctionalExtensions;
 
 namespace SharedKernel.Domain.Errors
 {
@@ -9,14 +9,14 @@ namespace SharedKernel.Domain.Errors
     /// </summary>
     public sealed class Error : ICombine
     {
-        private readonly List<string> _errors;
+        private readonly HashSet<string> _errors;
 
         public Error(string error)
-            : this(new List<string> {error})
+            : this(string.IsNullOrWhiteSpace(error) ? new HashSet<string>() : new HashSet<string> { error })
         {
         }
 
-        private Error(List<string> errors)
+        private Error(HashSet<string> errors)
         {
             _errors = errors ?? throw new ArgumentNullException(nameof(errors));
         }
@@ -25,10 +25,14 @@ namespace SharedKernel.Domain.Errors
 
         public ICombine Combine(ICombine value)
         {
-            var errorMsg = value as Error;
-            var _errorList = new List<string>(errorMsg._errors);
-            _errorList.AddRange(_errors);
-            return new Error(_errorList);
+            if (!(value is Error errorMsg))
+                throw new InvalidCastException(nameof(ICombine) + " -> " + nameof(Error));
+
+            var errorList = new HashSet<string>(errorMsg._errors, errorMsg._errors.Comparer);
+            foreach (var error in _errors)
+                errorList.Add(error);
+            
+            return new Error(errorList);
         }
     }
 }

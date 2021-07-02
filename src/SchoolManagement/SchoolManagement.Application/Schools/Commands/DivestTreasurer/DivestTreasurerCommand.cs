@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
@@ -8,13 +6,18 @@ using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Domain.Constants;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.DivestTreasurer
 {
-    [Authorize(Policy = "MustBeAtLeastFormTutor")]
-    public sealed class DivestTreasurerCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastFormTutor)]
+    public sealed class DivestTreasurerCommand : IUserCommand, IGroupAuthorizationRequest
     {
         public DivestTreasurerCommand(Guid groupId, Guid schoolId)
         {
@@ -26,17 +29,13 @@ namespace SchoolManagement.Application.Schools.Commands.DivestTreasurer
         public Guid SchoolId { get; }
     }
 
-    internal sealed class DivestTreasurerHandler : IRequestHandler<DivestTreasurerCommand, Result<Unit, RequestError>>
+    internal sealed class DivestTreasurerCommandHandler : IRequestHandler<DivestTreasurerCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _schoolContext;
         private readonly ISchoolRepository _schoolRepository;
 
-        public DivestTreasurerHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public DivestTreasurerCommandHandler(ISchoolRepository schoolRepository)
         {
-            _schoolRepository = schoolRepository;
-            _schoolContext = schoolContext;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
         }
 
         public async Task<Result<Unit, RequestError>> Handle(DivestTreasurerCommand request,
@@ -59,8 +58,6 @@ namespace SchoolManagement.Application.Schools.Commands.DivestTreasurer
                 return SharedRequestError.General.NotFound(GroupRoles.Treasurer);
 
             schoolOrNone.Value.DivestTreasurerFromGroup(groupId);
-
-            await _schoolContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

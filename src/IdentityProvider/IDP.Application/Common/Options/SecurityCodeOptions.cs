@@ -4,6 +4,6 @@
     {
         public const string SecurityCode = "SecurityCode";
         public int AntiSpamInMinutes { get; set; }
-        public int ExpirationTimeInMinutes { get; set; }
+        public int ExpirationTimeInHours { get; set; }
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
@@ -9,12 +6,16 @@ using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.DivestHeadmaster
 {
-    [Authorize(Policy = "MustBeAdmin")]
-    public sealed class DivestHeadmasterCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAdmin)]
+    public sealed class DivestHeadmasterCommand : IUserCommand
     {
         public DivestHeadmasterCommand(Guid schoolId)
         {
@@ -24,17 +25,13 @@ namespace SchoolManagement.Application.Schools.Commands.DivestHeadmaster
         public Guid SchoolId { get; }
     }
 
-    internal sealed class DivestHeadmasterHandler : IRequestHandler<DivestHeadmasterCommand, Result<Unit, RequestError>>
+    internal sealed class DivestHeadmasterCommandHandler : IRequestHandler<DivestHeadmasterCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
         private readonly ISchoolRepository _schoolRepository;
 
-        public DivestHeadmasterHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public DivestHeadmasterCommandHandler(ISchoolRepository schoolRepository)
         {
-            _schoolRepository = schoolRepository;
-            _context = schoolContext;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
         }
 
         public async Task<Result<Unit, RequestError>> Handle(DivestHeadmasterCommand request,
@@ -47,12 +44,10 @@ namespace SchoolManagement.Application.Schools.Commands.DivestHeadmaster
             if (schoolOrNone.HasNoValue)
                 return SharedRequestError.General.NotFound(schoolId, nameof(School));
 
-            if (!schoolOrNone.Value.Members.Any(m => m.Role == Role.Headmaster))
+            if (schoolOrNone.Value.Members.All(m => m.Role != Role.Headmaster))
                 return SharedRequestError.General.NotFound(nameof(Role.Headmaster));
 
             schoolOrNone.Value.DivestHeadmaster();
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

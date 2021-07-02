@@ -1,0 +1,485 @@
+2021-05-31 18:24:50.742 +02:00 [INF] Configuring web host ()...
+2021-05-31 18:24:59.497 +02:00 [INF] Applying migrations ()...
+2021-05-31 18:26:37.405 +02:00 [INF] Configuring web host ()...
+2021-05-31 18:26:40.582 +02:00 [INF] Applying migrations ()...
+2021-05-31 18:48:21.507 +02:00 [INF] Configuring web host ()...
+2021-05-31 18:48:24.675 +02:00 [INF] Applying migrations ()...
+2021-05-31 18:52:58.974 +02:00 [INF] Configuring web host ()...
+2021-05-31 18:53:02.067 +02:00 [INF] Applying migrations ()...
+2021-05-31 18:53:02.482 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 18:53:05.088 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 18:53:05.101 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 18:53:05.139 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 18:53:05.139 +02:00 [INF] Starting web host ()...
+2021-05-31 18:53:05.326 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 18:53:05.344 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 18:53:05.347 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 18:53:05.558 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 18:53:05.679 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 18:53:05.726 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 18:53:05.744 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 18:53:05.754 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 18:53:05.762 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 18:53:05.771 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 18:53:05.778 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 18:53:05.786 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 18:53:05.793 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 18:53:05.799 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 18:53:05.805 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 18:53:05.813 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 18:53:05.820 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 18:53:05.833 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 18:53:05.844 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 18:53:05.850 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 18:53:05.858 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 18:53:05.867 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 18:53:05.876 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 18:53:05.887 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 18:53:05.915 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 18:53:05.945 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 19:11:31.360 +02:00 [INF] Configuring web host ()...
+2021-05-31 19:11:35.185 +02:00 [INF] Applying migrations ()...
+2021-05-31 19:11:37.510 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 19:11:41.480 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 19:11:41.493 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 19:11:41.524 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 19:11:41.525 +02:00 [INF] Starting web host ()...
+2021-05-31 19:11:41.705 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 19:11:41.722 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 19:11:41.726 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 19:11:41.961 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 19:11:42.072 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 19:11:42.139 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 19:11:42.163 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 19:11:42.171 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 19:11:42.180 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 19:11:42.187 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 19:11:42.211 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 19:11:42.228 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 19:11:42.243 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 19:11:42.251 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 19:11:42.263 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 19:11:42.273 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 19:11:42.281 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 19:11:42.291 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 19:11:42.302 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 19:11:42.313 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 19:11:42.320 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 19:11:42.328 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 19:11:42.341 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 19:11:42.347 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 19:11:42.355 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 19:11:42.364 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 19:19:46.597 +02:00 [INF] Configuring web host ()...
+2021-05-31 19:19:49.358 +02:00 [INF] Applying migrations ()...
+2021-05-31 19:19:49.686 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 19:19:52.137 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 19:19:52.151 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 19:19:52.212 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 19:19:52.213 +02:00 [INF] Starting web host ()...
+2021-05-31 20:35:37.981 +02:00 [INF] Configuring web host ()...
+2021-05-31 20:35:41.759 +02:00 [INF] Applying migrations ()...
+2021-05-31 20:35:42.277 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 20:35:44.743 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 20:35:44.755 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 20:35:44.784 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 20:35:44.784 +02:00 [INF] Starting web host ()...
+2021-05-31 20:35:44.954 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 20:35:44.968 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 20:35:44.971 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 20:35:45.259 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 20:35:45.394 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 20:35:45.443 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 20:35:45.472 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 20:35:45.479 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 20:35:45.490 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 20:35:45.496 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 20:35:45.512 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 20:35:45.526 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 20:35:45.545 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 20:35:45.552 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 20:35:45.558 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 20:35:45.572 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 20:35:45.583 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 20:35:45.590 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 20:35:45.602 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 20:35:45.608 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 20:35:45.614 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 20:35:45.624 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 20:35:45.632 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 20:35:45.639 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 20:35:45.645 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 20:35:45.659 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 20:44:40.382 +02:00 [INF] Configuring web host ()...
+2021-05-31 20:44:45.156 +02:00 [INF] Applying migrations ()...
+2021-05-31 20:44:45.535 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 20:46:25.181 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 20:46:25.194 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 20:46:25.261 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 20:46:25.261 +02:00 [INF] Starting web host ()...
+2021-05-31 20:46:25.385 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 20:46:25.401 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 20:46:25.405 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 20:46:25.589 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 20:46:25.699 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 20:46:25.763 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 20:46:25.822 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 20:46:25.861 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 20:46:25.873 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 20:46:25.881 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 20:46:25.899 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 20:46:25.908 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 20:46:25.916 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 20:46:25.924 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 20:46:25.933 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 20:46:25.944 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 20:46:25.951 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 20:46:25.958 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 20:46:25.964 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 20:46:25.972 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 20:46:25.978 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 20:46:25.986 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 20:46:25.994 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 20:46:25.999 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 20:46:26.007 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 20:46:26.012 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 20:47:05.974 +02:00 [INF] Configuring web host ()...
+2021-05-31 20:47:09.404 +02:00 [INF] Applying migrations ()...
+2021-05-31 20:47:09.794 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 20:54:52.629 +02:00 [INF] Configuring web host ()...
+2021-05-31 20:54:55.681 +02:00 [INF] Applying migrations ()...
+2021-05-31 20:54:55.996 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 20:59:00.284 +02:00 [INF] Configuring web host ()...
+2021-05-31 20:59:06.529 +02:00 [INF] Applying migrations ()...
+2021-05-31 20:59:06.897 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 20:59:11.383 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 20:59:11.404 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 20:59:11.844 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 20:59:11.845 +02:00 [INF] Starting web host ()...
+2021-05-31 20:59:12.039 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 20:59:12.069 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 20:59:12.074 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 20:59:12.337 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 20:59:12.601 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 20:59:12.652 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 20:59:12.691 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 20:59:12.712 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 20:59:12.735 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 20:59:12.792 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 20:59:12.836 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 20:59:12.845 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 20:59:12.854 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 20:59:12.863 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 20:59:12.873 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 20:59:12.886 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 20:59:12.912 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 20:59:12.935 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 20:59:12.954 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 20:59:12.972 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 20:59:13.021 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 20:59:13.064 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 20:59:13.076 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 20:59:13.090 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 20:59:13.105 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 20:59:13.118 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 20:59:20.180 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2021-05-31 20:59:20.288 +02:00 [INF] Showing login: User is not authenticated
+2021-05-31 20:59:26.432 +02:00 [INF] ----- Handling user request LoginCommand ({"Email":"robert_olech@o2.pl","$type":"LoginCommand"})
+2021-05-31 20:59:26.491 +02:00 [INF] ----- Begin transaction "1bf54d45-fcf1-4694-a794-661499700915" for LoginCommand ({"Email":"robert_olech@o2.pl","$type":"LoginCommand"})
+2021-05-31 20:59:27.421 +02:00 [INF] ----- Commit transaction "1bf54d45-fcf1-4694-a794-661499700915" for LoginCommand
+2021-05-31 20:59:27.573 +02:00 [INF] ----- Request LoginCommand handled successfully - response: {"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","Email":"robert_olech@o2.pl","$type":"UserDto"}
+2021-05-31 20:59:27.648 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeCallbackEndpoint for /connect/authorize/callback
+2021-05-31 20:59:27.670 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 20:59:27.673 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 20:59:27.714 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 20:59:28.542 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.TokenEndpoint for /connect/token
+2021-05-31 20:59:28.603 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 20:59:28.603 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 20:59:28.607 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 20:59:28.619 +02:00 [INF] Token request validation success, {"ClientId":"fundraiserapi_swagger","ClientName":"Backend.API - Swagger","GrantType":"authorization_code","Scopes":null,"AuthorizationCode":"****87CE","RefreshToken":"********","UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"grant_type":"authorization_code","code":"0AFDC830BD9B3CA45391A3F2632D301A04382C08E4F7B226960CD996238C87CE","client_id":"fundraiserapi_swagger","redirect_uri":"https://localhost:44307/swagger/oauth2-redirect.html","code_verifier":"09HwVJKGaNTa6NB5bAAX3onMrqAKn6BuUiM70PXuTxM"},"$type":"TokenRequestValidationLog"}
+2021-05-31 20:59:28.664 +02:00 [INF] ----- Handling internal query GetUserClaimsQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"GetUserClaimsQuery"})
+2021-05-31 20:59:28.667 +02:00 [INF] ----- Validating command GetUserClaimsQuery
+2021-05-31 20:59:28.822 +02:00 [INF] ----- Internal query GetUserClaimsQuery handled successfully - response: [{"Type":"role","Value":"Administrator","$type":"ClaimDto"}]
+2021-05-31 21:00:17.538 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2021-05-31 21:00:17.891 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2021-05-31 22:00:59.793 +02:00 [INF] Configuring web host ()...
+2021-05-31 22:01:04.913 +02:00 [INF] Applying migrations ()...
+2021-05-31 22:01:05.311 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 22:01:08.784 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 22:01:08.799 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 22:01:08.834 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 22:01:08.834 +02:00 [INF] Starting web host ()...
+2021-05-31 22:01:09.004 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 22:01:09.018 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 22:01:09.022 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 22:01:09.263 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 22:01:09.565 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 22:01:09.716 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 22:01:09.743 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 22:01:09.751 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 22:01:09.763 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 22:01:09.773 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 22:01:09.782 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 22:01:09.792 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 22:01:09.799 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 22:01:09.810 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 22:01:09.816 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 22:01:09.826 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 22:01:09.836 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 22:01:09.844 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 22:01:09.855 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 22:01:09.872 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 22:01:09.883 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 22:01:09.913 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 22:01:09.933 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 22:01:09.956 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 22:01:09.996 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 22:01:10.014 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 22:01:19.160 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2021-05-31 22:01:19.427 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:01:19.457 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:01:19.522 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:01:20.330 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.TokenEndpoint for /connect/token
+2021-05-31 22:01:20.423 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:01:20.423 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:01:20.458 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:01:20.474 +02:00 [INF] Token request validation success, {"ClientId":"fundraiserapi_swagger","ClientName":"Backend.API - Swagger","GrantType":"authorization_code","Scopes":null,"AuthorizationCode":"****855F","RefreshToken":"********","UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"grant_type":"authorization_code","code":"BB4C989EBEBB860CCFFF37356750C35DFF33D52D6D9A6CB96B0E27E5AA42855F","client_id":"fundraiserapi_swagger","redirect_uri":"https://localhost:44307/swagger/oauth2-redirect.html","code_verifier":"iqdsmgITOQ2ovEESk_9qU_RQthSCdK0g2SCdJCiEFEI"},"$type":"TokenRequestValidationLog"}
+2021-05-31 22:01:20.697 +02:00 [INF] ----- Handling internal query GetUserClaimsQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"GetUserClaimsQuery"})
+2021-05-31 22:01:20.702 +02:00 [INF] ----- Validating command GetUserClaimsQuery
+2021-05-31 22:01:21.063 +02:00 [INF] ----- Internal query GetUserClaimsQuery handled successfully - response: [{"Type":"role","Value":"Administrator","$type":"ClaimDto"}]
+2021-05-31 22:02:01.013 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2021-05-31 22:02:01.365 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2021-05-31 22:08:19.837 +02:00 [INF] Configuring web host ()...
+2021-05-31 22:08:22.887 +02:00 [INF] Applying migrations ()...
+2021-05-31 22:08:23.370 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 22:08:26.979 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 22:08:26.995 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 22:08:27.028 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 22:08:27.028 +02:00 [INF] Starting web host ()...
+2021-05-31 22:08:27.296 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 22:08:27.314 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 22:08:27.321 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 22:08:27.538 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 22:08:27.656 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 22:08:27.702 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 22:08:27.727 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 22:08:27.740 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 22:08:27.750 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 22:08:27.757 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 22:08:27.818 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 22:08:27.840 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 22:08:27.855 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 22:08:27.869 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 22:08:27.878 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 22:08:27.896 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 22:08:27.906 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 22:08:27.913 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 22:08:27.923 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 22:08:27.930 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 22:08:27.939 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 22:08:27.968 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 22:08:27.978 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 22:08:28.005 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 22:08:28.012 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 22:08:28.023 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 22:08:35.557 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2021-05-31 22:08:35.736 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:08:35.743 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:08:35.816 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:08:36.560 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.TokenEndpoint for /connect/token
+2021-05-31 22:08:36.637 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:08:36.637 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:08:36.644 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:08:36.722 +02:00 [INF] Token request validation success, {"ClientId":"fundraiserapi_swagger","ClientName":"Backend.API - Swagger","GrantType":"authorization_code","Scopes":null,"AuthorizationCode":"****D4A9","RefreshToken":"********","UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"grant_type":"authorization_code","code":"E7E00B6C3BCBA27108B69D5CDAF478AF31B4CD42EE3AEA2DD2FDF93BE54AD4A9","client_id":"fundraiserapi_swagger","redirect_uri":"https://localhost:44307/swagger/oauth2-redirect.html","code_verifier":"iOfCovwpkp1Ws-AUAbEBDfJUad62jJdJzTUsbqKrtME"},"$type":"TokenRequestValidationLog"}
+2021-05-31 22:08:36.778 +02:00 [INF] ----- Handling internal query GetUserClaimsQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"GetUserClaimsQuery"})
+2021-05-31 22:08:36.782 +02:00 [INF] ----- Validating command GetUserClaimsQuery
+2021-05-31 22:08:37.027 +02:00 [INF] ----- Internal query GetUserClaimsQuery handled successfully - response: [{"Type":"role","Value":"Administrator","$type":"ClaimDto"}]
+2021-05-31 22:09:02.678 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2021-05-31 22:09:03.234 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2021-05-31 22:13:45.536 +02:00 [INF] Configuring web host ()...
+2021-05-31 22:13:49.879 +02:00 [INF] Applying migrations ()...
+2021-05-31 22:13:50.332 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 22:13:53.494 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 22:13:53.538 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 22:13:53.589 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 22:13:53.590 +02:00 [INF] Starting web host ()...
+2021-05-31 22:13:53.760 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 22:13:53.780 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 22:13:53.787 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 22:13:54.072 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 22:13:54.238 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 22:13:54.290 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 22:13:54.326 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 22:13:54.337 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 22:13:54.346 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 22:13:54.370 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 22:13:54.395 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 22:13:54.419 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 22:13:54.466 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 22:13:54.475 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 22:13:54.521 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 22:13:54.531 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 22:13:54.539 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 22:13:54.575 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 22:13:54.591 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 22:13:54.604 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 22:13:54.620 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 22:13:54.724 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 22:13:54.751 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 22:13:54.781 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 22:13:54.804 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 22:13:54.817 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 22:23:18.106 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2021-05-31 22:23:18.283 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:23:18.291 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:23:18.408 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:23:19.030 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.TokenEndpoint for /connect/token
+2021-05-31 22:23:19.119 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:23:19.119 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:23:19.126 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:23:19.138 +02:00 [INF] Token request validation success, {"ClientId":"fundraiserapi_swagger","ClientName":"Backend.API - Swagger","GrantType":"authorization_code","Scopes":null,"AuthorizationCode":"****D4DB","RefreshToken":"********","UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"grant_type":"authorization_code","code":"35A224D69F6E5AFB5F850B44FDA27B3EC5C09C79BBC12753377C0097CFD4D4DB","client_id":"fundraiserapi_swagger","redirect_uri":"https://localhost:44307/swagger/oauth2-redirect.html","code_verifier":"rmJBhZ4ZmThVSbqemNJ4P1x5V6cKnfI7F1LExqr-97M"},"$type":"TokenRequestValidationLog"}
+2021-05-31 22:23:19.182 +02:00 [INF] ----- Handling internal query GetUserClaimsQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"GetUserClaimsQuery"})
+2021-05-31 22:23:19.184 +02:00 [INF] ----- Validating command GetUserClaimsQuery
+2021-05-31 22:23:19.221 +02:00 [INF] ----- Internal query GetUserClaimsQuery handled successfully - response: [{"Type":"role","Value":"Administrator","$type":"ClaimDto"}]
+2021-05-31 22:23:23.922 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2021-05-31 22:23:24.341 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2021-05-31 22:30:32.373 +02:00 [INF] Configuring web host ()...
+2021-05-31 22:30:36.772 +02:00 [INF] Applying migrations ()...
+2021-05-31 22:30:37.397 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 22:30:40.472 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 22:30:40.488 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 22:30:40.543 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 22:30:40.543 +02:00 [INF] Starting web host ()...
+2021-05-31 22:30:40.740 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 22:30:40.758 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 22:30:40.762 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 22:30:40.992 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 22:30:41.116 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 22:30:41.163 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 22:30:41.201 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 22:30:41.238 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 22:30:41.255 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 22:30:41.265 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 22:30:41.286 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 22:30:41.319 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 22:30:41.334 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 22:30:41.345 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 22:30:41.355 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 22:30:41.367 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 22:30:41.376 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 22:30:41.386 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 22:30:41.447 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 22:30:41.473 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 22:30:41.505 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 22:30:41.550 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 22:30:41.570 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 22:30:41.596 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 22:30:41.614 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 22:30:41.634 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 22:34:29.623 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2021-05-31 22:34:30.280 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:34:30.308 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:34:30.420 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:34:31.473 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.TokenEndpoint for /connect/token
+2021-05-31 22:34:31.590 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:34:31.592 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:34:32.105 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:34:32.124 +02:00 [INF] Token request validation success, {"ClientId":"fundraiserapi_swagger","ClientName":"Backend.API - Swagger","GrantType":"authorization_code","Scopes":null,"AuthorizationCode":"****B8E0","RefreshToken":"********","UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"grant_type":"authorization_code","code":"EEFB27A22556161D513332388F4C70372D91DB044A06914064AC9D1E221DB8E0","client_id":"fundraiserapi_swagger","redirect_uri":"https://localhost:44307/swagger/oauth2-redirect.html","code_verifier":"NIjTblPYvg4rMYfkWpbh4LZZRaEwVHnbrnBAx_8MyRM"},"$type":"TokenRequestValidationLog"}
+2021-05-31 22:34:32.256 +02:00 [INF] ----- Handling internal query GetUserClaimsQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"GetUserClaimsQuery"})
+2021-05-31 22:34:32.259 +02:00 [INF] ----- Validating command GetUserClaimsQuery
+2021-05-31 22:34:32.331 +02:00 [INF] ----- Internal query GetUserClaimsQuery handled successfully - response: [{"Type":"role","Value":"Administrator","$type":"ClaimDto"}]
+2021-05-31 22:54:07.490 +02:00 [INF] Configuring web host ()...
+2021-05-31 22:54:10.305 +02:00 [INF] Applying migrations ()...
+2021-05-31 22:54:10.644 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 22:54:13.313 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 22:54:13.334 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 22:54:13.403 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 22:54:13.403 +02:00 [INF] Starting web host ()...
+2021-05-31 22:54:14.020 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 22:54:14.044 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 22:54:14.051 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 22:54:14.420 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 22:54:14.668 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 22:54:14.752 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 22:54:14.792 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 22:54:14.811 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 22:54:14.843 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 22:54:14.862 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 22:54:14.880 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 22:54:15.020 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 22:54:15.041 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 22:54:15.069 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 22:54:15.093 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 22:54:15.103 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 22:54:15.113 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 22:54:15.120 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 22:54:15.194 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 22:54:15.206 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 22:54:15.322 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 22:54:15.353 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 22:54:15.384 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 22:54:15.470 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 22:54:15.483 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 22:54:15.493 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 22:56:07.348 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2021-05-31 22:56:07.568 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:56:07.580 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:56:07.629 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:56:08.075 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.TokenEndpoint for /connect/token
+2021-05-31 22:56:08.164 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 22:56:08.165 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 22:56:08.198 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 22:56:08.249 +02:00 [INF] Token request validation success, {"ClientId":"fundraiserapi_swagger","ClientName":"Backend.API - Swagger","GrantType":"authorization_code","Scopes":null,"AuthorizationCode":"****063D","RefreshToken":"********","UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"grant_type":"authorization_code","code":"400A53282DF69EAB07FCE6C92B1438EED440813D95AD0CA80000382CAC43063D","client_id":"fundraiserapi_swagger","redirect_uri":"https://localhost:44307/swagger/oauth2-redirect.html","code_verifier":"2MhrQWsE5V_kkkaa0G3AJEi5RdiK59TQhwgkrunWOcA"},"$type":"TokenRequestValidationLog"}
+2021-05-31 22:56:08.300 +02:00 [INF] ----- Handling internal query GetUserClaimsQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"GetUserClaimsQuery"})
+2021-05-31 22:56:08.302 +02:00 [INF] ----- Validating command GetUserClaimsQuery
+2021-05-31 22:56:08.368 +02:00 [INF] ----- Internal query GetUserClaimsQuery handled successfully - response: [{"Type":"role","Value":"Administrator","$type":"ClaimDto"}]
+2021-05-31 22:56:30.085 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2021-05-31 22:56:30.406 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks
+2021-05-31 22:58:34.960 +02:00 [INF] Configuring web host ()...
+2021-05-31 23:02:28.069 +02:00 [INF] Configuring web host ()...
+2021-05-31 23:02:33.627 +02:00 [INF] Applying migrations ()...
+2021-05-31 23:02:33.986 +02:00 [INF] Migrating database associated with context IdentityDbContext
+2021-05-31 23:02:36.959 +02:00 [INF] Migrated database associated with context IdentityDbContext
+2021-05-31 23:02:36.975 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-05-31 23:02:37.016 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-05-31 23:02:37.016 +02:00 [INF] Starting web host ()...
+2021-05-31 23:02:37.199 +02:00 [INF] Starting IdentityServer4 version 4.1.1+cebd52f5bc61bdefc262fd20739d4d087c6f961f
+2021-05-31 23:02:37.216 +02:00 [INF] You are using the in-memory version of the persisted grant store. This will store consent decisions, authorization codes, refresh and reference tokens in memory only. If you are using any of those features in production, you want to switch to a different store implementation.
+2021-05-31 23:02:37.220 +02:00 [INF] Using the default authentication scheme idsrv for IdentityServer
+2021-05-31 23:02:37.514 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-05-31 23:02:37.642 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-05-31 23:02:37.748 +02:00 [INF] Subscribing to event FormTutorAssignedIntegrationEvent with IIntegrationEventHandler<FormTutorAssignedIntegrationEvent>
+2021-05-31 23:02:37.796 +02:00 [INF] Subscribing to event FormTutorDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorDivestedIntegrationEvent>
+2021-05-31 23:02:37.813 +02:00 [INF] Subscribing to event FormTutorsDivestedIntegrationEvent with IIntegrationEventHandler<FormTutorsDivestedIntegrationEvent>
+2021-05-31 23:02:37.827 +02:00 [INF] Subscribing to event HeadmasterDivestedIntegrationEvent with IIntegrationEventHandler<HeadmasterDivestedIntegrationEvent>
+2021-05-31 23:02:37.852 +02:00 [INF] Subscribing to event HeadmasterPromotedIntegrationEvent with IIntegrationEventHandler<HeadmasterPromotedIntegrationEvent>
+2021-05-31 23:02:37.870 +02:00 [INF] Subscribing to event MemberArchivedIntegrationEvent with IIntegrationEventHandler<MemberArchivedIntegrationEvent>
+2021-05-31 23:02:37.900 +02:00 [INF] Subscribing to event MemberEnrolledIntegrationEvent with IIntegrationEventHandler<MemberEnrolledIntegrationEvent>
+2021-05-31 23:02:37.910 +02:00 [INF] Subscribing to event MemberExpelledIntegrationEvent with IIntegrationEventHandler<MemberExpelledIntegrationEvent>
+2021-05-31 23:02:37.919 +02:00 [INF] Subscribing to event MemberRestoredIntegrationEvent with IIntegrationEventHandler<MemberRestoredIntegrationEvent>
+2021-05-31 23:02:37.930 +02:00 [INF] Subscribing to event MembersArchivedIntegrationEvent with IIntegrationEventHandler<MembersArchivedIntegrationEvent>
+2021-05-31 23:02:37.940 +02:00 [INF] Subscribing to event MembersEnrolledIntegrationEvent with IIntegrationEventHandler<MembersEnrolledIntegrationEvent>
+2021-05-31 23:02:37.949 +02:00 [INF] Subscribing to event SchoolRemovedIntegrationEvent with IIntegrationEventHandler<SchoolRemovedIntegrationEvent>
+2021-05-31 23:02:37.961 +02:00 [INF] Subscribing to event StudentAssignedIntegrationEvent with IIntegrationEventHandler<StudentAssignedIntegrationEvent>
+2021-05-31 23:02:37.968 +02:00 [INF] Subscribing to event StudentDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentDisenrolledIntegrationEvent>
+2021-05-31 23:02:37.979 +02:00 [INF] Subscribing to event StudentsDisenrolledIntegrationEvent with IIntegrationEventHandler<StudentsDisenrolledIntegrationEvent>
+2021-05-31 23:02:37.986 +02:00 [INF] Subscribing to event StudentsAssignedIntegrationEvent with IIntegrationEventHandler<StudentsAssignedIntegrationEvent>
+2021-05-31 23:02:38.011 +02:00 [INF] Subscribing to event TreasurerDivestedIntegrationEvent with IIntegrationEventHandler<TreasurerDivestedIntegrationEvent>
+2021-05-31 23:02:38.018 +02:00 [INF] Subscribing to event TreasurersDivestedIntegrationEvent with IIntegrationEventHandler<TreasurersDivestedIntegrationEvent>
+2021-05-31 23:02:38.036 +02:00 [INF] Subscribing to event TreasurerPromotedIntegrationEvent with IIntegrationEventHandler<TreasurerPromotedIntegrationEvent>
+2021-05-31 23:02:38.051 +02:00 [INF] Subscribing to event PasswordResetRequestedIntegrationEvent with IIntegrationEventHandler<PasswordResetRequestedIntegrationEvent>
+2021-05-31 23:02:38.061 +02:00 [INF] Subscribing to event UserRegistrationRequestedIntegrationEvent with IIntegrationEventHandler<UserRegistrationRequestedIntegrationEvent>
+2021-05-31 23:02:43.518 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.AuthorizeEndpoint for /connect/authorize
+2021-05-31 23:02:43.786 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 23:02:43.796 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 23:02:44.011 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 23:02:44.605 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.TokenEndpoint for /connect/token
+2021-05-31 23:02:44.685 +02:00 [INF] ----- Handling internal query IsUserActiveQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"IsUserActiveQuery"})
+2021-05-31 23:02:44.685 +02:00 [INF] ----- Validating command IsUserActiveQuery
+2021-05-31 23:02:44.690 +02:00 [INF] ----- Internal query IsUserActiveQuery handled successfully - response: true
+2021-05-31 23:02:44.726 +02:00 [INF] Token request validation success, {"ClientId":"fundraiserapi_swagger","ClientName":"Backend.API - Swagger","GrantType":"authorization_code","Scopes":null,"AuthorizationCode":"****B839","RefreshToken":"********","UserName":null,"AuthenticationContextReferenceClasses":null,"Tenant":null,"IdP":null,"Raw":{"grant_type":"authorization_code","code":"459AA511F9A3D18A36D5D8A0477422E040EA99F6D0554CD03120617D0B91B839","client_id":"fundraiserapi_swagger","redirect_uri":"https://localhost:44307/swagger/oauth2-redirect.html","code_verifier":"Y0-DpwlyiaVsj4FJnKO3kVB9XecQi9sf4ggw8j4Urqg"},"$type":"TokenRequestValidationLog"}
+2021-05-31 23:02:44.778 +02:00 [INF] ----- Handling internal query GetUserClaimsQuery ({"Subject":"3f0b0a5f-7aa6-46f4-9247-3ef9a9df2407","$type":"GetUserClaimsQuery"})
+2021-05-31 23:02:44.780 +02:00 [INF] ----- Validating command GetUserClaimsQuery
+2021-05-31 23:02:44.815 +02:00 [INF] ----- Internal query GetUserClaimsQuery handled successfully - response: [{"Type":"role","Value":"Administrator","$type":"ClaimDto"}]
+2021-05-31 23:03:11.681 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryEndpoint for /.well-known/openid-configuration
+2021-05-31 23:03:12.067 +02:00 [INF] Invoking IdentityServer endpoint: IdentityServer4.Endpoints.DiscoveryKeyEndpoint for /.well-known/openid-configuration/jwks

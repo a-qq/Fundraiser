@@ -1,7 +1,9 @@
 ﻿using System;
+using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Domain.Constants;
 using SharedKernel.Domain.Errors;
 using SharedKernel.Domain.ValueObjects;
 
@@ -31,43 +33,38 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
         public Role Role { get; private set; }
         public Email Email { get; }
         public Gender Gender { get; }
-        public bool IsActive { get; }
+        public bool IsActive { get; private set; }
         public bool IsArchived { get; private set; }
         public virtual School School { get; }
         public virtual Group Group { get; private set; }
 
-        internal Result<bool, Error> Archive()
+        internal Result<string, Error> Archive()
         {
             if (IsArchived)
-                throw new InvalidOperationException(nameof(Member) + ":" + nameof(Archive));
+                return new Error($"{Role} '{Email}' (Id: '{Id}') is already archived!");
 
-            var validation = CanBeArchived();
+            if (Role == Role.Headmaster)
+                return new Error($"Headmaster '{Email}' (Id: '{Id}') cannot be archived!");
 
-            if (validation.IsFailure)
-                return validation;
+            if (!IsActive)
+                return new Error($"Cannot archive not active member '{Email}' (Id: '{Id}')!");
 
-            var groupOrNone = School.GroupOfFormTutor(this);
+            string groupRole = null;
+            var groupOrNone = School.CurrentGroupOfFormTutor(this);
 
             if (groupOrNone.HasValue)
-                School.DivestFormTutorFromGroup(groupOrNone.Value.Id);
+            {
+                groupOrNone.Value.DivestFormTutor();
+                groupRole = GroupRoles.FormTutor;
+            }
+            else if (!(Group is null) && !Group.IsArchived)
+                groupRole = Group.DisenrollStudent(this.Id).Item2;
+            else if (!(Group is null) && Group.IsArchived && Group.Treasurer == this)
+                groupRole = GroupRoles.Treasurer;
 
             IsArchived = true;
 
-            return Result.Success<bool, Error>(true);
-        }
-
-        internal Result<bool, Error> CanBeArchived()
-        {
-            if (IsArchived)
-                throw new InvalidOperationException(nameof(Member) + ":" + nameof(CanBeArchived));
-
-            var result = Result.Combine(
-                Result.FailureIf(Role == Role.Headmaster, true,
-                    new Error($"Headmaster '{Email}' (Id: '{Id}') cannot be archived!")),
-                Result.FailureIf(!IsActive, true,
-                    new Error($"Cannot archive not active member '{Email}' (Id: '{Id}')!")));
-
-            return result;
+            return Result.Success<string, Error>(groupRole);
         }
 
         internal Result<bool, Error> Restore()
@@ -91,6 +88,7 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
         {
             if (Role != Role.Headmaster || IsArchived)
                 throw new InvalidOperationException(nameof(Member) + ":" + nameof(DegradeToTeacher));
+            //event?!
 
             Role = Role.Teacher;
         }
@@ -105,8 +103,33 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
                 return validation;
 
             Role = Role.Headmaster;
-
+            //event?!
             return Result.Success<bool, Error>(true);
+        }
+
+        internal Result MarkAsActive()
+        {
+            if (this.IsActive)
+                return Result.Failure($"Member '{Id}' is already active!");
+
+            IsActive = true;
+
+            return Result.Success();
+        }
+
+        internal void SetGroup(Group group)
+        {
+            Guard.Against.Null(group, nameof(group));
+
+            if (!(Group is null) || group.School != this.School)
+                throw new InvalidOperationException(nameof(Member) + " : " + nameof(SetGroup));
+
+            Group = group;
+        }
+
+        internal void RemoveFromGroup()
+        {
+            Group = null;
         }
     }
 }

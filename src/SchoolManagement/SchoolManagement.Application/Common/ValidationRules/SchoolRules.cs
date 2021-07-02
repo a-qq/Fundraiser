@@ -30,7 +30,9 @@ namespace SchoolManagement.Application.Common.ValidationRules
         {
             return ruleBuilder.Custom((property, context) =>
             {
-                var result = GroupMembersLimit.Validate(property, context.PropertyName);
+                if (property is null) return;
+
+                var result = GroupMembersLimit.Validate(property.Value, context.PropertyName);
                 if (result.IsFailure)
                     context.AddFailure(result.Error);
             });

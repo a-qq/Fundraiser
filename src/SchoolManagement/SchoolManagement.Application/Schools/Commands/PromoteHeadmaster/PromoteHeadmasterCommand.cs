@@ -1,20 +1,20 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.PromoteHeadmaster
 {
-    [Authorize(Policy = "MustBeAdmin")]
-    public sealed class PromoteHeadmasterCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAdmin)]
+    public sealed class PromoteHeadmasterCommand : IUserCommand
     {
         public PromoteHeadmasterCommand(Guid schoolId, Guid teacherId)
         {
@@ -27,18 +27,13 @@ namespace SchoolManagement.Application.Schools.Commands.PromoteHeadmaster
     }
 
     internal sealed class
-        PromoteHeadmasterHandler : IRequestHandler<PromoteHeadmasterCommand, Result<Unit, RequestError>>
+        PromoteHeadmasterCommandHandler : IRequestHandler<PromoteHeadmasterCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
-
         private readonly ISchoolRepository _schoolRepository;
 
-        public PromoteHeadmasterHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public PromoteHeadmasterCommandHandler(ISchoolRepository schoolRepository)
         {
             _schoolRepository = schoolRepository;
-            _context = schoolContext;
         }
 
         public async Task<Result<Unit, RequestError>> Handle(PromoteHeadmasterCommand request,
@@ -59,8 +54,6 @@ namespace SchoolManagement.Application.Schools.Commands.PromoteHeadmaster
 
             if (result.IsFailure)
                 return SharedRequestError.General.BusinessRuleViolation(result.Error);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

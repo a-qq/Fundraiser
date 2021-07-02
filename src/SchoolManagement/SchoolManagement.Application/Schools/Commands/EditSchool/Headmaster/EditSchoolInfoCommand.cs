@@ -1,18 +1,20 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.EditSchool.Headmaster
 {
-    [Authorize(Policy = "MustBeHeadmaster")]
-    public sealed class EditSchoolInfoCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class EditSchoolInfoCommand : IUserCommand, ISchoolAuthorizationRequest
     {
         public EditSchoolInfoCommand(string description, int? groupMembersLimit, Guid schoolId)
         {
@@ -26,17 +28,13 @@ namespace SchoolManagement.Application.Schools.Commands.EditSchool.Headmaster
         public Guid SchoolId { get; }
     }
 
-    internal sealed class EditSchoolInfoHandler : IRequestHandler<EditSchoolInfoCommand, Result<Unit, RequestError>>
+    internal sealed class EditSchoolInfoCommandHandler : IRequestHandler<EditSchoolInfoCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
         private readonly ISchoolRepository _schoolRepository;
 
-        public EditSchoolInfoHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public EditSchoolInfoCommandHandler(ISchoolRepository schoolRepository)
         {
-            _schoolRepository = schoolRepository;
-            _context = schoolContext;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
         }
 
         public async Task<Result<Unit, RequestError>> Handle(EditSchoolInfoCommand request,
@@ -44,16 +42,19 @@ namespace SchoolManagement.Application.Schools.Commands.EditSchool.Headmaster
         {
             var schoolId = new SchoolId(request.SchoolId);
             var description = Description.Create(request.Description).Value;
-            var limit = GroupMembersLimit.Create(request.GroupMembersLimit).Value;
+            var limit = request.GroupMembersLimit.HasValue
+                ? GroupMembersLimit.Create(request.GroupMembersLimit.Value).Value
+                : null;
 
             var schoolOrNone = await _schoolRepository.GetByIdAsync(schoolId, cancellationToken);
 
             if (schoolOrNone.HasNoValue)
                 return SharedRequestError.General.NotFound(schoolId, nameof(School));
 
-            schoolOrNone.Value.EditInfo(description, limit);
+            var result = schoolOrNone.Value.EditInfo(description, limit);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            if (result.IsFailure)
+                return SharedRequestError.General.BusinessRuleViolation(result.Error);
 
             return Unit.Value;
         }

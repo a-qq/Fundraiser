@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Dapper;
+using SchoolManagement.Application.Common.Interfaces;
+using SharedKernel.Domain.ValueObjects;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
-using Dapper;
-using SchoolManagement.Application.Common.Interfaces;
-using SharedKernel.Domain.ValueObjects;
-using SharedKernel.Infrastructure.Interfaces;
 
 namespace SchoolManagement.Infrastructure.Services
 {
@@ -14,7 +13,8 @@ namespace SchoolManagement.Infrastructure.Services
     {
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
 
-        public EmailUniquenessChecker(ISqlConnectionFactory sqlConnectionFactory)
+        public EmailUniquenessChecker(
+            ISqlConnectionFactory sqlConnectionFactory)
         {
             _sqlConnectionFactory = sqlConnectionFactory;
             SqlMapper.AddTypeHandler(new EmailTypeHandler());
@@ -37,10 +37,12 @@ namespace SchoolManagement.Infrastructure.Services
                     Email = email.Value
                 });
 
+            
+
             return !usersNumber.HasValue;
         }
 
-        public async Task<Tuple<bool, IEnumerable<Email>>> AreUnique(IEnumerable<Email> emails)
+        public async Task<Tuple<bool, IEnumerable<Email>>> AreUnique(IReadOnlyCollection<Email> emails)
         {
             if (emails == null || !emails.Any())
                 throw new ArgumentNullException(nameof(emails));
@@ -50,13 +52,13 @@ namespace SchoolManagement.Infrastructure.Services
                                "FROM [management].[Members] AS [Member] " +
                                "WHERE [Member].[Email] IN @Emails";
 
-            var emailsAstrings = emails.Select(e => e.Value);
+            var emailsAsStrings = emails.Select(e => e.Value);
 
-            var duplicates = await connection.QueryAsync<Email>(sql,
+            var duplicates = (await connection.QueryAsync<Email>(sql,
                 new
                 {
-                    Emails = emailsAstrings
-                });
+                    Emails = emailsAsStrings
+                })).ToList();
 
             return new Tuple<bool, IEnumerable<Email>>(!duplicates.Any(), duplicates);
         }

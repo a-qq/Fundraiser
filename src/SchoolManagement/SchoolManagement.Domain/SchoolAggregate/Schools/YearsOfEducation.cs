@@ -10,13 +10,13 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
             Value = yearsOfEducation;
         }
 
-        private static int MinValue => 2;
-        private static int MaxValue => 4;
+        public static int MinValue => 2;
+        public static int MaxValue => 4;
         public byte Value { get; }
 
-        public static Result<YearsOfEducation> Create(int yearsOfEducation)
+        public static Result<YearsOfEducation> Create(int yearsOfEducation, string propertyName = nameof(YearsOfEducation))
         {
-            var validation = Validate(yearsOfEducation);
+            var validation = Validate(yearsOfEducation, propertyName);
             if (validation.IsFailure)
                 return validation.ConvertFailure<YearsOfEducation>();
 

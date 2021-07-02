@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Domain.Constants;
 using SharedKernel.Domain.Errors;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Groups
 {
@@ -39,17 +40,19 @@ namespace SchoolManagement.Domain.SchoolAggregate.Groups
             if (IsArchived)
                 throw new InvalidOperationException(nameof(Group) + ":" + nameof(AssignFormTutor));
 
-            var candidate = School.Members.Single(m => m.Id == memberId
-                                                       && !m.IsArchived && m.Role == Role.Teacher);
+            var candidate = School.Members.Single(
+                m => m.Id == memberId && !m.IsArchived && m.Role == Role.Teacher);
 
-            var groupOrNone = School.GroupOfFormTutor(candidate);
+            var groupOrNone = School.CurrentGroupOfFormTutor(candidate);
 
-            var validation = Result.Combine(
-                Result.FailureIf(Maybe<Member>.From(FormTutor).HasValue, true,
-                    new Error($"Group '{Code}'(Id: '{Id}') already has a form tutor!")),
-                Result.FailureIf(groupOrNone.HasValue, true,
-                    new Error($"'{candidate.Email}'(Id: '{candidate.Id}') is already form tutor " +
-                              $"of group '{groupOrNone.Value.Code}'!")));
+            var validation = Result.Success<bool, Error>(true);
+
+            if (!(FormTutor is null))
+                validation = new Error($"Group '{Code}'(Id: '{Id}') already has a form tutor!");
+
+            if (groupOrNone.HasValue)
+                validation = Result.Combine(validation, new Error($"'{candidate.Email}'(Id: '{candidate.Id}')" +
+                                    $" is already form tutor of group '{groupOrNone.Value.Code}'!"));
 
             if (validation.IsFailure)
                 return validation;
@@ -59,158 +62,129 @@ namespace SchoolManagement.Domain.SchoolAggregate.Groups
             return Result.Success<bool, Error>(true);
         }
 
-        internal Result<bool, Error> AssignStudents(IEnumerable<MemberId> studentIds)
+        internal Result<Member, Error> AssignStudent(MemberId memberId)
         {
-            if (studentIds is null || !studentIds.Any())
-                throw new ArgumentException(nameof(studentIds));
+            var student = School.Members.Single(
+                m => m.Id == memberId && !m.IsArchived && m.Role == Role.Student);
 
-            if (IsArchived)
-                throw new InvalidOperationException(nameof(Group) + ":" + nameof(AssignStudents));
-
-            var studentsToAdd = School.Members.TakeWhile(
-                m => studentIds.Contains(m.Id) && !m.IsArchived && m.Role == Role.Student);
-
-            if (studentIds.Distinct().Count() != studentsToAdd.Count())
-                throw new ArgumentException(nameof(studentIds));
-
-            var validationResult = HaveSpaceFor(studentsToAdd);
-            foreach (var student in studentsToAdd)
+            if (!(student.Group is null))
             {
-                Maybe<Group> groupOrNone = student.Group;
-                validationResult = Result.Combine(validationResult,
-                    Result.FailureIf(groupOrNone.HasValue, true,
-                        new Error($"'{student.Email}'(Id: '{student.Id}') " +
-                                  $"is already member of group '{student.Group.Code}'!")));
+                return new Error($"'{student.Email}' (Id: '{student.Id}') is " +
+                                 $"already member of group '{student.Group.Code}'!");
             }
 
-            if (validationResult.IsSuccess)
-                _students.AddRange(studentsToAdd);
+            if (!(School.GroupMembersLimit is null) && _students.Count >= School.GroupMembersLimit)
+            {
+                return new Error($"Group '{Code}' (Id: '{Id}') is full (max " +
+                                 $"student count: '{School.GroupMembersLimit}')!");
+            }
 
-            return validationResult;
-        }
+            _students.Add(student);
+            student.SetGroup(this);
 
-        internal Result<bool, Error> CanGraduate()
-        {
-            if (IsArchived)
-                throw new InvalidOperationException(nameof(Group) + ":" + nameof(CanGraduate));
-
-            var validation = Result.Success<bool, Error>(true);
-            if (Number == School.YearsOfEducation)
-                foreach (var student in _students)
-                    validation = Result.Combine(validation, student.CanBeArchived());
-
-            return validation;
+            return Result.Success<Member, Error>(student);
         }
 
         internal void Delete()
         {
             if (!IsArchived)
             {
-                Maybe<Member> treasurerOrNone = Treasurer;
-                if (treasurerOrNone.HasValue)
-                    School.DivestTreasurerFromGroup(Id);
-
-                Maybe<Member> formTutorOrNone = FormTutor;
-                if (formTutorOrNone.HasValue)
+                if (!(FormTutor is null))
                     School.DivestFormTutorFromGroup(Id);
-            }
-            else
-            {
-                Treasurer = null;
-                FormTutor = null;
-            }
 
-            _students.Clear();
-        }
-
-        internal void DisenrollStudent(MemberId studentId)
-        {
-            var student = _students.Single(s => s.Id == studentId);
-
-            if (Treasurer == student)
-            {
-                if (IsArchived)
-                    DivestTreasurer();
-                else
-                    School.DivestTreasurerFromGroup(Id);
-            }
-
-            _students.Remove(student);
-        }
-
-        internal MemberId DivestFormTutor()
-        {
-            if (FormTutor == null)
-                throw new InvalidOperationException(nameof(Group) + ":" + nameof(DivestFormTutor));
-
-            var id = FormTutor.Id;
-
-            FormTutor = null;
-
-            return id;
-        }
-
-        internal MemberId DivestTreasurer()
-        {
-            if (Treasurer == null)
-                throw new InvalidOperationException(nameof(Group) + ":" + nameof(DivestTreasurer));
-
-            var id = Treasurer.Id;
-
-            Treasurer = null;
-
-            return id;
-        }
-
-        internal void Graduate()
-        {
-            if (IsArchived)
-                throw new InvalidOperationException(nameof(Group) + ":" + nameof(Graduate));
-
-            var studentIds = new List<MemberId>();
-            if (Number == School.YearsOfEducation)
-            {
-                foreach (var student in Students)
-                {
-                    if (student.Archive().IsFailure)
-                        throw new InvalidOperationException(nameof(Group) + ":" + nameof(Graduate));
-
-                    studentIds.Add(student.Id);
-                }
-
-                IsArchived = true;
+                foreach (var student in Students.ToList())
+                    School.DisenrollStudentFromGroup(Id, student.Id);
 
                 return;
             }
 
-            Number = Number.Create(Number + 1).Value;
+            this.FormTutor = null;
+
+            foreach (var student in Students.ToList())
+                DisenrollStudent(student.Id);
         }
 
-        internal Result<bool, Error> HaveSpaceFor(IEnumerable<Member> members)
+        internal (Member, string) DisenrollStudent(MemberId studentId)
         {
-            if (members is null || !members.Any() || !members.All(m => m.School == School))
-                throw new ArgumentException(nameof(members));
+            var student = _students.Single(s => s.Id == studentId);
+            var isTreasurer = Treasurer == student;
+            if (isTreasurer)
+                DivestTreasurer();
+            
+            _students.Remove(student);
+            student.RemoveFromGroup();
 
-            return HaveSpaceFor(members.Count());
+            return (student, isTreasurer ? GroupRoles.Treasurer : null);
         }
 
-        internal Result<bool, Error> HaveSpaceFor(int count)
+        internal Member DivestFormTutor()
         {
-            Maybe<GroupMembersLimit> limit = School.GroupMembersLimit;
-            if (limit.HasValue && _students.Count + count > limit.Value)
+            if (FormTutor == null)
+                throw new InvalidOperationException(nameof(Group) + ":" + nameof(DivestFormTutor));
+
+            var formTutor = FormTutor;
+
+            FormTutor = null;
+
+            return formTutor;
+        }
+
+        internal Member DivestTreasurer()
+        {
+            if (Treasurer == null)
+                throw new InvalidOperationException(nameof(Group) + ":" + nameof(DivestTreasurer));
+
+            var treasurer = Treasurer;
+
+            Treasurer = null;
+
+            return treasurer;
+        }
+
+        internal Result<bool, Error> Graduate()
+        {
+            if (IsArchived)
+                throw new InvalidOperationException("Attempt to graduate archived group!");
+
+            if (Number >= School.YearsOfEducation)
             {
-                var diff = School.GroupMembersLimit - Students.Count;
-                var exceededBy = _students.Count + count - limit.Value;
-                var diffMessage = diff > 0
-                    ? $"Maximally '{diff.Value}' members can be added!"
-                    : "Cannot add any more members!";
-                var message = $"Member limit for group '{Code}' (Id: '{Id.Value}') exceeded by '{exceededBy}'!" +
-                              diffMessage;
+                //order matters, treasurer role wil be kept, but student won't have perms
 
-                return new Error(message);
+                IsArchived = true;
+
+                var result = Result.Success<bool, Error>(true);
+                foreach (var student in Students)
+                {
+                    var archivization = School.ArchiveMember(student.Id);
+                    result = Result.Combine(result, archivization);
+                }
+
+                return result;
             }
 
+            Number = Number.Create(Number + 1).Value;
             return Result.Success<bool, Error>(true);
+        }
+
+        public Result<bool, Error> HaveSpaceFor(int count)
+        {
+            Maybe<GroupMembersLimit> limit = School.GroupMembersLimit;
+
+            if (!limit.HasValue || !(_students.Count + count > limit.Value))
+                return Result.Success<bool, Error>(true);
+
+            var diff = School.GroupMembersLimit - Students.Count;
+
+            var exceededBy = _students.Count + count - limit.Value;
+
+            var diffMessage = diff > 0
+                ? $"Maximally '{diff.Value}' members can be added!"
+                : "Cannot add any more members!";
+
+            var message = $"Member limit for group '{Code}' (Id: '{Id.Value}') " +
+                          $"exceeded by '{exceededBy}'!" + diffMessage;
+
+            return new Error(message);
         }
 
 
@@ -221,10 +195,8 @@ namespace SchoolManagement.Domain.SchoolAggregate.Groups
 
             var student = _students.Single(m => m.Id == studentId);
 
-            Maybe<Member> formTutorOrNone = Treasurer;
-
-            if (formTutorOrNone.HasValue)
-                return new Error($"Group '{Code}'(Id: '{Id}') already has a treasurer!");
+            if (!(Treasurer is null))
+                return new Error($"Group '{Code}' (Id: '{Id}') already has a treasurer!");
 
             Treasurer = student;
 

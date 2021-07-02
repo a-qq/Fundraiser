@@ -1,20 +1,21 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.PassOnHeadmaster
 {
-    [Authorize(Policy = "MustBeHeadmaster")]
-    public sealed class PassOnHeadmasterCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeHeadmaster)]
+    public sealed class PassOnHeadmasterCommand : IUserCommand, ISchoolAuthorizationRequest
     {
         public PassOnHeadmasterCommand(Guid schoolId, Guid teacherId)
         {
@@ -26,18 +27,13 @@ namespace SchoolManagement.Application.Schools.Commands.PassOnHeadmaster
         public Guid TeacherId { get; }
     }
 
-    internal sealed class PassOnHeadmasterHandler : IRequestHandler<PassOnHeadmasterCommand, Result<Unit, RequestError>>
+    internal sealed class PassOnHeadmasterCommandHandler : IRequestHandler<PassOnHeadmasterCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
-
         private readonly ISchoolRepository _schoolRepository;
 
-        public PassOnHeadmasterHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public PassOnHeadmasterCommandHandler(ISchoolRepository schoolRepository)
         {
             _schoolRepository = schoolRepository;
-            _context = schoolContext;
         }
 
         public async Task<Result<Unit, RequestError>> Handle(PassOnHeadmasterCommand request,
@@ -54,12 +50,10 @@ namespace SchoolManagement.Application.Schools.Commands.PassOnHeadmaster
             if (!schoolOrNone.Value.Members.Any(m => m.Id == teacherId && m.Role == Role.Teacher))
                 return SharedRequestError.General.NotFound(teacherId, nameof(Role.Teacher));
 
-            if (!schoolOrNone.Value.Members.Any(m => m.Role == Role.Headmaster))
+            if (schoolOrNone.Value.Members.All(m => m.Role != Role.Headmaster))
                 return SharedRequestError.General.NotFound(nameof(Role.Headmaster));
 
             schoolOrNone.Value.PassOnHeadmaster(teacherId);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

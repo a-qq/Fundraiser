@@ -12,36 +12,42 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
             Value = value;
         }
 
-        private static int MinLength => 2;
-        private static int MaxLength => 200;
+        public static int MinLength => 2;
+        public static int MaxLength => 200;
         public string Value { get; }
 
 
-        public static Result<LastName> Create(string lastName)
+        public static Result<LastName,Error> Create(string lastName, string propertyName = nameof(LastName))
         {
-            var validationResult = Validate(lastName);
+            var validationResult = Validate(lastName, propertyName);
             if (validationResult.IsFailure)
-                return Result.Failure<LastName>(string.Join(" ", validationResult.Error));
+                return validationResult.ConvertFailure<LastName>();
 
             lastName = lastName.Trim();
-            lastName = char.ToUpper(lastName[0]) + lastName.Substring(1);
 
-            return Result.Success(new LastName(lastName));
+            var dashIndex = lastName.IndexOf('-');
+            var offset = dashIndex > 0 
+                ? lastName.Substring(1, dashIndex).ToLower() + char.ToUpper(lastName[dashIndex + 1]) + lastName.Substring(dashIndex+2).ToLower()
+                : lastName.Substring(1).ToLower();
+
+            lastName = char.ToUpper(lastName[0]) + offset;
+
+            return new LastName(lastName);
         }
 
-        public static Result<bool, Error> Validate(string lastName, string properyName = nameof(LastName))
+        public static Result<bool, Error> Validate(string lastName, string propertyName = nameof(LastName))
         {
             if (string.IsNullOrWhiteSpace(lastName))
-                return Result.Failure<bool, Error>(new Error($"{properyName} is required!"));
+                return Result.Failure<bool, Error>(new Error($"{propertyName} is required!"));
 
             lastName = lastName.Trim();
             return Result.Combine(
-                Result.FailureIf(!Regex.IsMatch(lastName, @"^[\p{L}]+-?[\p{L}]+$"), true,
-                    new Error($"{properyName} should consist of only letters optionally devided by one '-'!")),
+                Result.FailureIf(!Regex.IsMatch(lastName, @"^[\p{L}]+(-[\p{L}]+)?$"), true,
+                    new Error($"{propertyName} should consist of only letters optionally divided by one '-'!")),
                 Result.FailureIf(lastName.Length < MinLength, true,
-                    new Error($"{properyName} should consist of min {MinLength} characters!")),
+                    new Error($"{propertyName} should consist of min {MinLength} characters!")),
                 Result.FailureIf(lastName.Length > MaxLength, true,
-                    new Error($"{properyName} should contain max {MaxLength} characters!")));
+                    new Error($"{propertyName} should contain max {MaxLength} characters!")));
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

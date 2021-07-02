@@ -1,20 +1,21 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.RestoreMember
 {
-    [Authorize(Policy = "MustBeAtLeastHeadmaster")]
-    public sealed class RestoreMemberCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class RestoreMemberCommand : IUserCommand, ISchoolAuthorizationRequest
     {
         public RestoreMemberCommand(Guid schoolId, Guid memberId)
         {
@@ -26,17 +27,13 @@ namespace SchoolManagement.Application.Schools.Commands.RestoreMember
         public Guid MemberId { get; }
     }
 
-    internal sealed class RestoreMemberHandler : IRequestHandler<RestoreMemberCommand, Result<Unit, RequestError>>
+    internal sealed class RestoreMemberCommandHandler : IRequestHandler<RestoreMemberCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
         private readonly ISchoolRepository _schoolRepository;
 
-        public RestoreMemberHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public RestoreMemberCommandHandler(ISchoolRepository schoolRepository)
         {
             _schoolRepository = schoolRepository;
-            _context = schoolContext;
         }
 
         public async Task<Result<Unit, RequestError>> Handle(RestoreMemberCommand request,
@@ -50,15 +47,13 @@ namespace SchoolManagement.Application.Schools.Commands.RestoreMember
             if (schoolOrNone.HasNoValue)
                 return SharedRequestError.General.NotFound(schoolId, nameof(School));
 
-            if (!schoolOrNone.Value.Members.Any(m => m.Id == memberId))
+            if (schoolOrNone.Value.Members.All(m => m.Id != memberId))
                 return SharedRequestError.General.NotFound(memberId, nameof(Member));
 
             var result = schoolOrNone.Value.RestoreMember(memberId);
 
             if (result.IsFailure)
                 return SharedRequestError.General.BusinessRuleViolation(result.Error);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

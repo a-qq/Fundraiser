@@ -1,25 +1,26 @@
-﻿using System;
+﻿using CSharpFunctionalExtensions;
+using SharedKernel.Domain.Constants;
+using System;
 using System.Collections.Generic;
-using CSharpFunctionalExtensions;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Members
 {
     public class Role : ValueObject
     {
-        public static readonly Role Headmaster = Create(RoleEnum.Headmaster.ToString()).Value;
-        public static readonly Role Teacher = Create(RoleEnum.Teacher.ToString()).Value;
-        public static readonly Role Student = Create(RoleEnum.Student.ToString()).Value;
+        public static readonly Role Headmaster = Create(SchoolRole.Headmaster.ToString()).Value;
+        public static readonly Role Teacher = Create(SchoolRole.Teacher.ToString()).Value;
+        public static readonly Role Student = Create(SchoolRole.Student.ToString()).Value;
 
-        private Role(RoleEnum value)
+        private Role(SchoolRole value)
         {
             Value = value;
         }
 
-        public RoleEnum Value { get; }
+        public SchoolRole Value { get; }
 
-        public static Result<Role> Create(string role)
+        public static Result<Role> Create(string role, string propertyName = nameof(Role))
         {
-            var validationResult = ValidateAndConvert(role);
+            var validationResult = ValidateAndConvert(role, propertyName);
 
             if (validationResult.IsFailure)
                 return validationResult.ConvertFailure<Role>();
@@ -27,15 +28,15 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
             return Result.Success(new Role(validationResult.Value));
         }
 
-        public static Result<RoleEnum> ValidateAndConvert(string role, string propertyName = nameof(Role))
+        public static Result<SchoolRole> ValidateAndConvert(string role, string propertyName = nameof(Role))
         {
             if (string.IsNullOrWhiteSpace(role))
-                return Result.Failure<RoleEnum>($"{propertyName} is required!");
+                return Result.Failure<SchoolRole>($"{propertyName} is required!");
 
             role = role.Trim();
 
-            if (!Enum.TryParse(role, true, out RoleEnum holder))
-                return Result.Failure<RoleEnum>($"{propertyName} is invalid!");
+            if (!Enum.TryParse(role, true, out SchoolRole holder))
+                return Result.Failure<SchoolRole>($"{propertyName} is invalid!");
 
             return Result.Success(holder);
         }
@@ -74,12 +75,5 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
         {
             return a.Value >= b.Value;
         }
-    }
-
-    public enum RoleEnum
-    {
-        Student = 1,
-        Teacher = 2,
-        Headmaster = 3
     }
 }

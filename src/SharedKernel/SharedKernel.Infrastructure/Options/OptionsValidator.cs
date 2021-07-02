@@ -1,15 +1,13 @@
-﻿using System;
+﻿using SharedKernel.Domain.ValueObjects;
+using System;
 using System.Linq;
-using Microsoft.Extensions.Options;
-using SharedKernel.Domain.ValueObjects;
 
 namespace SharedKernel.Infrastructure.Options
 {
     public static class SharedOptionsValidator
     {
-        public static void ValidateMailOptions(IOptions<MailOptions> mailOptions)
+        public static void ValidateMailOptions(MailOptions mailConfig)
         {
-            var mailConfig = mailOptions.Value;
             var emailValidation = Email.Validate(mailConfig.Email);
             if (emailValidation.IsFailure)
                 throw new ApplicationException(string.Join(" \n", emailValidation.Error.Errors));
@@ -28,10 +26,8 @@ namespace SharedKernel.Infrastructure.Options
                     $"{nameof(mailConfig.Password)} in {MailOptions.MailSettings} is not configured!");
         }
 
-        public static void ValidateUrlsOptions(IOptions<UrlsOptions> urlsOptions)
+        public static void ValidateUrlsOptions(UrlsOptions urlsConfig)
         {
-            var urlsConfig = urlsOptions.Value;
-
             if (string.IsNullOrWhiteSpace(urlsConfig.Client) ||
                 !Uri.IsWellFormedUriString(urlsConfig.Client, UriKind.Absolute))
                 throw new ApplicationException($"{nameof(urlsConfig.Client)} in {UrlsOptions.Urls} is not configured!");

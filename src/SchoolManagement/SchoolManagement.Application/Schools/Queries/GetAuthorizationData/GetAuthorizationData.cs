@@ -1,19 +1,18 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Ardalis.GuardClauses;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using Dapper;
 using MediatR;
 using Microsoft.Extensions.Caching.Memory;
-using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SchoolManagement.Application.Common.Interfaces;
 using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Queries.GetAuthorizationData
 {
     public sealed class
-        GetAuthorizationData : CommandRequest<AuthorizationDto> //IQuery<Result<AuthorizationDto, RequestError>>
+        GetAuthorizationData : IInternalQuery<AuthorizationDto>
     {
         public GetAuthorizationData(Guid schoolId, Guid memberId)
         {
@@ -26,7 +25,7 @@ namespace SchoolManagement.Application.Schools.Queries.GetAuthorizationData
     }
 
     internal sealed class
-        GetFormTutorIdHandler : IRequestHandler<GetAuthorizationData, Result<AuthorizationDto, RequestError>>
+        GetFormTutorIdHandler : IRequestHandler<GetAuthorizationData, Maybe<AuthorizationDto>>
     {
         private readonly IMemoryCache _cache;
         private readonly ISqlConnectionFactory _sqlConnectionFactory;
@@ -39,11 +38,11 @@ namespace SchoolManagement.Application.Schools.Queries.GetAuthorizationData
             _cache = cache;
         }
 
-        public async Task<Result<AuthorizationDto, RequestError>> Handle(GetAuthorizationData request,
+        public async Task<Maybe<AuthorizationDto>> Handle(GetAuthorizationData request,
             CancellationToken cancellationToken)
         {
             if (!_cache.TryGetValue(nameof(GetAuthorizationData) + request.MemberId,
-                out AuthorizationDto autorizationData))
+                out AuthorizationDto authorizationData))
             {
                 var connection = _sqlConnectionFactory.GetOpenConnection();
 
@@ -58,22 +57,19 @@ namespace SchoolManagement.Application.Schools.Queries.GetAuthorizationData
                                    "WHERE [M].[Id] = @MemberId " +
                                    "AND [M].[SchoolId] = @SchoolId";
 
-                autorizationData = await connection.QuerySingleOrDefaultAsync<AuthorizationDto>(sql, new
+                authorizationData = await connection.QuerySingleOrDefaultAsync<AuthorizationDto>(sql, new
                 {
                     request.MemberId, request.SchoolId
                 });
 
-                if (!(autorizationData is null))
-                    _cache.Set(SchemaNames.Management + request.MemberId, autorizationData,
+                if (!(authorizationData is null))
+                    _cache.Set(SchemaNames.Management + request.MemberId, authorizationData,
                         new MemoryCacheEntryOptions()
                             .SetAbsoluteExpiration(new TimeSpan(0, 0, 2))
                             .SetSlidingExpiration(new TimeSpan(0, 0, 1)));
             }
-
-            if (autorizationData is null)
-                return SharedRequestError.General.NotFound();
-
-            return autorizationData;
+            
+            return authorizationData;
         }
     }
 }

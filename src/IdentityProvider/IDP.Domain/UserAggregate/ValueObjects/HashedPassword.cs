@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using IDP.Domain.UserAggregate.Entities;
 using Microsoft.AspNetCore.Identity;
-using SharedKernel.Domain.Errors;
+using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace IDP.Domain.UserAggregate.ValueObjects
 {
@@ -20,7 +19,7 @@ namespace IDP.Domain.UserAggregate.ValueObjects
 
         public string Value { get; }
 
-        public static Result<HashedPassword, Error> Create(string password, IPasswordHasher<User> passwordHasher)
+        public static Result<HashedPassword> Create(string password, IPasswordHasher<User> passwordHasher)
         {
             if (passwordHasher == null)
                 throw new ArgumentNullException(nameof(passwordHasher));
@@ -35,24 +34,18 @@ namespace IDP.Domain.UserAggregate.ValueObjects
             return new HashedPassword(hashedPassword);
         }
 
-        public static Result<bool, Error> Validate(string password, string propertyName = "Password")
+        public static Result Validate(string password, string propertyName = "Password", string errorMessageSeparator = "\n")
         {
             if (string.IsNullOrWhiteSpace(password))
-                return Result.Failure<bool, Error>(new Error($"{propertyName} is required"));
+                return Result.Failure($"{propertyName} is required");
 
-            return Result.Combine(
-                Result.FailureIf(password.Length < MinLength, true,
-                    new Error($"{propertyName} must have at least {MinLength} characters!")),
-                Result.FailureIf(password.Length > MaxLength, true,
-                    new Error($"{propertyName} must have at most {MaxLength} characters!")),
-                Result.FailureIf(!Regex.IsMatch(password, @"[A-Z]+"), true,
-                    new Error($"{propertyName} must contain at least one uppercase letter!")),
-                Result.FailureIf(!Regex.IsMatch(password, @"[0-9]+"), true,
-                    new Error($"{propertyName} must contain at least one number!")),
-                Result.FailureIf(!Regex.IsMatch(password, @"[a-z]+"), true,
-                    new Error($"{propertyName} must contain at least one lowercase letter!")),
-                Result.FailureIf(!Regex.IsMatch(password, @"[~`!@#$%^&*()\-\\+=[\]{}'|/.,_?<>]+"), true,
-                    new Error($"{propertyName} must contain at least one special character!")));
+            return Result.Combine(errorMessageSeparator,
+                Result.FailureIf(password.Length < MinLength, $"{propertyName} must have at least {MinLength} characters!"),
+                Result.FailureIf(password.Length > MaxLength, $"{propertyName} must have at most {MaxLength} characters!"),
+                Result.FailureIf(!Regex.IsMatch(password, @"[A-Z]+"), $"{propertyName} must contain at least one uppercase letter!"),
+                Result.FailureIf(!Regex.IsMatch(password, @"[0-9]+"), $"{propertyName} must contain at least one number!"),
+                Result.FailureIf(!Regex.IsMatch(password, @"[a-z]+"), $"{propertyName} must contain at least one lowercase letter!"),
+                Result.FailureIf(!Regex.IsMatch(password, @"[~`!@#$%^&*()\-\\+=[\]{}'|/.,_?<>]+"),$"{propertyName} must contain at least one special character!"));
         }
 
         public static HashedPassword CheckHashAndConvert(string hashedPassword)

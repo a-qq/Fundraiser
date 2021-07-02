@@ -1,5 +1,6 @@
 ﻿using System;
 using FluentValidation;
+using SchoolManagement.Application.Common.Models;
 using SchoolManagement.Application.Common.ValidationRules;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Members;
@@ -42,7 +43,7 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
                 }).Otherwise(() =>
             {
                 RuleFor(p => p.Group).Empty()
-                    .WithMessage("Field '{PropertyName}' must be empty, if role is other then student!");
+                    .WithMessage("Only student can be assigned to {PropertyName}. Field '{PropertyName}' must be empty, if role is other then student!");
             });
         }
     }

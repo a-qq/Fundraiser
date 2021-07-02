@@ -3,23 +3,24 @@ using CSharpFunctionalExtensions;
 
 namespace SharedKernel.Domain.Common
 {
-    public abstract class AggregateRoot : Entity
+    public abstract class AggregateRoot : Entity, IAggregateRoot
     {
         private readonly List<DomainEvent> _domainEvents = new List<DomainEvent>();
         public virtual IReadOnlyList<DomainEvent> DomainEvents => _domainEvents;
 
-        protected virtual void AddDomainEvent(DomainEvent newEvent)
+        protected void AddDomainEvent(DomainEvent newEvent)
         {
             _domainEvents.Add(newEvent);
         }
 
-        public virtual void ClearEvents()
+        public void ClearEvents()
         {
             _domainEvents.Clear();
         }
     }
 
-    public abstract class AggregateRoot<TId> : Entity<TId>
+    public abstract class AggregateRoot<TId> : Entity<TId>, IAggregateRoot
+        where TId : ITypedId
     {
         private readonly List<DomainEvent> _domainEvents = new List<DomainEvent>();
 

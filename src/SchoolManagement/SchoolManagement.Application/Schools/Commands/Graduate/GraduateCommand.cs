@@ -1,18 +1,20 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.Graduate
 {
-    [Authorize(Policy = "MustBeAtLeastHeadmaster")]
-    public sealed class GraduateCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class GraduateCommand : IUserCommand, ISchoolAuthorizationRequest
     {
         public GraduateCommand(Guid schoolId)
         {
@@ -22,17 +24,13 @@ namespace SchoolManagement.Application.Schools.Commands.Graduate
         public Guid SchoolId { get; }
     }
 
-    internal sealed class GraduateHandler : IRequestHandler<GraduateCommand, Result<Unit, RequestError>>
+    internal sealed class GraduateCommandHandler : IRequestHandler<GraduateCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
         private readonly ISchoolRepository _schoolRepository;
 
-        public GraduateHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public GraduateCommandHandler(ISchoolRepository schoolRepository)
         {
-            _schoolRepository = schoolRepository;
-            _context = schoolContext;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
         }
 
         public async Task<Result<Unit, RequestError>> Handle(GraduateCommand request,
@@ -42,14 +40,12 @@ namespace SchoolManagement.Application.Schools.Commands.Graduate
 
             var schoolOrNone = await _schoolRepository.GetByIdWithMembersAsync(schoolId, cancellationToken);
             if (schoolOrNone.HasNoValue)
-                SharedRequestError.General.NotFound(schoolId, nameof(School));
+                return SharedRequestError.General.NotFound(schoolId, nameof(School));
 
             var result = schoolOrNone.Value.Graduate();
 
             if (result.IsFailure)
-                SharedRequestError.General.BusinessRuleViolation(result.Error);
-
-            await _context.SaveChangesAsync(cancellationToken);
+                return SharedRequestError.General.BusinessRuleViolation(result.Error);
 
             return Unit.Value;
         }

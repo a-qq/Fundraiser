@@ -1,0 +1,704 @@
+2021-06-01 00:19:42.537 +02:00 [INF] Configuring web host ()...
+2021-06-01 00:19:49.301 +02:00 [INF] Applying migrations ()...
+2021-06-01 00:19:49.650 +02:00 [INF] Migrating database associated with context SchoolContext
+2021-06-01 00:19:52.078 +02:00 [INF] Migrated database associated with context SchoolContext
+2021-06-01 00:19:52.094 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:19:52.113 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:19:52.116 +02:00 [INF] Migrating database associated with context DeadLetterContext
+2021-06-01 00:19:52.232 +02:00 [INF] Migrated database associated with context DeadLetterContext
+2021-06-01 00:19:52.238 +02:00 [INF] Migrating database associated with context FundraiserContext
+2021-06-01 00:19:52.490 +02:00 [INF] Migrated database associated with context FundraiserContext
+2021-06-01 00:19:52.492 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:19:52.545 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:19:52.545 +02:00 [INF] Starting web host ()...
+2021-06-01 00:19:53.005 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-06-01 00:19:53.158 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-06-01 00:19:53.224 +02:00 [INF] Subscribing to event UserRegisteredIntegrationEvent with IIntegrationEventHandler<UserRegisteredIntegrationEvent>
+2021-06-01 00:19:53.303 +02:00 [INF] Subscribing to event DeadLetterIntegrationEvent with IIntegrationEventHandler<DeadLetterIntegrationEvent>
+2021-06-01 00:23:01.885 +02:00 [INF] Configuring web host ()...
+2021-06-01 00:23:07.249 +02:00 [INF] Applying migrations ()...
+2021-06-01 00:23:07.757 +02:00 [INF] Migrating database associated with context SchoolContext
+2021-06-01 00:23:11.719 +02:00 [INF] Migrated database associated with context SchoolContext
+2021-06-01 00:23:11.736 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:23:11.765 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:23:11.770 +02:00 [INF] Migrating database associated with context DeadLetterContext
+2021-06-01 00:23:11.966 +02:00 [INF] Migrated database associated with context DeadLetterContext
+2021-06-01 00:23:11.975 +02:00 [INF] Migrating database associated with context FundraiserContext
+2021-06-01 00:23:12.346 +02:00 [INF] Migrated database associated with context FundraiserContext
+2021-06-01 00:23:12.348 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:23:12.414 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:23:12.414 +02:00 [INF] Starting web host ()...
+2021-06-01 00:23:13.011 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-06-01 00:23:13.257 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-06-01 00:23:13.357 +02:00 [INF] Subscribing to event UserRegisteredIntegrationEvent with IIntegrationEventHandler<UserRegisteredIntegrationEvent>
+2021-06-01 00:23:13.381 +02:00 [INF] Subscribing to event DeadLetterIntegrationEvent with IIntegrationEventHandler<DeadLetterIntegrationEvent>
+2021-06-01 00:26:06.814 +02:00 [INF] Configuring web host ()...
+2021-06-01 00:26:11.786 +02:00 [INF] Applying migrations ()...
+2021-06-01 00:26:12.253 +02:00 [INF] Migrating database associated with context SchoolContext
+2021-06-01 00:26:14.835 +02:00 [INF] Migrated database associated with context SchoolContext
+2021-06-01 00:26:14.849 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:26:14.875 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:26:14.880 +02:00 [INF] Migrating database associated with context DeadLetterContext
+2021-06-01 00:26:15.724 +02:00 [INF] Migrated database associated with context DeadLetterContext
+2021-06-01 00:26:15.733 +02:00 [INF] Migrating database associated with context FundraiserContext
+2021-06-01 00:26:16.708 +02:00 [INF] Migrated database associated with context FundraiserContext
+2021-06-01 00:26:16.712 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:26:16.787 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:26:16.787 +02:00 [INF] Starting web host ()...
+2021-06-01 00:26:17.366 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-06-01 00:26:17.748 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-06-01 00:26:17.820 +02:00 [INF] Subscribing to event UserRegisteredIntegrationEvent with IIntegrationEventHandler<UserRegisteredIntegrationEvent>
+2021-06-01 00:26:17.845 +02:00 [INF] Subscribing to event DeadLetterIntegrationEvent with IIntegrationEventHandler<DeadLetterIntegrationEvent>
+2021-06-01 00:26:44.197 +02:00 [INF] ----- Handling user request RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"moxiy16479@bombaya.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 00:26:46.812 +02:00 [INF] ----- Begin transaction "c904ec0b-4727-41d3-af41-4ed36a941965" for RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"moxiy16479@bombaya.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 00:26:48.060 +02:00 [INF] ----- Commit transaction "c904ec0b-4727-41d3-af41-4ed36a941965" for RegisterSchoolCommand
+2021-06-01 00:26:50.679 +02:00 [INF] Publishing domain event. Event - MemberEnrolledDomainEvent
+2021-06-01 00:26:50.715 +02:00 [INF] ----- Enqueuing integration event "71cc2cbd-3aa3-4185-9625-c720be458f86" to repository ({"MemberId":{"Value":"736eccd6-0abf-4228-936d-057fdee2236f","$type":"MemberId"},"Email":"moxiy16479@bombaya.com","Role":"Headmaster","SchoolId":{"Value":"8d52a819-6cba-4bcb-9ede-6769c4babd5a","$type":"SchoolId"},"FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"71cc2cbd-3aa3-4185-9625-c720be458f86","CreationDate":"2021-05-31T22:26:50.7139167Z","$type":"MemberEnrolledIntegrationEvent"})
+2021-06-01 00:27:45.980 +02:00 [ERR] ERROR Handling transaction for RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"moxiy16479@bombaya.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:f400ab71-012a-4a56-9c1f-25f69585c187
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.CommitTransactionAsync(IDbContextTransaction transaction) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 74
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.<>c__DisplayClass4_0.<<Handle>b__0>d.MoveNext() in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 68
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c.<<ExecuteAsync>b__3_0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 48
+2021-06-01 00:27:47.039 +02:00 [ERR] ----- Request RegisterSchoolCommand failed with exception!
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:f400ab71-012a-4a56-9c1f-25f69585c187
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.CommitTransactionAsync(IDbContextTransaction transaction) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 74
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.<>c__DisplayClass4_0.<<Handle>b__0>d.MoveNext() in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 68
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c.<<ExecuteAsync>b__3_0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 48
+   at SchoolManagement.Application.Behaviors.UserRequestLoggingBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestLoggingBehavior.cs:line 25
+   at SchoolManagement.Application.Behaviors.UserRequestValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestValidationBehaviour.cs:line 47
+   at SchoolManagement.Application.Behaviors.AuthorizationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\AuthorizationBehaviour.cs:line 56
+   at SchoolManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+2021-06-01 00:27:48.111 +02:00 [ERR] Error when processing request RegisterSchoolCommand
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:f400ab71-012a-4a56-9c1f-25f69585c187
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.CommitTransactionAsync(IDbContextTransaction transaction) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 74
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.<>c__DisplayClass4_0.<<Handle>b__0>d.MoveNext() in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 68
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c.<<ExecuteAsync>b__3_0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 48
+   at SchoolManagement.Application.Behaviors.UserRequestLoggingBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestLoggingBehavior.cs:line 25
+   at SchoolManagement.Application.Behaviors.UserRequestValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestValidationBehaviour.cs:line 47
+   at SchoolManagement.Application.Behaviors.AuthorizationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\AuthorizationBehaviour.cs:line 56
+   at SchoolManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+   at eSchool.API.Controllers.MediatrController.Handle[T](IRequest`1 request) in C:\Users\aqq\source\repos\FundraiserBackend\src\eSchool.API\Controllers\MediatrController.cs:line 23
+   at eSchool.API.Controllers.School.AdminController.RegisterSchool(RegisterSchoolRequest request) in C:\Users\aqq\source\repos\FundraiserBackend\src\eSchool.API\Controllers\School\AdminController.cs:line 45
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at eSchool.API.Middleware.ExceptionHandler.Invoke(HttpContext context) in C:\Users\aqq\source\repos\FundraiserBackend\src\eSchool.API\Middleware\ExceptionHandler.cs:line 31
+2021-06-01 00:33:30.629 +02:00 [INF] Configuring web host ()...
+2021-06-01 00:33:36.377 +02:00 [INF] Applying migrations ()...
+2021-06-01 00:33:36.735 +02:00 [INF] Migrating database associated with context SchoolContext
+2021-06-01 00:33:39.643 +02:00 [INF] Migrated database associated with context SchoolContext
+2021-06-01 00:33:39.658 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:33:39.680 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:33:39.683 +02:00 [INF] Migrating database associated with context DeadLetterContext
+2021-06-01 00:33:39.843 +02:00 [INF] Migrated database associated with context DeadLetterContext
+2021-06-01 00:33:39.851 +02:00 [INF] Migrating database associated with context FundraiserContext
+2021-06-01 00:33:40.170 +02:00 [INF] Migrated database associated with context FundraiserContext
+2021-06-01 00:33:40.172 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:33:40.228 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:33:40.228 +02:00 [INF] Starting web host ()...
+2021-06-01 00:33:40.740 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-06-01 00:33:40.865 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-06-01 00:33:40.939 +02:00 [INF] Subscribing to event UserRegisteredIntegrationEvent with IIntegrationEventHandler<UserRegisteredIntegrationEvent>
+2021-06-01 00:33:40.958 +02:00 [INF] Subscribing to event DeadLetterIntegrationEvent with IIntegrationEventHandler<DeadLetterIntegrationEvent>
+2021-06-01 00:34:58.792 +02:00 [INF] ----- Handling user request RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"moxiy16479@bombaya.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 00:35:00.151 +02:00 [INF] ----- Begin transaction "a7261dd2-b76c-47c0-b418-6a7b9b3c2f56" for RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"moxiy16479@bombaya.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 00:35:01.273 +02:00 [INF] Publishing domain event. Event - MemberEnrolledDomainEvent
+2021-06-01 00:35:01.304 +02:00 [INF] ----- Enqueuing integration event "0b04e8bc-3e93-46c1-85bf-bfccac03f67a" to repository ({"MemberId":{"Value":"f5c45433-2dc8-4adf-a91c-7857519967b2","$type":"MemberId"},"Email":"moxiy16479@bombaya.com","Role":"Headmaster","SchoolId":{"Value":"f4929cca-cd1e-4f11-8456-ec628058ba8e","$type":"SchoolId"},"FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"0b04e8bc-3e93-46c1-85bf-bfccac03f67a","CreationDate":"2021-05-31T22:35:01.3014455Z","$type":"MemberEnrolledIntegrationEvent"})
+2021-06-01 00:35:10.303 +02:00 [ERR] ----- Request RegisterSchoolCommand failed with exception!
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:94eebcd0-677d-45d8-8f96-beccc5dc79ad
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Application.Schools.Commands.RegisterSchool.RegisterSchoolCommandHandler.Handle(RegisterSchoolCommand command, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\Commands\RegisterSchool\RegisterSchoolCommand.cs:line 73
+   at FundraiserManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\FundraiserManagement\FundraiserManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+2021-06-01 00:35:11.091 +02:00 [ERR] ERROR Handling transaction for RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"moxiy16479@bombaya.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:94eebcd0-677d-45d8-8f96-beccc5dc79ad
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Application.Schools.Commands.RegisterSchool.RegisterSchoolCommandHandler.Handle(RegisterSchoolCommand command, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\Commands\RegisterSchool\RegisterSchoolCommand.cs:line 73
+   at FundraiserManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\FundraiserManagement\FundraiserManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.<>c__DisplayClass4_0.<<Handle>b__0>d.MoveNext() in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c.<<ExecuteAsync>b__3_0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 48
+2021-06-01 00:35:12.827 +02:00 [ERR] ----- Request RegisterSchoolCommand failed with exception!
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:94eebcd0-677d-45d8-8f96-beccc5dc79ad
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Application.Schools.Commands.RegisterSchool.RegisterSchoolCommandHandler.Handle(RegisterSchoolCommand command, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\Commands\RegisterSchool\RegisterSchoolCommand.cs:line 73
+   at FundraiserManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\FundraiserManagement\FundraiserManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.<>c__DisplayClass4_0.<<Handle>b__0>d.MoveNext() in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c.<<ExecuteAsync>b__3_0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 48
+   at SchoolManagement.Application.Behaviors.UserRequestLoggingBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestLoggingBehavior.cs:line 25
+   at SchoolManagement.Application.Behaviors.UserRequestValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestValidationBehaviour.cs:line 47
+   at SchoolManagement.Application.Behaviors.AuthorizationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\AuthorizationBehaviour.cs:line 56
+   at SchoolManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+2021-06-01 00:35:14.060 +02:00 [ERR] Error when processing request RegisterSchoolCommand
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:94eebcd0-677d-45d8-8f96-beccc5dc79ad
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Application.Schools.Commands.RegisterSchool.RegisterSchoolCommandHandler.Handle(RegisterSchoolCommand command, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\Commands\RegisterSchool\RegisterSchoolCommand.cs:line 73
+   at FundraiserManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\FundraiserManagement\FundraiserManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.<>c__DisplayClass4_0.<<Handle>b__0>d.MoveNext() in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 58
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c.<<ExecuteAsync>b__3_0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 48
+   at SchoolManagement.Application.Behaviors.UserRequestLoggingBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestLoggingBehavior.cs:line 25
+   at SchoolManagement.Application.Behaviors.UserRequestValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestValidationBehaviour.cs:line 47
+   at SchoolManagement.Application.Behaviors.AuthorizationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\AuthorizationBehaviour.cs:line 56
+   at SchoolManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+   at eSchool.API.Controllers.MediatrController.Handle[T](IRequest`1 request) in C:\Users\aqq\source\repos\FundraiserBackend\src\eSchool.API\Controllers\MediatrController.cs:line 23
+   at eSchool.API.Controllers.School.AdminController.RegisterSchool(RegisterSchoolRequest request) in C:\Users\aqq\source\repos\FundraiserBackend\src\eSchool.API\Controllers\School\AdminController.cs:line 45
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at eSchool.API.Middleware.ExceptionHandler.Invoke(HttpContext context) in C:\Users\aqq\source\repos\FundraiserBackend\src\eSchool.API\Middleware\ExceptionHandler.cs:line 31
+2021-06-01 00:40:43.690 +02:00 [INF] Configuring web host ()...
+2021-06-01 00:40:48.975 +02:00 [INF] Applying migrations ()...
+2021-06-01 00:40:49.493 +02:00 [INF] Migrating database associated with context SchoolContext
+2021-06-01 00:40:52.470 +02:00 [INF] Migrated database associated with context SchoolContext
+2021-06-01 00:40:52.485 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:40:52.538 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:40:52.541 +02:00 [INF] Migrating database associated with context DeadLetterContext
+2021-06-01 00:40:52.660 +02:00 [INF] Migrated database associated with context DeadLetterContext
+2021-06-01 00:40:52.666 +02:00 [INF] Migrating database associated with context FundraiserContext
+2021-06-01 00:40:52.998 +02:00 [INF] Migrated database associated with context FundraiserContext
+2021-06-01 00:40:53.000 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:40:53.055 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:40:53.055 +02:00 [INF] Starting web host ()...
+2021-06-01 00:40:53.553 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-06-01 00:40:53.772 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-06-01 00:40:53.856 +02:00 [INF] Subscribing to event UserRegisteredIntegrationEvent with IIntegrationEventHandler<UserRegisteredIntegrationEvent>
+2021-06-01 00:40:53.891 +02:00 [INF] Subscribing to event DeadLetterIntegrationEvent with IIntegrationEventHandler<DeadLetterIntegrationEvent>
+2021-06-01 00:42:44.111 +02:00 [INF] Configuring web host ()...
+2021-06-01 00:42:48.447 +02:00 [INF] Applying migrations ()...
+2021-06-01 00:42:48.831 +02:00 [INF] Migrating database associated with context SchoolContext
+2021-06-01 00:42:51.625 +02:00 [INF] Migrated database associated with context SchoolContext
+2021-06-01 00:42:51.640 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:42:51.670 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:42:51.673 +02:00 [INF] Migrating database associated with context DeadLetterContext
+2021-06-01 00:42:51.806 +02:00 [INF] Migrated database associated with context DeadLetterContext
+2021-06-01 00:42:51.814 +02:00 [INF] Migrating database associated with context FundraiserContext
+2021-06-01 00:42:52.112 +02:00 [INF] Migrated database associated with context FundraiserContext
+2021-06-01 00:42:52.114 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:42:52.165 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:42:52.165 +02:00 [INF] Starting web host ()...
+2021-06-01 00:42:52.635 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-06-01 00:42:52.786 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-06-01 00:42:52.863 +02:00 [INF] Subscribing to event UserRegisteredIntegrationEvent with IIntegrationEventHandler<UserRegisteredIntegrationEvent>
+2021-06-01 00:42:52.885 +02:00 [INF] Subscribing to event DeadLetterIntegrationEvent with IIntegrationEventHandler<DeadLetterIntegrationEvent>
+2021-06-01 00:43:57.140 +02:00 [INF] ----- Handling user request RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"soxisim184@edmondpt.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 00:43:57.208 +02:00 [INF] ----- Begin transaction "492bc939-a940-46fd-aea3-df52c2762200" for RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"soxisim184@edmondpt.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 00:43:58.525 +02:00 [INF] ----- Commit transaction "492bc939-a940-46fd-aea3-df52c2762200" for RegisterSchoolCommand
+2021-06-01 00:43:58.569 +02:00 [INF] Publishing domain event. Event - MemberEnrolledDomainEvent
+2021-06-01 00:43:58.593 +02:00 [INF] ----- Enqueuing integration event "79a4e31c-b2ee-4cd5-9839-16b7b5a5957c" to repository ({"MemberId":{"Value":"97ce7e88-7eed-4349-9044-74de85dbe226","$type":"MemberId"},"Email":"soxisim184@edmondpt.com","Role":"Headmaster","SchoolId":{"Value":"58931b42-a45e-46a2-a956-5022fe3fb6f8","$type":"SchoolId"},"FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"79a4e31c-b2ee-4cd5-9839-16b7b5a5957c","CreationDate":"2021-05-31T22:43:58.5909568Z","$type":"MemberEnrolledIntegrationEvent"})
+2021-06-01 00:44:00.214 +02:00 [ERR] ERROR Handling transaction for RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"soxisim184@edmondpt.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:91244694-535d-4d38-a9c9-75cc4b6cb6cc
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.CommitTransactionAsync(IDbContextTransaction transaction) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 74
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.<>c__DisplayClass4_0.<<Handle>b__0>d.MoveNext() in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 68
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c.<<ExecuteAsync>b__3_0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 48
+2021-06-01 00:44:01.196 +02:00 [ERR] ----- Request RegisterSchoolCommand failed with exception!
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:91244694-535d-4d38-a9c9-75cc4b6cb6cc
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.CommitTransactionAsync(IDbContextTransaction transaction) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 74
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.<>c__DisplayClass4_0.<<Handle>b__0>d.MoveNext() in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 68
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c.<<ExecuteAsync>b__3_0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 48
+   at SchoolManagement.Application.Behaviors.UserRequestLoggingBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestLoggingBehavior.cs:line 25
+   at SchoolManagement.Application.Behaviors.UserRequestValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestValidationBehaviour.cs:line 47
+   at SchoolManagement.Application.Behaviors.AuthorizationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\AuthorizationBehaviour.cs:line 56
+   at SchoolManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+2021-06-01 00:44:02.745 +02:00 [ERR] Error when processing request RegisterSchoolCommand
+Microsoft.EntityFrameworkCore.DbUpdateException: An error occurred while updating the entries. See the inner exception for details.
+ ---> Microsoft.Data.SqlClient.SqlException (0x80131904): Invalid object name 'bus.IntegrationEventLog'.
+   at Microsoft.Data.SqlClient.SqlCommand.<>c.<ExecuteDbDataReaderAsync>b__164_0(Task`1 result)
+   at System.Threading.Tasks.ContinuationResultTaskFromResultTask`2.InnerInvoke()
+   at System.Threading.Tasks.Task.<>c.<.cctor>b__274_0(Object obj)
+   at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
+--- End of stack trace from previous location where exception was thrown ---
+   at System.Threading.Tasks.Task.ExecuteWithThreadLocal(Task& currentTaskSlot, Thread threadPoolThread)
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.RelationalCommand.ExecuteReaderAsync(RelationalCommandParameterObject parameterObject, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+ClientConnectionId:91244694-535d-4d38-a9c9-75cc4b6cb6cc
+Error Number:208,State:1,Class:16
+   --- End of inner exception stack trace ---
+   at Microsoft.EntityFrameworkCore.Update.ReaderModificationCommandBatch.ExecuteAsync(IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Update.Internal.BatchExecutor.ExecuteAsync(IEnumerable`1 commandBatches, IRelationalConnection connection, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(IList`1 entriesToSave, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.ChangeTracking.Internal.StateManager.SaveChangesAsync(DbContext _, Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.SqlServer.Storage.Internal.SqlServerExecutionStrategy.ExecuteAsync[TState,TResult](TState state, Func`4 operation, Func`4 verifySucceeded, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.DbContext.SaveChangesAsync(Boolean acceptAllChangesOnSuccess, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.IntegrationEventService.AddAndSaveEventAsync(IntegrationEvent evt) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\IntegrationEventService.cs:line 65
+   at SchoolManagement.Application.Schools.DomainEventHandlers.MemberEnrolledDomainEventHandler.Handle(DomainEventNotification`1 notification, CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Schools\DomainEventHandlers\MemberEnrolledDomainEventHandler.cs:line 41
+   at MediatR.Mediator.PublishCore(IEnumerable`1 allHandlers, INotification notification, CancellationToken cancellationToken)
+   at SharedKernel.Infrastructure.Concretes.Services.DomainEventService.DispatchDomainEvents[TDbContext](TDbContext ctx) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\Services\DomainEventService.cs:line 48
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.SaveChangesAsync(CancellationToken cancellationToken) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 52
+   at SchoolManagement.Infrastructure.Persistence.SchoolContext.CommitTransactionAsync(IDbContextTransaction transaction) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Infrastructure\Persistence\SchoolContext.cs:line 74
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.<>c__DisplayClass4_0.<<Handle>b__0>d.MoveNext() in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 68
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.ExecutionStrategyExtensions.<>c.<<ExecuteAsync>b__3_0>d.MoveNext()
+--- End of stack trace from previous location where exception was thrown ---
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Storage.ExecutionStrategy.ExecuteImplementationAsync[TState,TResult](Func`4 operation, Func`4 verifySucceeded, TState state, CancellationToken cancellationToken)
+   at SchoolManagement.Application.Behaviors.TransactionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\TransactionBehaviour.cs:line 48
+   at SchoolManagement.Application.Behaviors.UserRequestLoggingBehavior`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestLoggingBehavior.cs:line 25
+   at SchoolManagement.Application.Behaviors.UserRequestValidationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UserRequestValidationBehaviour.cs:line 47
+   at SchoolManagement.Application.Behaviors.AuthorizationBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\AuthorizationBehaviour.cs:line 56
+   at SchoolManagement.Application.Behaviors.UnhandledExceptionBehaviour`2.Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate`1 next) in C:\Users\aqq\source\repos\FundraiserBackend\src\SchoolManagement\SchoolManagement.Application\Behaviors\UnhandledExceptionBehaviour.cs:line 25
+   at eSchool.API.Controllers.MediatrController.Handle[T](IRequest`1 request) in C:\Users\aqq\source\repos\FundraiserBackend\src\eSchool.API\Controllers\MediatrController.cs:line 23
+   at eSchool.API.Controllers.School.AdminController.RegisterSchool(RegisterSchoolRequest request) in C:\Users\aqq\source\repos\FundraiserBackend\src\eSchool.API\Controllers\School\AdminController.cs:line 45
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ActionMethodExecutor.TaskOfIActionResultExecutor.Execute(IActionResultTypeMapper mapper, ObjectMethodExecutor executor, Object controller, Object[] arguments)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeActionMethodAsync>g__Awaited|12_0(ControllerActionInvoker invoker, ValueTask`1 actionResultValueTask)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeNextActionFilterAsync>g__Awaited|10_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Rethrow(ActionExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ControllerActionInvoker.<InvokeInnerFilterAsync>g__Awaited|13_0(ControllerActionInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeNextResourceFilter>g__Awaited|24_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Rethrow(ResourceExecutedContextSealed context)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.Next(State& next, Scope& scope, Object& state, Boolean& isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeFilterPipelineAsync>g__Awaited|19_0(ResourceInvoker invoker, Task lastTask, State next, Scope scope, Object state, Boolean isCompleted)
+   at Microsoft.AspNetCore.Mvc.Infrastructure.ResourceInvoker.<InvokeAsync>g__Awaited|17_0(ResourceInvoker invoker, Task task, IDisposable scope)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|6_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at Microsoft.AspNetCore.Authorization.AuthorizationMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.Authentication.AuthenticationMiddleware.Invoke(HttpContext context)
+   at Swashbuckle.AspNetCore.SwaggerUI.SwaggerUIMiddleware.Invoke(HttpContext httpContext)
+   at Swashbuckle.AspNetCore.Swagger.SwaggerMiddleware.Invoke(HttpContext httpContext, ISwaggerProvider swaggerProvider)
+   at eSchool.API.Middleware.ExceptionHandler.Invoke(HttpContext context) in C:\Users\aqq\source\repos\FundraiserBackend\src\eSchool.API\Middleware\ExceptionHandler.cs:line 31
+2021-06-01 00:51:11.551 +02:00 [INF] Configuring web host ()...
+2021-06-01 00:51:14.271 +02:00 [INF] Applying migrations ()...
+2021-06-01 00:51:14.617 +02:00 [INF] Migrating database associated with context SchoolContext
+2021-06-01 00:51:16.917 +02:00 [INF] Migrated database associated with context SchoolContext
+2021-06-01 00:51:16.930 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:51:17.017 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:51:17.032 +02:00 [INF] Migrating database associated with context DeadLetterContext
+2021-06-01 00:51:17.142 +02:00 [INF] Migrated database associated with context DeadLetterContext
+2021-06-01 00:51:17.149 +02:00 [INF] Migrating database associated with context FundraiserContext
+2021-06-01 00:51:17.411 +02:00 [INF] Migrated database associated with context FundraiserContext
+2021-06-01 00:51:17.414 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 00:51:17.465 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 00:51:17.465 +02:00 [INF] Starting web host ()...
+2021-06-01 00:51:17.877 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-06-01 00:51:17.999 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-06-01 00:51:18.043 +02:00 [INF] Subscribing to event UserRegisteredIntegrationEvent with IIntegrationEventHandler<UserRegisteredIntegrationEvent>
+2021-06-01 00:51:18.067 +02:00 [INF] Subscribing to event DeadLetterIntegrationEvent with IIntegrationEventHandler<DeadLetterIntegrationEvent>
+2021-06-01 00:56:13.839 +02:00 [INF] ----- Handling user request RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"deseni3696@jmpant.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 00:56:13.884 +02:00 [INF] ----- Begin transaction "105f180f-fa3f-4006-bf1f-cca9b84c4d34" for RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"deseni3696@jmpant.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 00:56:14.733 +02:00 [INF] ----- Commit transaction "105f180f-fa3f-4006-bf1f-cca9b84c4d34" for RegisterSchoolCommand
+2021-06-01 00:56:14.767 +02:00 [INF] Publishing domain event. Event - MemberEnrolledDomainEvent
+2021-06-01 00:56:14.791 +02:00 [INF] ----- Enqueuing integration event "63c26d7c-2bc1-44e1-9838-da50e138b0ba" to repository ({"MemberId":{"Value":"49098504-3c64-41d1-8287-cbf46849bd5d","$type":"MemberId"},"Email":"deseni3696@jmpant.com","Role":"Headmaster","SchoolId":{"Value":"a447f3de-30e5-4a29-885b-7621c7d5598c","$type":"SchoolId"},"FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"63c26d7c-2bc1-44e1-9838-da50e138b0ba","CreationDate":"2021-05-31T22:56:14.7890680Z","$type":"MemberEnrolledIntegrationEvent"})
+2021-06-01 00:56:15.662 +02:00 [INF] ----- Publishing integration event: "63c26d7c-2bc1-44e1-9838-da50e138b0ba" from SchoolManagement.Application - ({"MemberId":{"Value":"49098504-3c64-41d1-8287-cbf46849bd5d","$type":"MemberId"},"Email":"deseni3696@jmpant.com","Role":"Headmaster","SchoolId":{"Value":"a447f3de-30e5-4a29-885b-7621c7d5598c","$type":"SchoolId"},"FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"63c26d7c-2bc1-44e1-9838-da50e138b0ba","CreationDate":"2021-05-31T22:56:14.7890680Z","$type":"MemberEnrolledIntegrationEvent"})
+2021-06-01 00:56:15.758 +02:00 [INF] ----- Request RegisterSchoolCommand handled successfully - response: {"Id":"a447f3de-30e5-4a29-885b-7621c7d5598c","Name":"Ii lo łańcut","YearsOfEducation":3,"Headmaster":{"Id":"49098504-3c64-41d1-8287-cbf46849bd5d","FirstName":"Staszek","LastName":"Kowalski","Email":"deseni3696@jmpant.com","Role":"Headmaster","Gender":"Male","$type":"MemberDTO"},"$type":"SchoolCreatedDTO"}
+2021-06-01 00:56:16.844 +02:00 [ERR] Dead lettering RabbitMQ message: "{"MemberId":"49098504-3c64-41d1-8287-cbf46849bd5d","Email":"deseni3696@jmpant.com","Role":"Headmaster","SchoolId":"a447f3de-30e5-4a29-885b-7621c7d5598c","FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"63c26d7c-2bc1-44e1-9838-da50e138b0ba","CreationDate":"2021-05-31T22:56:14.789068Z"}". Reason: An exception was thrown while activating DlxWorker.DeadLetterIntegrationEventHandler.
+Autofac.Core.DependencyResolutionException: An exception was thrown while activating DlxWorker.DeadLetterIntegrationEventHandler.
+ ---> Autofac.Core.DependencyResolutionException: None of the constructors found with 'Autofac.Core.Activators.Reflection.DefaultConstructorFinder' on type 'DlxWorker.DeadLetterIntegrationEventHandler' can be invoked with the available services and parameters:
+Cannot resolve parameter 'SharedKernel.Infrastructure.Abstractions.Common.ISqlConnectionFactory sqlConnectionFactory' of constructor 'Void .ctor(SharedKernel.Infrastructure.Abstractions.Common.IDateTime, SharedKernel.Infrastructure.Abstractions.Common.ISqlConnectionFactory, Microsoft.Extensions.Logging.ILogger`1[DlxWorker.DeadLetterIntegrationEventHandler])'.
+   at Autofac.Core.Activators.Reflection.ReflectionActivator.GetAllBindings(ConstructorBinder[] availableConstructors, IComponentContext context, IEnumerable`1 parameters)
+   at Autofac.Core.Activators.Reflection.ReflectionActivator.ActivateInstance(IComponentContext context, IEnumerable`1 parameters)
+   at Autofac.Core.Activators.Reflection.ReflectionActivator.<ConfigurePipeline>b__11_0(ResolveRequestContext ctxt, Action`1 next)
+   at Autofac.Core.Resolving.Middleware.DelegateMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Pipeline.ResolvePipelineBuilder.<>c__DisplayClass14_0.<BuildPipeline>b__1(ResolveRequestContext ctxt)
+   at Autofac.Core.Resolving.Middleware.DisposalTrackingMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Pipeline.ResolvePipelineBuilder.<>c__DisplayClass14_0.<BuildPipeline>b__1(ResolveRequestContext ctxt)
+   at Autofac.Core.Resolving.Middleware.ActivatorErrorHandlingMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   --- End of inner exception stack trace ---
+   at Autofac.Core.Resolving.Middleware.ActivatorErrorHandlingMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Pipeline.ResolvePipelineBuilder.<>c__DisplayClass14_0.<BuildPipeline>b__1(ResolveRequestContext ctxt)
+   at Autofac.Core.Pipeline.ResolvePipeline.Invoke(ResolveRequestContext ctxt)
+   at Autofac.Core.Resolving.Middleware.RegistrationPipelineInvokeMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Pipeline.ResolvePipelineBuilder.<>c__DisplayClass14_0.<BuildPipeline>b__1(ResolveRequestContext ctxt)
+   at Autofac.Core.Resolving.Middleware.SharingMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Pipeline.ResolvePipelineBuilder.<>c__DisplayClass14_0.<BuildPipeline>b__1(ResolveRequestContext ctxt)
+   at Autofac.Core.Resolving.Pipeline.ResolvePipelineBuilder.<>c__DisplayClass14_0.<BuildPipeline>b__1(ResolveRequestContext ctxt)
+   at Autofac.Core.Resolving.Middleware.CircularDependencyDetectorMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Pipeline.ResolvePipelineBuilder.<>c__DisplayClass14_0.<BuildPipeline>b__1(ResolveRequestContext ctxt)
+   at Autofac.Core.Pipeline.ResolvePipeline.Invoke(ResolveRequestContext ctxt)
+   at Autofac.Core.Resolving.ResolveOperation.GetOrCreateInstance(ISharingLifetimeScope currentOperationScope, ResolveRequest request)
+   at Autofac.Core.Resolving.ResolveOperation.ExecuteOperation(ResolveRequest request)
+   at Autofac.Core.Resolving.ResolveOperation.Execute(ResolveRequest request)
+   at Autofac.Core.Lifetime.LifetimeScope.ResolveComponent(ResolveRequest request)
+   at Autofac.ResolutionExtensions.TryResolveService(IComponentContext context, Service service, IEnumerable`1 parameters, Object& instance)
+   at Autofac.ResolutionExtensions.ResolveOptionalService(IComponentContext context, Service service, IEnumerable`1 parameters)
+   at Autofac.ResolutionExtensions.ResolveOptional(IComponentContext context, Type serviceType, IEnumerable`1 parameters)
+   at Autofac.ResolutionExtensions.ResolveOptional(IComponentContext context, Type serviceType)
+   at SharedKernel.Infrastructure.Concretes.EventBus.RabbitMQ.EventBusRabbitMq.HandleTypedSubscription(String eventName, String message, ILifetimeScope scope, SubscriptionInfo subscription, String dlxReason) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\EventBus\RabbitMQ\EventBusRabbitMq.cs:line 329
+   at SharedKernel.Infrastructure.Concretes.EventBus.RabbitMQ.EventBusRabbitMq.ProcessEvent(String eventName, String message, String dlxReason) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\EventBus\RabbitMQ\EventBusRabbitMq.cs:line 311
+   at SharedKernel.Infrastructure.Concretes.EventBus.RabbitMQ.EventBusRabbitMq.ProcessEvent(String eventName, String message, String dlxReason) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\EventBus\RabbitMQ\EventBusRabbitMq.cs:line 317
+   at SharedKernel.Infrastructure.Concretes.EventBus.RabbitMQ.EventBusRabbitMq.Consumer_Received(Object sender, BasicDeliverEventArgs eventArgs) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\EventBus\RabbitMQ\EventBusRabbitMq.cs:line 225
+2021-06-01 01:05:10.286 +02:00 [INF] Configuring web host ()...
+2021-06-01 01:05:13.572 +02:00 [INF] Applying migrations ()...
+2021-06-01 01:05:13.939 +02:00 [INF] Migrating database associated with context SchoolContext
+2021-06-01 01:05:16.377 +02:00 [INF] Migrated database associated with context SchoolContext
+2021-06-01 01:05:16.392 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 01:05:16.485 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 01:05:16.490 +02:00 [INF] Migrating database associated with context DeadLetterContext
+2021-06-01 01:05:16.675 +02:00 [INF] Migrated database associated with context DeadLetterContext
+2021-06-01 01:05:16.686 +02:00 [INF] Migrating database associated with context FundraiserContext
+2021-06-01 01:05:16.951 +02:00 [INF] Migrated database associated with context FundraiserContext
+2021-06-01 01:05:16.953 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 01:05:17.009 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 01:05:17.009 +02:00 [INF] Starting web host ()...
+2021-06-01 01:05:17.463 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-06-01 01:05:17.613 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-06-01 01:05:17.737 +02:00 [INF] Subscribing to event UserRegisteredIntegrationEvent with IIntegrationEventHandler<UserRegisteredIntegrationEvent>
+2021-06-01 01:05:17.841 +02:00 [INF] Subscribing to event DeadLetterIntegrationEvent with IIntegrationEventHandler<DeadLetterIntegrationEvent>
+2021-06-01 01:07:52.805 +02:00 [INF] ----- Handling user request RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"hicag54080@jmpant.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 01:07:52.849 +02:00 [INF] ----- Begin transaction "e936598f-5848-48ca-b6e3-60f3b36bc4e4" for RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"hicag54080@jmpant.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 01:07:53.774 +02:00 [INF] ----- Commit transaction "e936598f-5848-48ca-b6e3-60f3b36bc4e4" for RegisterSchoolCommand
+2021-06-01 01:07:53.811 +02:00 [INF] Publishing domain event. Event - MemberEnrolledDomainEvent
+2021-06-01 01:07:53.839 +02:00 [INF] ----- Enqueuing integration event "2d498044-2f6a-45ad-af33-6c41beeb122c" to repository ({"MemberId":{"Value":"942f04ab-980d-4c3e-8c5a-e36c0b97c6ed","$type":"MemberId"},"Email":"hicag54080@jmpant.com","Role":"Headmaster","SchoolId":{"Value":"d0ae6770-593c-415a-84d9-597125727d05","$type":"SchoolId"},"FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"2d498044-2f6a-45ad-af33-6c41beeb122c","CreationDate":"2021-05-31T23:07:53.8374531Z","$type":"MemberEnrolledIntegrationEvent"})
+2021-06-01 01:07:54.583 +02:00 [INF] ----- Publishing integration event: "2d498044-2f6a-45ad-af33-6c41beeb122c" from SchoolManagement.Application - ({"MemberId":{"Value":"942f04ab-980d-4c3e-8c5a-e36c0b97c6ed","$type":"MemberId"},"Email":"hicag54080@jmpant.com","Role":"Headmaster","SchoolId":{"Value":"d0ae6770-593c-415a-84d9-597125727d05","$type":"SchoolId"},"FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"2d498044-2f6a-45ad-af33-6c41beeb122c","CreationDate":"2021-05-31T23:07:53.8374531Z","$type":"MemberEnrolledIntegrationEvent"})
+2021-06-01 01:07:54.675 +02:00 [INF] ----- Request RegisterSchoolCommand handled successfully - response: {"Id":"d0ae6770-593c-415a-84d9-597125727d05","Name":"Ii lo łańcut","YearsOfEducation":3,"Headmaster":{"Id":"942f04ab-980d-4c3e-8c5a-e36c0b97c6ed","FirstName":"Staszek","LastName":"Kowalski","Email":"hicag54080@jmpant.com","Role":"Headmaster","Gender":"Male","$type":"MemberDTO"},"$type":"SchoolCreatedDTO"}
+2021-06-01 01:09:38.340 +02:00 [ERR] Dead lettering RabbitMQ message: "{"MemberId":"942f04ab-980d-4c3e-8c5a-e36c0b97c6ed","Email":"hicag54080@jmpant.com","Role":"Headmaster","SchoolId":"d0ae6770-593c-415a-84d9-597125727d05","FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"2d498044-2f6a-45ad-af33-6c41beeb122c","CreationDate":"2021-05-31T23:07:53.8374531Z"}". Reason: An exception was thrown while activating DlxWorker.DeadLetterIntegrationEventHandler.
+Autofac.Core.DependencyResolutionException: An exception was thrown while activating DlxWorker.DeadLetterIntegrationEventHandler.
+ ---> Autofac.Core.DependencyResolutionException: None of the constructors found with 'Autofac.Core.Activators.Reflection.DefaultConstructorFinder' on type 'DlxWorker.DeadLetterIntegrationEventHandler' can be invoked with the available services and parameters:
+Cannot resolve parameter 'SharedKernel.Infrastructure.Abstractions.Common.ISqlConnectionFactory sqlConnectionFactory' of constructor 'Void .ctor(SharedKernel.Infrastructure.Abstractions.Common.IDateTime, SharedKernel.Infrastructure.Abstractions.Common.ISqlConnectionFactory, Microsoft.Extensions.Logging.ILogger`1[DlxWorker.DeadLetterIntegrationEventHandler])'.
+   at Autofac.Core.Activators.Reflection.ReflectionActivator.GetAllBindings(ConstructorBinder[] availableConstructors, IComponentContext context, IEnumerable`1 parameters)
+   at Autofac.Core.Activators.Reflection.ReflectionActivator.ActivateInstance(IComponentContext context, IEnumerable`1 parameters)
+   at Autofac.Core.Activators.Reflection.ReflectionActivator.<ConfigurePipeline>b__11_0(ResolveRequestContext ctxt, Action`1 next)
+   at Autofac.Core.Resolving.Middleware.DelegateMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Middleware.DisposalTrackingMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Middleware.ActivatorErrorHandlingMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   --- End of inner exception stack trace ---
+   at Autofac.Core.Resolving.Middleware.ActivatorErrorHandlingMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Pipeline.ResolvePipeline.Invoke(ResolveRequestContext ctxt)
+   at Autofac.Core.Resolving.Middleware.RegistrationPipelineInvokeMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Middleware.SharingMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Resolving.Middleware.CircularDependencyDetectorMiddleware.Execute(ResolveRequestContext context, Action`1 next)
+   at Autofac.Core.Pipeline.ResolvePipeline.Invoke(ResolveRequestContext ctxt)
+   at Autofac.Core.Resolving.ResolveOperation.GetOrCreateInstance(ISharingLifetimeScope currentOperationScope, ResolveRequest request)
+   at Autofac.Core.Resolving.ResolveOperation.ExecuteOperation(ResolveRequest request)
+   at Autofac.Core.Resolving.ResolveOperation.Execute(ResolveRequest request)
+   at Autofac.Core.Lifetime.LifetimeScope.ResolveComponent(ResolveRequest request)
+   at Autofac.ResolutionExtensions.TryResolveService(IComponentContext context, Service service, IEnumerable`1 parameters, Object& instance)
+   at Autofac.ResolutionExtensions.ResolveOptionalService(IComponentContext context, Service service, IEnumerable`1 parameters)
+   at Autofac.ResolutionExtensions.ResolveOptional(IComponentContext context, Type serviceType, IEnumerable`1 parameters)
+   at Autofac.ResolutionExtensions.ResolveOptional(IComponentContext context, Type serviceType)
+   at SharedKernel.Infrastructure.Concretes.EventBus.RabbitMQ.EventBusRabbitMq.HandleTypedSubscription(String eventName, String message, ILifetimeScope scope, SubscriptionInfo subscription, String dlxReason) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\EventBus\RabbitMQ\EventBusRabbitMq.cs:line 329
+   at SharedKernel.Infrastructure.Concretes.EventBus.RabbitMQ.EventBusRabbitMq.ProcessEvent(String eventName, String message, String dlxReason) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\EventBus\RabbitMQ\EventBusRabbitMq.cs:line 311
+   at SharedKernel.Infrastructure.Concretes.EventBus.RabbitMQ.EventBusRabbitMq.ProcessEvent(String eventName, String message, String dlxReason) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\EventBus\RabbitMQ\EventBusRabbitMq.cs:line 317
+   at SharedKernel.Infrastructure.Concretes.EventBus.RabbitMQ.EventBusRabbitMq.Consumer_Received(Object sender, BasicDeliverEventArgs eventArgs) in C:\Users\aqq\source\repos\FundraiserBackend\src\SharedKernel\SharedKernel.Infrastructure\Concretes\EventBus\RabbitMQ\EventBusRabbitMq.cs:line 225
+2021-06-01 01:23:03.971 +02:00 [INF] Configuring web host ()...
+2021-06-01 01:23:06.854 +02:00 [INF] Applying migrations ()...
+2021-06-01 01:23:07.205 +02:00 [INF] Migrating database associated with context SchoolContext
+2021-06-01 01:23:09.591 +02:00 [INF] Migrated database associated with context SchoolContext
+2021-06-01 01:23:09.603 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 01:23:09.625 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 01:23:09.628 +02:00 [INF] Migrating database associated with context DeadLetterContext
+2021-06-01 01:23:09.786 +02:00 [INF] Migrated database associated with context DeadLetterContext
+2021-06-01 01:23:09.792 +02:00 [INF] Migrating database associated with context FundraiserContext
+2021-06-01 01:23:10.150 +02:00 [INF] Migrated database associated with context FundraiserContext
+2021-06-01 01:23:10.154 +02:00 [INF] Migrating database associated with context IntegrationEventLogContext
+2021-06-01 01:23:10.220 +02:00 [INF] Migrated database associated with context IntegrationEventLogContext
+2021-06-01 01:23:10.220 +02:00 [INF] Starting web host ()...
+2021-06-01 01:23:10.782 +02:00 [INF] RabbitMQ Client is trying to connect
+2021-06-01 01:23:11.010 +02:00 [INF] RabbitMQ Client acquired a persistent connection to 'localhost' and is subscribed to failure events
+2021-06-01 01:23:11.204 +02:00 [INF] Subscribing to event UserRegisteredIntegrationEvent with IIntegrationEventHandler<UserRegisteredIntegrationEvent>
+2021-06-01 01:23:11.245 +02:00 [INF] Subscribing to event DeadLetterIntegrationEvent with IIntegrationEventHandler<DeadLetterIntegrationEvent>
+2021-06-01 01:23:42.774 +02:00 [INF] ----- Handling user request RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"kexex66313@jmpant.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 01:23:42.847 +02:00 [INF] ----- Begin transaction "055d08cb-a4e0-4875-ac91-f71b427d4bf5" for RegisterSchoolCommand ({"Name":"II LO Łańcut","YearsOfEducation":3,"HeadmasterFirstName":"Staszek","HeadmasterLastName":"Kowalski","HeadmasterEmail":"kexex66313@jmpant.com","HeadmasterGender":"male","$type":"RegisterSchoolCommand"})
+2021-06-01 01:23:43.937 +02:00 [INF] ----- Commit transaction "055d08cb-a4e0-4875-ac91-f71b427d4bf5" for RegisterSchoolCommand
+2021-06-01 01:23:43.973 +02:00 [INF] Publishing domain event. Event - MemberEnrolledDomainEvent
+2021-06-01 01:23:44.006 +02:00 [INF] ----- Enqueuing integration event "0bed949f-089d-4515-a860-9a0d1c7e0e4c" to repository ({"MemberId":{"Value":"20703fda-66da-492e-b9b0-8e2ec0709b53","$type":"MemberId"},"Email":"kexex66313@jmpant.com","Role":"Headmaster","SchoolId":{"Value":"edb9e15b-0834-49d2-9d58-dd37624323a7","$type":"SchoolId"},"FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"0bed949f-089d-4515-a860-9a0d1c7e0e4c","CreationDate":"2021-05-31T23:23:44.0039228Z","$type":"MemberEnrolledIntegrationEvent"})
+2021-06-01 01:23:44.952 +02:00 [INF] ----- Publishing integration event: "0bed949f-089d-4515-a860-9a0d1c7e0e4c" from SchoolManagement.Application - ({"MemberId":{"Value":"20703fda-66da-492e-b9b0-8e2ec0709b53","$type":"MemberId"},"Email":"kexex66313@jmpant.com","Role":"Headmaster","SchoolId":{"Value":"edb9e15b-0834-49d2-9d58-dd37624323a7","$type":"SchoolId"},"FirstName":"Staszek","LastName":"Kowalski","Gender":"Male","Id":"0bed949f-089d-4515-a860-9a0d1c7e0e4c","CreationDate":"2021-05-31T23:23:44.0039228Z","$type":"MemberEnrolledIntegrationEvent"})
+2021-06-01 01:23:45.023 +02:00 [INF] ----- Request RegisterSchoolCommand handled successfully - response: {"Id":"edb9e15b-0834-49d2-9d58-dd37624323a7","Name":"Ii lo łańcut","YearsOfEducation":3,"Headmaster":{"Id":"20703fda-66da-492e-b9b0-8e2ec0709b53","FirstName":"Staszek","LastName":"Kowalski","Email":"kexex66313@jmpant.com","Role":"Headmaster","Gender":"Male","$type":"MemberDTO"},"$type":"SchoolCreatedDTO"}

@@ -2,13 +2,14 @@
 using CsvHelper;
 using CsvHelper.Configuration;
 using CsvHelper.TypeConversion;
+using SchoolManagement.Domain.Common.Models;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SharedKernel.Domain.ValueObjects;
 
 namespace SchoolManagement.Application.Common.Mappings.CsvHelper
 {
-    internal sealed class MemberEnrollmentAssignmentDataMap : ClassMap<MemberEnrollmentAssignmentData>
+    internal class MemberEnrollmentAssignmentDataMap : ClassMap<MemberEnrollmentAssignmentData>
     {
         public MemberEnrollmentAssignmentDataMap()
         {
@@ -93,7 +94,7 @@ namespace SchoolManagement.Application.Common.Mappings.CsvHelper
                 {
                     var number = Number.Create(int.Parse(text.Substring(0, 1))).Value;
                     var sign = Sign.Create(text[1..]).Value;
-                    return new Code(number, sign);
+                    return Maybe<Code>.From(new Code(number, sign));
                 }
 
                 return Maybe<Code>.None;
@@ -102,7 +103,7 @@ namespace SchoolManagement.Application.Common.Mappings.CsvHelper
             public override string ConvertToString(object value, IWriterRow row, MemberMapData memberMapData)
             {
                 var code = value as Maybe<Code>?;
-                return code.HasValue && code.Value.HasValue ? code.Value.Value : string.Empty;
+                return (code.HasValue && code.Value.HasValue) ? code.Value.Value : string.Empty;
             }
         }
     }

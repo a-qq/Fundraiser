@@ -1,8 +1,8 @@
 ﻿namespace IDP.Application.DTOs
 {
-    public class UserDTO
+    public class UserDto
     {
-        public UserDTO(string subject, string email)
+        public UserDto(string subject, string email)
         {
             Subject = subject;
             Email = email;

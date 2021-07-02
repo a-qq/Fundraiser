@@ -1,12 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.IO;
-using CsvHelper;
+﻿using CsvHelper;
 using CsvHelper.Configuration;
 using FluentValidation;
 using SchoolManagement.Application.Common.Mappings.CsvHelper;
 using SharedKernel.Infrastructure.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using SchoolManagement.Application.Common.Models;
 
 namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
 {
@@ -19,7 +21,7 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
                 .Must(p => p.Length < 3145728).WithMessage("{PropertyName} must be under 3 MB!")
                 .Must(p => (p.ContentType == "text/csv" || p.ContentType == "text/plain" ||
                             p.ContentType == "application/vnd.ms-excel")
-                           && new List<string> {".csv", ".txt"}.Contains(Path.GetExtension(p.FileName)))
+                           && new List<string> { ".csv", ".txt" }.Contains(Path.GetExtension(p.FileName)))
                 .WithMessage("{PropertyName} must be in '.csv' or '.txt' format!")
                 .DependentRules(() =>
                 {
@@ -29,33 +31,54 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
                             var config = new CsvConfiguration(CultureInfo.InvariantCulture)
                             {
                                 PrepareHeaderForMatch = (header, index) => header.ToLower(),
-                                Delimiter = GetValueofDelimiter(
-                                    context.ParentContext.InstanceToValidate as EnrollMembersFromCsvRequest)
+                                Delimiter = GetValueOfDelimiter(
+                                    context.ParentContext.InstanceToValidate as EnrollMembersFromCsvCommand)
                             };
-                            using (var reader = new StreamReader(file.OpenReadStream()))
-                            using (var csv = new CsvReader(reader, config))
+
+                            try
                             {
-                                csv.Context.RegisterClassMap<RawMemberFromCsvMap>();
-                                try
+                                using (var reader = new StreamReader(file.OpenReadStream()))
+                                using (var csv = new CsvReader(reader, config))
                                 {
+                                    csv.Context.RegisterClassMap<RawMemberFromCsvMap>();
                                     var records = csv.GetRecords<RawMemberFromCsvModel>();
-                                    var validationContext =
-                                        new ValidationContext<IEnumerable<RawMemberFromCsvModel>>(records);
-                                    var validator = new RawMembersFromCsvModelValidator();
-                                    var result = validator.Validate(validationContext);
-                                    if (!result.IsValid)
-                                        foreach (var error in result.Errors)
-                                            context.AddFailure(error);
+                                    var duplicateEmails = records
+                                        .Select(c => c.Email)
+                                        .GroupBy(e => e)
+                                        .SelectMany(g => g.Skip(1))
+                                        .ToHashSet();
+
+                                    if (duplicateEmails.Any())
+                                        context.AddFailure(context.PropertyName + ".Records",
+                                            $"Duplicate emails in input file: {string.Join("\n", duplicateEmails)}");
                                 }
-                                catch (HeaderValidationException ex)
+                                using (var reader = new StreamReader(file.OpenReadStream()))
+                                using (var csv = new CsvReader(reader, config))
                                 {
-                                    var index = ex.Message.IndexOf("\r\nIf");
-                                    var message = index > 0 ? ex.Message.Remove(index) : ex.Message;
-                                    var messages = message.Replace("[0]", "").Split("\r\n");
-                                    foreach (var error in messages)
-                                        context.AddFailure(error);
+                                    var recordValidator = new RawMemberFromCsvModelValidator();
+                                    csv.Context.RegisterClassMap<RawMemberFromCsvMap>();
+                                    foreach (var record in csv.GetRecords<RawMemberFromCsvModel>())
+                                    {
+                                        var validationContext = new ValidationContext<RawMemberFromCsvModel>(record);
+                                        var result = recordValidator.Validate(validationContext);
+                                        if (result.IsValid)
+                                            continue;
+
+                                        foreach (var error in result.Errors)
+                                            context.AddFailure(context.PropertyName
+                                                 + $".Records[{record.RowNumber}]." + error.PropertyName, error.ErrorMessage);
+                                    }
                                 }
                             }
+                            catch (HeaderValidationException ex)
+                            {
+                                var index = ex.Message.IndexOf("\r\nIf", StringComparison.Ordinal);
+                                var message = index > 0 ? ex.Message.Remove(index) : ex.Message;
+                                var messages = message.Replace("[0]", "").Split("\r\n");
+                                foreach (var error in messages)
+                                    context.AddFailure(error);
+                            }
+
                         }));
                 });
 
@@ -65,9 +88,9 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMembersFromCsv
             RuleFor(p => p.SchoolId).GuidIdMustBeValid();
         }
 
-        private string GetValueofDelimiter(EnrollMembersFromCsvRequest request)
+        private string GetValueOfDelimiter(EnrollMembersFromCsvCommand request)
         {
-            var delimiter = ((char) request.Delimiter).ToString();
+            var delimiter = ((char)request.Delimiter).ToString();
             return delimiter;
         }
     }

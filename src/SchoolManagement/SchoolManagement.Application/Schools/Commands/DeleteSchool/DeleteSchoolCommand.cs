@@ -1,19 +1,22 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using MediatR;
+using Microsoft.Extensions.Logging;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
+using SchoolManagement.Application.IntegrationEvents.Events;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
-using SchoolManagement.Domain.SchoolAggregate.Schools.Events;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.DeleteSchool
 {
-    [Authorize(Policy = "MustBeAtLeastHeadmaster")]
-    public sealed class DeleteSchoolCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class DeleteSchoolCommand : IUserCommand, ISchoolAuthorizationRequest
     {
         public DeleteSchoolCommand(Guid schoolId)
         {
@@ -23,20 +26,21 @@ namespace SchoolManagement.Application.Schools.Commands.DeleteSchool
         public Guid SchoolId { get; }
     }
 
-    internal sealed class DeleteSchoolHandler : IRequestHandler<DeleteSchoolCommand, Result<Unit, RequestError>>
+    internal sealed class DeleteSchoolCommandHandler : IRequestHandler<DeleteSchoolCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
-        private readonly IDomainEventService _domainEventService;
+        private readonly ILoggerFactory _logger;
+        private readonly IIntegrationEventService _integrationEventService;
         private readonly ISchoolRepository _schoolRepository;
 
-        public DeleteSchoolHandler(
+        public DeleteSchoolCommandHandler(
             ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext,
-            IDomainEventService domainEventService)
+            ILoggerFactory logger,
+            IIntegrationEventService integrationEventService)
         {
-            _schoolRepository = schoolRepository;
-            _context = schoolContext;
-            _domainEventService = domainEventService;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
+            _logger = Guard.Against.Null(logger, nameof(logger));
+            _integrationEventService = Guard.Against.Null(integrationEventService, nameof(integrationEventService));
+
         }
 
         public async Task<Result<Unit, RequestError>> Handle(DeleteSchoolCommand request,
@@ -51,9 +55,12 @@ namespace SchoolManagement.Application.Schools.Commands.DeleteSchool
 
             _schoolRepository.Remove(schoolOrNone.Value);
 
-            await _context.SaveChangesAsync(cancellationToken);
+            _logger.CreateLogger<DeleteSchoolCommandHandler>()
+                .LogTrace("School with Id: {SchoolId} has been successfully removed!",
+                    schoolOrNone.Value.Id);
 
-            await _domainEventService.Publish(new SchoolRemovedEvent(schoolId));
+            await _integrationEventService.AddAndSaveEventAsync(
+                new SchoolRemovedIntegrationEvent(schoolOrNone.Value.Id));
 
             return Unit.Value;
         }

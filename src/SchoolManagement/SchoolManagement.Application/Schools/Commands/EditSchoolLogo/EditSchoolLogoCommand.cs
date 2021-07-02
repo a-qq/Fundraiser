@@ -1,21 +1,23 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.EditSchoolLogo
 {
-    [Authorize(Policy = "MustBeAtLeastHeadmaster")]
-    public sealed class EditSchoolLogoCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class EditSchoolLogoCommand : IUserCommand, ISchoolAuthorizationRequest
     {
         public EditSchoolLogoCommand(IFormFile logo, Guid schoolId)
         {
@@ -27,20 +29,17 @@ namespace SchoolManagement.Application.Schools.Commands.EditSchoolLogo
         public Guid SchoolId { get; }
     }
 
-    internal sealed class EditSchoolLogoHandler : IRequestHandler<EditSchoolLogoCommand, Result<Unit, RequestError>>
+    internal sealed class EditSchoolLogoCommandHandler : IRequestHandler<EditSchoolLogoCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
         private readonly ISchoolRepository _schoolRepository;
         private readonly ILogoStorageService _storageService;
 
-        public EditSchoolLogoHandler(
+        public EditSchoolLogoCommandHandler(
             ISchoolRepository schoolRepository,
-            ILogoStorageService storageService,
-            ISchoolContext schoolContext)
+            ILogoStorageService storageService)
         {
-            _schoolRepository = schoolRepository;
-            _storageService = storageService;
-            _context = schoolContext;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
+            _storageService = Guard.Against.Null(storageService, nameof(storageService));
         }
 
         public async Task<Result<Unit, RequestError>> Handle(EditSchoolLogoCommand request,
@@ -54,25 +53,22 @@ namespace SchoolManagement.Application.Schools.Commands.EditSchoolLogo
                 return SharedRequestError.General.NotFound(schoolId, nameof(School));
 
             Image logo = null;
-            using (logo = Image.Load(request.Logo.OpenReadStream()))
+            using (logo = await Image.LoadAsync(request.Logo.OpenReadStream()))
             {
                 logo.Mutate(x => x.Resize(new ResizeOptions
-                        {
-                            Mode = ResizeMode.Min,
-                            Size = new Size(250, 250)
-                        }
+                {
+                    Mode = ResizeMode.Min,
+                    Size = new Size(250, 250)
+                }
                     ).Resize(new ResizeOptions
                     {
                         Mode = ResizeMode.BoxPad,
                         Size = new Size(250, 250)
                     })
                     .BackgroundColor(Color.Transparent));
+
+                await _storageService.UpsertLogoAsync(logo, schoolOrNone.Value, cancellationToken);
             }
-
-            await _storageService.UpsertLogoAsync(logo, schoolOrNone.Value, cancellationToken);
-
-            //as new photo has been saved and old photo already is deleted, don't allow cancellation of the flow by passing token
-            await _context.SaveChangesAsync();
 
             return Unit.Value;
         }

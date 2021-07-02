@@ -1,21 +1,22 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.PromoteTreasurer
 {
-    [Authorize(Policy = "MustBeFormTutorOrHeadmasterOrAdmin")]
-    public sealed class PromoteTreasurerCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastFormTutor)]
+    public sealed class PromoteTreasurerCommand : IUserCommand, IGroupAuthorizationRequest
     {
         public PromoteTreasurerCommand(Guid groupId, Guid studentId, Guid schoolId)
         {
@@ -29,24 +30,20 @@ namespace SchoolManagement.Application.Schools.Commands.PromoteTreasurer
         public Guid SchoolId { get; }
     }
 
-    internal sealed class PromoteTreasurerHandler : IRequestHandler<PromoteTreasurerCommand, Result<Unit, RequestError>>
+    internal sealed class PromoteTreasurerCommandHandler : IRequestHandler<PromoteTreasurerCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _schoolContext;
         private readonly ISchoolRepository _schoolRepository;
 
-        public PromoteTreasurerHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public PromoteTreasurerCommandHandler(ISchoolRepository schoolRepository)
         {
             _schoolRepository = schoolRepository;
-            _schoolContext = schoolContext;
         }
 
         public async Task<Result<Unit, RequestError>> Handle(PromoteTreasurerCommand request,
             CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
-            var groupId = new GroupId(request.SchoolId);
+            var groupId = new GroupId(request.GroupId);
             var studentId = new MemberId(request.StudentId);
 
             var schoolOrNone = await _schoolRepository.GetByIdWithGroupsAsync(schoolId, cancellationToken);
@@ -57,16 +54,14 @@ namespace SchoolManagement.Application.Schools.Commands.PromoteTreasurer
             if (groupOrNone.HasNoValue)
                 return SharedRequestError.General.NotFound(groupId, nameof(Group));
 
-            if (!groupOrNone.Value.Students.Any(g => g.Id == studentId))
+            if (groupOrNone.Value.Students.All(g => g.Id != studentId))
                 return SharedRequestError.General.NotFound(studentId, "Student");
 
             var result = schoolOrNone.Value.PromoteTreasurer(groupId, studentId);
 
             if (result.IsFailure)
                 return SharedRequestError.General.BusinessRuleViolation(result.Error);
-
-            await _schoolContext.SaveChangesAsync(cancellationToken);
-
+            
             return Unit.Value;
         }
     }

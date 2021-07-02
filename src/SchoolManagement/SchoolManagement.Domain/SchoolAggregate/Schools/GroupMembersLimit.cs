@@ -10,13 +10,13 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
             Value = number;
         }
 
-        private static int MinValue => 1;
-        private static int MaxValue => 500;
+        public static int MinValue => 1;
+        public static int MaxValue => 500;
         public ushort? Value { get; }
 
-        public static Result<GroupMembersLimit> Create(int? limit)
+        public static Result<GroupMembersLimit> Create(int? limit, string propertyName = nameof(GroupMembersLimit))
         {
-            var validation = Validate(limit);
+            var validation = Validate(limit, propertyName);
             if (validation.IsFailure)
                 return validation.ConvertFailure<GroupMembersLimit>();
 
@@ -25,10 +25,10 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
 
         public static Result Validate(int? number, string propertyName = nameof(GroupMembersLimit))
         {
-            if (number.HasValue && number < MinValue)
-                return Result.Failure($"{propertyName} is required and must be at least {MinValue}!");
+            if (!(number is null) && number < MinValue)
+                return Result.Failure($"{propertyName} must be at least {MinValue}!");
 
-            if (number.HasValue && number > MaxValue)
+            if (!(number is null) && number > MaxValue)
                 return Result.Failure($"{propertyName} can not be greater than {MaxValue}!");
 
             return Result.Success();
@@ -36,12 +36,17 @@ namespace SchoolManagement.Domain.SchoolAggregate.Schools
 
         public static implicit operator string(GroupMembersLimit limit)
         {
-            return limit.Value.ToString();
+            return limit?.Value?.ToString() ?? string.Empty;
         }
 
-        public static implicit operator ushort?(GroupMembersLimit limit)
+        public override string ToString()
         {
-            return limit.Value;
+            return this?.Value?.ToString() ?? string.Empty;
+        }
+
+        public static implicit operator int?(GroupMembersLimit limit)
+        {
+            return limit?.Value;
         }
 
         protected override IEnumerable<object> GetEqualityComponents()

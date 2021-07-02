@@ -1,20 +1,22 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.ArchiveMember
 {
-    [Authorize(Policy = "MustBeAtLeastHeadmaster")]
-    public sealed class ArchiveMemberCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class ArchiveMemberCommand : IUserCommand, ISchoolAuthorizationRequest
     {
         public ArchiveMemberCommand(Guid memberId, Guid schoolId)
         {
@@ -26,17 +28,13 @@ namespace SchoolManagement.Application.Schools.Commands.ArchiveMember
         public Guid SchoolId { get; }
     }
 
-    internal sealed class ArchiveMemberHandler : IRequestHandler<ArchiveMemberCommand, Result<Unit, RequestError>>
+    internal sealed class ArchiveMemberCommandHandler : IRequestHandler<ArchiveMemberCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
         private readonly ISchoolRepository _schoolRepository;
 
-        public ArchiveMemberHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public ArchiveMemberCommandHandler(ISchoolRepository schoolRepository)
         {
-            _schoolRepository = schoolRepository;
-            _context = schoolContext;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
         }
 
         public async Task<Result<Unit, RequestError>> Handle(ArchiveMemberCommand request,
@@ -45,20 +43,18 @@ namespace SchoolManagement.Application.Schools.Commands.ArchiveMember
             var schoolId = new SchoolId(request.SchoolId);
             var memberId = new MemberId(request.MemberId);
 
-            var schoolOrNone = await _schoolRepository.GetByIdWithMembersAsync(schoolId, cancellationToken);
+            var schoolOrNone = await _schoolRepository.GetByIdWithMembersAsync(schoolId, cancellationToken, true);
 
             if (schoolOrNone.HasNoValue)
                 return SharedRequestError.General.NotFound(schoolId, nameof(School));
 
-            if (!schoolOrNone.Value.Members.Any(m => m.Id == memberId))
+            if (schoolOrNone.Value.Members.All(m => m.Id != memberId))
                 return SharedRequestError.General.NotFound(memberId, nameof(Member));
 
             var result = schoolOrNone.Value.ArchiveMember(memberId);
 
             if (result.IsFailure)
                 return SharedRequestError.General.BusinessRuleViolation(result.Error);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

@@ -1,14 +1,16 @@
-﻿namespace SharedKernel.Infrastructure.Errors
+﻿using System.Collections.Generic;
+
+namespace SharedKernel.Infrastructure.Errors
 {
     public sealed class BodyFieldErrorModel
     {
-        public BodyFieldErrorModel(string fieldName, string[] message)
+        public BodyFieldErrorModel(string fieldName, IReadOnlyCollection<string> message)
         {
             FieldName = fieldName;
             Message = message;
         }
 
         public string FieldName { get; }
-        public string[] Message { get; }
+        public IReadOnlyCollection<string> Message { get; }
     }
 }

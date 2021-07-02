@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using CSharpFunctionalExtensions;
+using SK = SharedKernel.Domain.Constants;
 
 namespace SchoolManagement.Domain.SchoolAggregate.Members
 {
     public class Gender : ValueObject
     {
-        internal static Gender Male = Create(GenderEnum.Male.ToString()).Value;
-        internal static Gender Female = Create(GenderEnum.Female.ToString()).Value;
+        public static Gender Male = Create(SK.Gender.Male.ToString()).Value;
+        public static Gender Female = Create(SK.Gender.Female.ToString()).Value;
 
-        private Gender(GenderEnum value)
+        private Gender(SK.Gender value)
         {
             Value = value;
         }
 
-        public GenderEnum Value { get; }
+        public SK.Gender Value { get; }
 
-        public static Result<Gender> Create(string gender)
+        public static Result<Gender> Create(string gender, string propertyName = nameof(Gender))
         {
-            var validationResult = ValidateAndConvert(gender);
+            var validationResult = ValidateAndConvert(gender, propertyName);
 
             if (validationResult.IsFailure)
                 return validationResult.ConvertFailure<Gender>();
@@ -26,15 +27,15 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
             return Result.Success(new Gender(validationResult.Value));
         }
 
-        public static Result<GenderEnum> ValidateAndConvert(string gender, string propertyName = nameof(Gender))
+        public static Result<SK.Gender> ValidateAndConvert(string gender, string propertyName = nameof(Gender))
         {
             if (string.IsNullOrWhiteSpace(gender))
-                return Result.Failure<GenderEnum>($"{propertyName} is required!");
+                return Result.Failure<SK.Gender>($"{propertyName} is required!");
 
             gender = gender.Trim();
 
-            if (!Enum.TryParse(gender, true, out GenderEnum holder))
-                return Result.Failure<GenderEnum>($"{propertyName} is invalid!");
+            if (!Enum.TryParse(gender, true, out SK.Gender holder))
+                return Result.Failure<SK.Gender>($"{propertyName} is invalid!");
 
             return Result.Success(holder);
         }
@@ -53,11 +54,5 @@ namespace SchoolManagement.Domain.SchoolAggregate.Members
         {
             return gender.Value.ToString();
         }
-    }
-
-    public enum GenderEnum
-    {
-        Male = 1,
-        Female = 2
     }
 }

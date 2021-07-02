@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using AutoMapper;
 using CSharpFunctionalExtensions;
 using MediatR;
@@ -9,13 +7,17 @@ using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
 using SharedKernel.Domain.ValueObjects;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.EnrollMember
 {
-    [Authorize(Policy = "MustBeAtLeastHeadmaster")]
-    public sealed class EnrollMemberCommand : CommandRequest<MemberDTO>
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class EnrollMemberCommand : IUserCommand<MemberDTO>, ISchoolAuthorizationRequest
     {
         public EnrollMemberCommand(string firstName, string lastName, string email, string role, string gender,
             Guid schoolId)
@@ -36,23 +38,20 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMember
         public Guid SchoolId { get; }
     }
 
-    internal sealed class EnrollMemberHandler : IRequestHandler<EnrollMemberCommand, Result<MemberDTO, RequestError>>
+    internal sealed class EnrollMemberCommandHandler : IRequestHandler<EnrollMemberCommand, Result<MemberDTO, RequestError>>
     {
         private readonly IEmailUniquenessChecker _checker;
-        private readonly ISchoolContext _context;
         private readonly IMapper _mapper;
         private readonly ISchoolRepository _schoolRepository;
 
-        public EnrollMemberHandler(
-            ISchoolContext schoolContext,
+        public EnrollMemberCommandHandler(
             ISchoolRepository schoolRepository,
-            IEmailUniquenessChecker checker,
+            IEmailUniquenessChecker emailUniquenessChecker,
             IMapper mapper)
         {
-            _context = schoolContext;
-            _schoolRepository = schoolRepository;
-            _checker = checker;
-            _mapper = mapper;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
+            _checker = Guard.Against.Null(emailUniquenessChecker, nameof(emailUniquenessChecker));
+            _mapper = Guard.Against.Null(mapper, nameof(mapper));
         }
 
         public async Task<Result<MemberDTO, RequestError>> Handle(EnrollMemberCommand request,
@@ -77,8 +76,6 @@ namespace SchoolManagement.Application.Schools.Commands.EnrollMember
 
             if (memberOrError.IsFailure)
                 return SharedRequestError.General.BusinessRuleViolation(memberOrError.Error);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             var memberDto = _mapper.Map<MemberDTO>(memberOrError.Value);
 

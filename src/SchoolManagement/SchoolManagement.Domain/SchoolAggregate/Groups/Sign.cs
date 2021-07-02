@@ -12,12 +12,12 @@ namespace SchoolManagement.Domain.SchoolAggregate.Groups
             Value = sign;
         }
 
-        private static int MaxLength => 4;
+        public static int MaxLength => 4;
         public string Value { get; }
 
-        public static Result<Sign, Error> Create(string sign)
+        public static Result<Sign, Error> Create(string sign, string propertyName = nameof(Sign))
         {
-            var validation = Validate(sign);
+            var validation = Validate(sign, propertyName);
             if (validation.IsFailure)
                 return validation.ConvertFailure<Sign>();
 
@@ -34,9 +34,9 @@ namespace SchoolManagement.Domain.SchoolAggregate.Groups
             sign = sign.Trim();
 
             return Result.Combine(
-                Result.FailureIf(sign.Length > 4, true,
+                Result.FailureIf(sign.Length > MaxLength, true,
                     new Error($"{propertyName} should consist of max {MaxLength} characters!")),
-                Result.FailureIf(!sign.All(c => char.IsLetter(c)), true,
+                Result.FailureIf(!sign.All(char.IsLetter), true,
                     new Error($"{propertyName} should consist of only letters!")));
         }
 

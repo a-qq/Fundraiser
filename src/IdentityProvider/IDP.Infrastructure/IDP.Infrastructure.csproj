@@ -5,8 +5,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Persistance\Migrations\20210226161900_Ignore_domain_event.cs" />
-    <Compile Remove="Persistance\Migrations\20210226161900_Ignore_domain_event.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20210226161900_Ignore_domain_event.cs" />
+    <Compile Remove="Persistence\Migrations\20210226161900_Ignore_domain_event.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20210324044049_Change subject to typed value object.cs" />
+    <Compile Remove="Persistence\Migrations\20210324044049_Change subject to typed value object.Designer.cs" />
+    <Compile Remove="Persistence\Migrations\20210324045402_Change subject to typed value object.cs" />
+    <Compile Remove="Persistence\Migrations\20210324045402_Change subject to typed value object.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

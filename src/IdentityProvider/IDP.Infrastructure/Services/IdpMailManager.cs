@@ -1,32 +1,35 @@
-﻿using System;
-using System.IO;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using IDP.Application.Common.Interfaces;
 using IDP.Domain.UserAggregate.ValueObjects;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Options;
 using SharedKernel.Domain.ValueObjects;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Abstractions.Common;
 using SharedKernel.Infrastructure.Options;
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace IDP.Infrastructure.Services
 {
     internal sealed class IdpMailManager : IIdpMailManager
     {
         private readonly IMailManager _mailManager;
-        private readonly string _resetPasswordTemplate;
         private readonly UrlsOptions _urls;
+        private readonly IWebHostEnvironment _environment;
+        private readonly IMemoryCache _cache;
 
         public IdpMailManager(
-            IOptions<UrlsOptions> urls,
-            IWebHostEnvironment environment,
+            UrlsOptions urlsOptions,
+            IWebHostEnvironment webHostEnvironment,
             IMailManager mailManager,
             IMemoryCache memoryCache)
         {
-            _resetPasswordTemplate = GetResetPasswordTemplate(environment, memoryCache);
-            _urls = urls.Value;
-            _mailManager = mailManager;
+            _cache = Guard.Against.Null(memoryCache, nameof(memoryCache));
+            _environment = Guard.Against.Null(webHostEnvironment, nameof(webHostEnvironment));
+            _urls = Guard.Against.Null(urlsOptions, nameof(urlsOptions));
+            _mailManager = Guard.Against.Null(mailManager, nameof(mailManager));
         }
 
         //        await _mailManager.SendMailAsHtmlAsync(domainEvent.Email, "Your new reset password link from your school's management system!",
@@ -38,28 +41,26 @@ namespace IDP.Infrastructure.Services
 
         public async Task SendResetPasswordEmail(Email email, SecurityCode securityCode)
         {
-            if (email is null)
-                throw new ArgumentNullException(nameof(email));
-
-            if (securityCode is null)
-                throw new ArgumentNullException(nameof(securityCode));
+            string emailString = Guard.Against.Null(email, nameof(email));
+            string securityCodeString = Guard.Against.Null(securityCode, nameof(securityCode));
 
             var subject = "Password reset for your account has been requested!";
-            var url = $"{_urls.Idp}PasswordReset/ResetPassword/?securityCode={securityCode.Value.Replace("+", "%2B")}";
-            var body = PopulateResetPasswordTemplate(subject, email, url, securityCode.ExpirationDate.Date.Value);
+            var url = $"{_urls.Idp}PasswordReset/ResetPassword/?securityCode={securityCodeString.Replace("+", "%2B")}";
+            var body = PopulateResetPasswordTemplate(subject, emailString, url, securityCode.ExpirationDate);
 
             await _mailManager.SendMailAsHtmlAsync(email, subject, body);
         }
 
         private string PopulateResetPasswordTemplate(string subject, string email, string url, DateTime? expirationDate)
         {
-            var body = _resetPasswordTemplate.Replace("{Url}", url);
+            var body = GetResetPasswordTemplate(_environment, _cache);;
+            body = body.Replace("{Url}", url);
             body = body.Replace("{Email}", email);
             body = body.Replace("{Subject}", subject);
             body = body.Replace("{base}",
-                Environment.GetEnvironmentVariable("ASPNETCORE_URLS").Split(';')[1] + "/templates/");
+                GetHostUrl() + "/templates/");
             body = body.Replace("{expirationDate}",
-                expirationDate.HasValue ? expirationDate?.ToString("MM/dd/yyyy HH:mm") : "consumed");
+                 expirationDate?.ToString("MM/dd/yyyy HH:mm") ?? "consumed");
 
             return body;
         }
@@ -79,5 +80,47 @@ namespace IDP.Infrastructure.Services
 
             return resetPasswordTemplate;
         }
+
+        public async Task SendRegistrationEmailAsync(Email email, SecurityCode securityCode, string givenName)
+        {
+            string emailString = Guard.Against.Null(email, nameof(email));
+            string securityCodeString = Guard.Against.Null(securityCode, nameof(securityCode));
+
+            var subject = $"{givenName}, welcome in your school's management system!";
+            var url = $"{_urls.Idp}Registration/Register/?SecurityCode={securityCodeString.Replace("+", "%2B")}";
+            var body = PopulateWelcomeTemplate(subject, givenName ?? "User", emailString, url);
+            await _mailManager.SendMailAsHtmlAsync(emailString, subject, body);
+        }
+
+        private string PopulateWelcomeTemplate(string subject, string givenName, string email, string url)
+        {
+            var body = GetWelcomeEmailTemplate();
+            body = body.Replace("{FirstName}", givenName);
+            body = body.Replace("{Url}", url);
+            body = body.Replace("{Email}", email);
+            body = body.Replace("{Subject}", subject);
+            body = body.Replace("{base}",
+                GetHostUrl() + "/templates/");
+            return body;
+        }
+
+        private string GetWelcomeEmailTemplate()
+        {
+            if (!_cache.TryGetValue("WelcomeEmailTemplate", out string welcomeEmailTemplate))
+            {
+                var templatePath = Path.Combine(_environment.WebRootPath, @"templates\WelcomeEmailTemplate.html");
+                using (var reader = new StreamReader(templatePath))
+                {
+                    welcomeEmailTemplate = reader.ReadToEnd();
+                }
+
+                _cache.Set("WelcomeEmailTemplate", welcomeEmailTemplate);
+            }
+
+            return welcomeEmailTemplate;
+        }
+
+        private static string GetHostUrl()
+            => Environment.GetEnvironmentVariable("ASPNETCORE_URLS").Split(';').First(url => url.StartsWith("https"));
     }
 }

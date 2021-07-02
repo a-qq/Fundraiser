@@ -7,5 +7,6 @@ namespace IDP.Application.Common.Interfaces
     public interface IIdpMailManager
     {
         Task SendResetPasswordEmail(Email email, SecurityCode securityCode);
+        Task SendRegistrationEmailAsync(Email email, SecurityCode securityCode, string givenName);
     }
 }

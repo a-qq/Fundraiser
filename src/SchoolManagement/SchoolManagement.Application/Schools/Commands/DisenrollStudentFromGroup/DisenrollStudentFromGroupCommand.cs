@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
@@ -9,13 +6,18 @@ using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Members;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.DisenrollStudentFromGroup
 {
-    [Authorize(Policy = "MustBeAtLeastHeadmaster")]
-    public sealed class DisenrollStudentFromGroupCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class DisenrollStudentFromGroupCommand : IUserCommand, ISchoolAuthorizationRequest
     {
         public DisenrollStudentFromGroupCommand(Guid groupId, Guid studentId, Guid schoolId)
         {
@@ -30,17 +32,13 @@ namespace SchoolManagement.Application.Schools.Commands.DisenrollStudentFromGrou
     }
 
     internal sealed class
-        DisenrollStudentFromGroupHandler : IRequestHandler<DisenrollStudentFromGroupCommand, Result<Unit, RequestError>>
+        DisenrollStudentFromGroupCommandHandler : IRequestHandler<DisenrollStudentFromGroupCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
         private readonly ISchoolRepository _schoolRepository;
 
-        public DisenrollStudentFromGroupHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public DisenrollStudentFromGroupCommandHandler(ISchoolRepository schoolRepository)
         {
-            _schoolRepository = schoolRepository;
-            _context = schoolContext;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
         }
 
         public async Task<Result<Unit, RequestError>> Handle(DisenrollStudentFromGroupCommand request,
@@ -59,12 +57,10 @@ namespace SchoolManagement.Application.Schools.Commands.DisenrollStudentFromGrou
             if (groupOrNone.HasNoValue)
                 return SharedRequestError.General.NotFound(groupId, nameof(Group));
 
-            if (!groupOrNone.Value.Students.Any(s => s.Id == studentId))
+            if (groupOrNone.Value.Students.All(s => s.Id != studentId))
                 return SharedRequestError.General.NotFound(studentId, "Student");
 
             schoolOrNone.Value.DisenrollStudentFromGroup(groupId, studentId);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

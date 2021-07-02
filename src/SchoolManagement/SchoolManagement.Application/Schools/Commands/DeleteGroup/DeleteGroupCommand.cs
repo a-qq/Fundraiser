@@ -1,20 +1,22 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using CSharpFunctionalExtensions;
 using MediatR;
 using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.DeleteGroup
 {
-    [Authorize(Policy = "MustBeAtLeastHeadmaster")]
-    public sealed class DeleteGroupCommand : CommandRequest
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class DeleteGroupCommand : IUserCommand, ISchoolAuthorizationRequest
     {
         public DeleteGroupCommand(Guid groupId, Guid schoolId)
         {
@@ -26,36 +28,30 @@ namespace SchoolManagement.Application.Schools.Commands.DeleteGroup
         public Guid SchoolId { get; }
     }
 
-    internal sealed class DeleteGroupHandler : IRequestHandler<DeleteGroupCommand, Result<Unit, RequestError>>
+    internal sealed class DeleteGroupCommandHandler : IRequestHandler<DeleteGroupCommand, Result<Unit, RequestError>>
     {
-        private readonly ISchoolContext _context;
         private readonly ISchoolRepository _schoolRepository;
 
-        public DeleteGroupHandler(
-            ISchoolRepository schoolRepository,
-            ISchoolContext schoolContext)
+        public DeleteGroupCommandHandler(ISchoolRepository schoolRepository)
         {
-            _schoolRepository = schoolRepository;
-            _context = schoolContext;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
         }
 
         public async Task<Result<Unit, RequestError>> Handle(DeleteGroupCommand request,
             CancellationToken cancellationToken)
         {
             var schoolId = new SchoolId(request.SchoolId);
-            var groupId = new GroupId(request.SchoolId);
+            var groupId = new GroupId(request.GroupId);
 
             var schoolOrNone = await _schoolRepository.GetByIdWithGroupsAsync(schoolId, cancellationToken, true);
 
             if (schoolOrNone.HasNoValue)
                 return SharedRequestError.General.NotFound(schoolId, nameof(School));
 
-            if (!schoolOrNone.Value.Groups.Any(g => g.Id == groupId))
+            if (schoolOrNone.Value.Groups.All(g => g.Id != groupId))
                 return SharedRequestError.General.NotFound(groupId, nameof(Group));
 
             schoolOrNone.Value.DeleteGroup(groupId);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }

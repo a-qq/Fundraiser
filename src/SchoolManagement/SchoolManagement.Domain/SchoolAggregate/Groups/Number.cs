@@ -10,13 +10,13 @@ namespace SchoolManagement.Domain.SchoolAggregate.Groups
             Value = number;
         }
 
-        private static int MinValue => 1;
-        private static int MaxValue => 4;
+        public static int MinValue => 1;
+        public static int MaxValue => 4;
         public byte Value { get; }
 
-        public static Result<Number> Create(int number)
+        public static Result<Number> Create(int number, string propertyName = nameof(Number))
         {
-            var validation = Validate(number);
+            var validation = Validate(number, propertyName);
             if (validation.IsFailure)
                 return validation.ConvertFailure<Number>();
 

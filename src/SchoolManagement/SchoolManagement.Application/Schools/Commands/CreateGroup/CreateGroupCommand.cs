@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Ardalis.GuardClauses;
 using AutoMapper;
 using CSharpFunctionalExtensions;
 using MediatR;
@@ -8,13 +6,17 @@ using SchoolManagement.Application.Common.Interfaces;
 using SchoolManagement.Application.Common.Security;
 using SchoolManagement.Domain.SchoolAggregate.Groups;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using SharedKernel.Infrastructure.Abstractions.Requests;
 using SharedKernel.Infrastructure.Errors;
-using SharedKernel.Infrastructure.Interfaces;
+using SharedKernel.Infrastructure.Utils;
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Schools.Commands.CreateGroup
 {
-    [Authorize(Policy = "MustBeAtLeastHeadmaster")]
-    public sealed class CreateGroupCommand : CommandRequest<GroupDTO>
+    [Authorize(Policy = PolicyNames.MustBeAtLeastHeadmaster)]
+    public sealed class CreateGroupCommand : IUserCommand<GroupDTO>, ISchoolAuthorizationRequest
     {
         public CreateGroupCommand(int number, string sign, Guid schoolId)
         {
@@ -28,20 +30,17 @@ namespace SchoolManagement.Application.Schools.Commands.CreateGroup
         public Guid SchoolId { get; }
     }
 
-    internal sealed class CreateGroupHandler : IRequestHandler<CreateGroupCommand, Result<GroupDTO, RequestError>>
+    internal sealed class CreateGroupCommandHandler : IRequestHandler<CreateGroupCommand, Result<GroupDTO, RequestError>>
     {
-        private readonly ISchoolContext _context;
         private readonly IMapper _mapper;
         private readonly ISchoolRepository _schoolRepository;
 
-        public CreateGroupHandler(
-            ISchoolContext schoolContext,
+        public CreateGroupCommandHandler(
             ISchoolRepository schoolRepository,
             IMapper mapper)
         {
-            _context = schoolContext;
-            _schoolRepository = schoolRepository;
-            _mapper = mapper;
+            _schoolRepository = Guard.Against.Null(schoolRepository, nameof(schoolRepository));
+            _mapper = Guard.Against.Null(mapper, nameof(mapper));
         }
 
         public async Task<Result<GroupDTO, RequestError>> Handle(CreateGroupCommand request,
@@ -60,8 +59,6 @@ namespace SchoolManagement.Application.Schools.Commands.CreateGroup
 
             if (groupOrError.IsFailure)
                 return SharedRequestError.General.BusinessRuleViolation(groupOrError.Error);
-
-            await _context.SaveChangesAsync(cancellationToken);
 
             var groupDto = _mapper.Map<GroupDTO>(groupOrError.Value);
 

@@ -1,7 +1,7 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using CSharpFunctionalExtensions;
+﻿using CSharpFunctionalExtensions;
 using SchoolManagement.Domain.SchoolAggregate.Schools;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace SchoolManagement.Application.Common.Interfaces
 {

@@ -1,70 +1,80 @@
-﻿using System;
+﻿using CSharpFunctionalExtensions;
+using System;
 using System.Collections.Generic;
-using CSharpFunctionalExtensions;
-using SharedKernel.Domain.Errors;
 
 namespace IDP.Domain.UserAggregate.ValueObjects
 {
     public class SecurityCode : ValueObject
     {
-        public static readonly SecurityCode None = new SecurityCode(null, ExpirationDate.Infinite, null);
-
-        private readonly DateTime? _expirationDate;
+        private readonly int? _hoursToExpire;
+        private readonly DateTime? _issuedAt;
 
         protected SecurityCode()
         {
         }
 
-        private SecurityCode(string securityCode, ExpirationDate expirationDate, DateTime? issuedAt)
+        private SecurityCode(string securityCode, HoursToExpire hoursToExpire, DateTime issuedAt)
             : this()
         {
             Value = securityCode;
-            _expirationDate = expirationDate ?? throw new ArgumentNullException(nameof(expirationDate));
-            IssuedAt = issuedAt;
+            _hoursToExpire = hoursToExpire ?? throw new ArgumentNullException(nameof(hoursToExpire));
+            _issuedAt = issuedAt;
         }
 
         public string Value { get; }
-        public ExpirationDate ExpirationDate => (ExpirationDate) _expirationDate;
-        public DateTime? IssuedAt { get; }
 
+        public HoursToExpire HoursToExpire => _hoursToExpire.HasValue
+            ? HoursToExpire.Create(_hoursToExpire.Value).Value
+            : HoursToExpire.Infinite;
 
-        public static Result<SecurityCode, Error> Create(string securityCode, ExpirationDate expirationDate,
-            DateTime? issuedAt = null)
+        public DateTime? ExpirationDate => _hoursToExpire.HasValue ? _issuedAt?.AddHours(_hoursToExpire.Value) : null; 
+
+        public bool IsExpired(DateTime now)
+            => _hoursToExpire.HasValue && IssuedAt.AddHours(_hoursToExpire.Value) < now;
+
+        public DateTime IssuedAt => _issuedAt.Value;
+
+        public static Result<SecurityCode> Create(string securityCode, HoursToExpire hoursToExpire,
+            DateTime issuedAt)
         {
-            var validationResult = Validate(securityCode, expirationDate, issuedAt);
+            var validationResult = Validate(securityCode, hoursToExpire, issuedAt);
             if (validationResult.IsFailure)
                 return validationResult.ConvertFailure<SecurityCode>();
 
-            return Result.Success<SecurityCode, Error>(new SecurityCode(securityCode, expirationDate, issuedAt));
+            return Result.Success(new SecurityCode(securityCode, hoursToExpire, issuedAt));
         }
 
-        private static Result<bool, Error> Validate(string securityCode, ExpirationDate expirationDate,
-            DateTime? issuedAt)
+
+        private static Result Validate(string securityCode, HoursToExpire hoursToExpire,
+            DateTime issuedAt)
         {
-            return Result.Combine(
-                Result.FailureIf(!IsCodeValid(securityCode), true, new Error("Security code is invalid")),
-                Result.FailureIf(
-                    expirationDate != ExpirationDate.Infinite && issuedAt == null ||
-                    issuedAt != null && issuedAt > DateTime.UtcNow,
-                    true, new Error("Security code's issue date is invalid")),
-                Result.FailureIf(expirationDate < issuedAt, true,
-                    new Error("Security code's expiration date is invalid")));
+            return Result.Combine(ValidateCode(securityCode),
+                Result.FailureIf(issuedAt > DateTime.UtcNow, "Security code's issue date is invalid"),
+                Result.FailureIf(hoursToExpire is null, "Number of hours to code expiration are required!"));
         }
 
-        public static bool IsCodeValid(string securityCode)
+        public static Result ValidateCode(string securityCode, string propertyName = nameof(SecurityCode))
         {
-            return !string.IsNullOrEmpty(securityCode) &&
-                   Convert.TryFromBase64String(securityCode, _ = new byte[securityCode.Length * 3 / 4], out _);
+            return Result.FailureIf(
+                string.IsNullOrEmpty(securityCode)
+                || !Convert.TryFromBase64String(securityCode, _ = new byte[securityCode.Length * 3 / 4], out _),
+                $"{propertyName} is invalid");
         }
 
         protected override IEnumerable<object> GetEqualityComponents()
         {
             yield return Value;
+            yield return IsExpired(DateTime.UtcNow);
         }
 
         public static implicit operator string(SecurityCode code)
         {
             return code.Value;
+        }
+
+        public override string ToString()
+        {
+            return this.Value;
         }
     }
 }

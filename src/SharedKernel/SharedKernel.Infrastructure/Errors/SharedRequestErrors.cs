@@ -57,7 +57,7 @@ namespace SharedKernel.Infrastructure.Errors
                 return new SharedRequestError("invalid.route.input.values", errors);
             }
 
-            public static RequestError NotFound(string id = null, string entityName = "Record")
+            public static RequestError NotFound(string entityName = "Record", string id = null)
             {
                 var forId = id == null ? "" : $" for Id '{id}'";
                 return new SharedRequestError("record.not.found", $"{entityName} not found{forId}!");
@@ -71,11 +71,6 @@ namespace SharedKernel.Infrastructure.Errors
             public static RequestError NotFound(IEnumerable<Guid> ids, string entityName = "Record")
             {
                 return new SharedRequestError("record.not.found", NotFoundMessages(ids, entityName));
-            }
-
-            public static RequestError NotFound(long id, string entityName = "Record")
-            {
-                return new SharedRequestError("record.not.found", $"{entityName} not found for Id '{id}'");
             }
 
             public static RequestError NotFound(IEnumerable<string> uniqueProperties, string entityName = "Record",
