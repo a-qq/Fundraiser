@@ -1,0 +1,33 @@
+﻿{
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "applicationUrl": "http://localhost:5001",
+      "sslPort": 44309
+    }
+  },
+  "profiles": {
+    "IIS Express": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "launchUrl": "",
+      "applicationUrl": "https://localhost:44309;http://localhost:5001",
+      "environmentVariables": {
+        "JWTSecret": "",
+        "ConnectionStrings__DefaultConnection": "",
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:5001;https://localhost:44309",
+        "Urls__Idp": "https://localhost:44309/",
+        "Urls__Api": "https://localhost:44307/",
+        "Urls__Client": "https://localhost:44308/",
+        "SecurityCode__ExpirationTimeInHours": "1",
+        "SecurityCode__AntispamInMinutes": "3",
+        "Administrators__Admins__0__Email": "",
+        "Administrators__Admins__0__Password": "",
+        "MailSettings__Email": "",
+        "MailSettings__Password": ""
+      }
+    }
+  }
+}

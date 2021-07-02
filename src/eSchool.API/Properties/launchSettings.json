@@ -31,8 +31,7 @@
         "MailSettings__Email": "",
         "MailSettings__Password": "",
         "Stripe__Secret_Key": "",
-        "Stripe__Public_Key": "",
-        "FundraiserManagement_Tests_ConnectionString": ""
+        "Stripe__Public_Key": ""
       }
     }
   }
